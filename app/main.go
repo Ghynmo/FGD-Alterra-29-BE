@@ -10,6 +10,20 @@ import (
 	_userController "fgd-alterra-29/controllers/users"
 	_userRepository "fgd-alterra-29/drivers/databases/users"
 
+	_threadUseCase "fgd-alterra-29/business/threads"
+	_threadController "fgd-alterra-29/controllers/threads"
+	_threadRepository "fgd-alterra-29/drivers/databases/threads"
+
+	_userbadgeUseCase "fgd-alterra-29/business/user_badges"
+	_userbadgeController "fgd-alterra-29/controllers/user_badges"
+	_userbadgeRepository "fgd-alterra-29/drivers/databases/user_badges"
+
+	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
+	_categoryRepository "fgd-alterra-29/drivers/databases/categories"
+	_commentRepository "fgd-alterra-29/drivers/databases/comments"
+	_followRepository "fgd-alterra-29/drivers/databases/follows"
+	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
+
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -25,6 +39,13 @@ func init() {
 
 func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_userRepository.Users{})
+	db.AutoMigrate(&_reputationRepository.Reputations{})
+	db.AutoMigrate(&_badgeRepository.Badges{})
+	db.AutoMigrate(&_categoryRepository.Categories{})
+	db.AutoMigrate(&_followRepository.Follows{})
+	db.AutoMigrate(&_threadRepository.Threads{})
+	db.AutoMigrate(&_commentRepository.Comments{})
+	db.AutoMigrate(&_userbadgeRepository.UserBadges{})
 }
 
 func main() {
@@ -43,12 +64,22 @@ func main() {
 	e := echo.New()
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
+	threadRepository := _threadRepository.NewMysqlThreadRepository(Conn)
+	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext)
+	threadController := _threadController.NewThreadController(threadUseCase)
+
+	userbadgeRepository := _userbadgeRepository.NewMysqlUserBadgeRepository(Conn)
+	userbadgeUseCase := _userbadgeUseCase.NewUserBadgeUseCase(userbadgeRepository, timeoutContext)
+	userbadgeController := _userbadgeController.NewUserBadgeController(userbadgeUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
-	userController := _userController.NewUserController(userUseCase)
+	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase)
 
 	routesInit := routes.ControllerList{
-		UserController: *userController,
+		UserController:      *userController,
+		UserBadgeController: *userbadgeController,
+		ThreadController:    *threadController,
 	}
 
 	routesInit.RouteRegister(*e)

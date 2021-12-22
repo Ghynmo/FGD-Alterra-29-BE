@@ -2,18 +2,45 @@ package users
 
 import (
 	"context"
+	"fgd-alterra-29/business/comments"
+	"fgd-alterra-29/business/follows"
+	"fgd-alterra-29/business/threads"
+	userbadges "fgd-alterra-29/business/user_badges"
+	"time"
 )
 
 type Domain struct {
-	ID       int
-	Name     string
-	Password string
+	ID            int
+	Role_id       int
+	Reputation_id int
+	Name          string
+	Email         string
+	Phone         string
+	Address       string
+	Header_url    string
+	Photo_url     string
+	Bio           string
+	UserBadges    []userbadges.Domain
+	Threads       []threads.Domain
+	Following     []follows.Domain
+	Followers     []follows.Domain
+	Comments      []comments.Domain
+	Q_Followers   int
+	Q_Following   int
+	Q_Post        int
+	Q_Thread      int
+	Created_at    time.Time
+	Updated_at    time.Time
+	Deleted_at    time.Time
 }
 
 type UseCase interface {
-	GetUserController(ctx context.Context) ([]Domain, error)
+	GetUsersController(ctx context.Context) ([]Domain, error)
+	GetProfileController(ctx context.Context, id int) (Domain, []threads.Domain, error)
 }
 
 type Repository interface {
-	GetUser(ctx context.Context) ([]Domain, error)
+	GetUsers(ctx context.Context) ([]Domain, error)
+	GetProfile(ctx context.Context, id int) (Domain, error)
+	GetCategoryActive(ctx context.Context, id int) ([]threads.Domain, error)
 }

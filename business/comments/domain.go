@@ -16,7 +16,7 @@ type Domain struct {
 	Updated_at time.Time
 	Deleted_at time.Time
 	Name       string
-	Title      string
+	Thread     string
 }
 
 type UseCase interface {

@@ -14,13 +14,16 @@ import (
 	_threadController "fgd-alterra-29/controllers/threads"
 	_threadRepository "fgd-alterra-29/drivers/databases/threads"
 
+	_commentUseCase "fgd-alterra-29/business/comments"
+	_commentController "fgd-alterra-29/controllers/comments"
+	_commentRepository "fgd-alterra-29/drivers/databases/comments"
+
 	_userbadgeUseCase "fgd-alterra-29/business/user_badges"
 	_userbadgeController "fgd-alterra-29/controllers/user_badges"
 	_userbadgeRepository "fgd-alterra-29/drivers/databases/user_badges"
 
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_categoryRepository "fgd-alterra-29/drivers/databases/categories"
-	_commentRepository "fgd-alterra-29/drivers/databases/comments"
 	_followRepository "fgd-alterra-29/drivers/databases/follows"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 
@@ -72,6 +75,10 @@ func main() {
 	userbadgeUseCase := _userbadgeUseCase.NewUserBadgeUseCase(userbadgeRepository, timeoutContext)
 	userbadgeController := _userbadgeController.NewUserBadgeController(userbadgeUseCase)
 
+	commentRepository := _commentRepository.NewMysqlCommentRepository(Conn)
+	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
+	commentController := _commentController.NewCommentController(commentUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase)
@@ -80,6 +87,7 @@ func main() {
 		UserController:      *userController,
 		UserBadgeController: *userbadgeController,
 		ThreadController:    *threadController,
+		CommentController:   *commentController,
 	}
 
 	routesInit.RouteRegister(*e)

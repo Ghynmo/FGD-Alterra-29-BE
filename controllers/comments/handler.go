@@ -3,7 +3,9 @@ package comments
 import (
 	"fgd-alterra-29/business/comments"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/comments/responses"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -19,13 +21,13 @@ func NewCommentController(threadUseCase comments.UseCase) *CommentController {
 }
 
 func (handler CommentController) GetProfileComments(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
-	id := 1
 
 	comments, err := handler.CommentUseCase.GetCommentProfile(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, comments)
+	return controllers.NewSuccessResponse(c, responses.ToListPostProfile(comments))
 }

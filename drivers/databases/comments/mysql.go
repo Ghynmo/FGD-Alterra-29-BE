@@ -21,7 +21,7 @@ func NewMysqlCommentRepository(conn *gorm.DB) comments.Repository {
 func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int) ([]comments.Domain, error) {
 	var Comment []Comments
 
-	result := DB.Conn.Table("comments").Where("comments.user_id = 1").Select("title, comment, name").
+	result := DB.Conn.Table("comments").Where("comments.user_id = 1").Select("title as Thread, comment, name").
 		Joins("join threads on comments.thread_id = threads.id").Joins("join users on comments.user_id = users.id").
 		Find(&Comment)
 
@@ -29,7 +29,7 @@ func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int)
 		return []comments.Domain{}, result.Error
 	}
 
-	fmt.Println("This Thread", Comment)
+	fmt.Println("This Comment", Comment)
 
 	return ToListDomain(Comment), nil
 }

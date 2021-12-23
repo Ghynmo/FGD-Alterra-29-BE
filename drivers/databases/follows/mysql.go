@@ -3,7 +3,6 @@ package follows
 import (
 	"context"
 	"fgd-alterra-29/business/follows"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +28,6 @@ func (DB *MysqlFollowRepository) GetFollowers(ctx context.Context, id int) ([]fo
 		return []follows.Domain{}, result.Error
 	}
 
-	fmt.Println("Followers", Follow)
 	return ToListDomain(Follow), nil
 }
 
@@ -44,6 +42,5 @@ func (DB *MysqlFollowRepository) GetFollowing(ctx context.Context, id int) ([]fo
 		return []follows.Domain{}, result.Error
 	}
 
-	fmt.Println("Followers", Follow)
 	return ToListDomain(Follow), nil
 }

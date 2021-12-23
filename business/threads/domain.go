@@ -18,7 +18,6 @@ type Domain struct {
 	Updated_at    time.Time
 	Deleted_at    time.Time
 	Category      string
-	Q_Title       int
 	Comment       string
 	Q_Comment     int
 	RecentReplier string

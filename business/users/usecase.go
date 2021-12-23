@@ -2,7 +2,6 @@ package users
 
 import (
 	"context"
-	"fgd-alterra-29/business/threads"
 	"time"
 )
 
@@ -27,13 +26,11 @@ func (uc *UserUseCase) GetUsersController(ctx context.Context) ([]Domain, error)
 	return user, nil
 }
 
-func (uc *UserUseCase) GetProfileController(ctx context.Context, id int) (Domain, []threads.Domain, error) {
+func (uc *UserUseCase) GetProfileController(ctx context.Context, id int) (Domain, error) {
 	user, err := uc.Repo.GetProfile(ctx, id)
 	if err != nil {
-		return Domain{}, []threads.Domain{}, err
+		return Domain{}, err
 	}
 
-	threads, _ := uc.Repo.GetCategoryActive(ctx, id)
-
-	return user, threads, nil
+	return user, nil
 }

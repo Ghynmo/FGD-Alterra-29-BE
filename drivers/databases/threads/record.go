@@ -17,7 +17,6 @@ type Threads struct {
 	// Updated_at    time.Time
 	// Deleted_at    time.Time
 	Category      string `gorm:"-:migration;->"`
-	Q_Title       int    `gorm:"-:migration;->"`
 	Comment       string `gorm:"-:migration;->"`
 	Q_Comment     int    `gorm:"-:migration;->"`
 	RecentReplier string `gorm:"-:migration;->"`
@@ -36,7 +35,6 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		// Updated_at:    Thread.Updated_at,
 		// Deleted_at:    Thread.Deleted_at,
 		Category:      Thread.Category,
-		Q_Title:       Thread.Q_Title,
 		Comment:       Thread.Comment,
 		Q_Comment:     Thread.Q_Comment,
 		RecentReplier: Thread.RecentReplier,

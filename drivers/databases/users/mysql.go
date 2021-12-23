@@ -2,9 +2,7 @@ package users
 
 import (
 	"context"
-	b_threads "fgd-alterra-29/business/threads"
 	"fgd-alterra-29/business/users"
-	threads "fgd-alterra-29/drivers/databases/threads"
 
 	"gorm.io/gorm"
 )
@@ -48,18 +46,4 @@ func (DB *MysqlUserRepository) GetProfile(ctx context.Context, id int) (users.Do
 	}
 
 	return User.ToDomain(), nil
-}
-
-func (DB *MysqlUserRepository) GetCategoryActive(ctx context.Context, id int) ([]b_threads.Domain, error) {
-	var Threads []threads.Threads
-
-	result := DB.Conn.Table("threads").Select("count(title) as Q_Title, category").Where("threads.user_id = 1").
-		Joins("join categories on threads.category_id = categories.id").Group("category_id").
-		Find(&Threads)
-
-	if result.Error != nil {
-		return []b_threads.Domain{}, result.Error
-	}
-
-	return threads.ToListDomain(Threads), nil
 }

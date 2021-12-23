@@ -3,7 +3,6 @@ package comments
 import (
 	"context"
 	"fgd-alterra-29/business/comments"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -28,8 +27,6 @@ func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int)
 	if result.Error != nil {
 		return []comments.Domain{}, result.Error
 	}
-
-	fmt.Println("This Comment", Comment)
 
 	return ToListDomain(Comment), nil
 }

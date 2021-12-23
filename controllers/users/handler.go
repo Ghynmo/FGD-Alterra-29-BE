@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fgd-alterra-29/business/categories"
 	"fgd-alterra-29/business/threads"
 	userbadges "fgd-alterra-29/business/user_badges"
 	"fgd-alterra-29/business/users"
@@ -16,13 +17,15 @@ type UserController struct {
 	UserUseCase      users.UseCase
 	ThreadUseCase    threads.UseCase
 	UserBadgeUseCase userbadges.UseCase
+	CategoryUseCase  categories.UseCase
 }
 
-func NewUserController(userUseCase users.UseCase, threadUseCase threads.UseCase, userbadgeUseCase userbadges.UseCase) *UserController {
+func NewUserController(userUC users.UseCase, threadUC threads.UseCase, userbadgeUC userbadges.UseCase, categoryUC categories.UseCase) *UserController {
 	return &UserController{
-		UserUseCase:      userUseCase,
-		ThreadUseCase:    threadUseCase,
-		UserBadgeUseCase: userbadgeUseCase,
+		UserUseCase:      userUC,
+		ThreadUseCase:    threadUC,
+		UserBadgeUseCase: userbadgeUC,
+		CategoryUseCase:  categoryUC,
 	}
 }
 
@@ -41,9 +44,10 @@ func (handler UserController) GetProfileController(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	user, catthreads, err := handler.UserUseCase.GetProfileController(ctx, id)
+	user, err := handler.UserUseCase.GetProfileController(ctx, id)
 	thread, err1 := handler.ThreadUseCase.GetProfileThreads(ctx, id)
 	userbadges, err2 := handler.UserBadgeUseCase.GetUserBadge(ctx, id)
+	catthreads, err3 := handler.CategoryUseCase.GetUserActiveInCategory(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
@@ -51,6 +55,9 @@ func (handler UserController) GetProfileController(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	if err2 != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	if err3 != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, responses.ToProfile(user, userbadges, catthreads, thread))

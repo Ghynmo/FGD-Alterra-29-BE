@@ -3,7 +3,6 @@ package threads
 import (
 	"context"
 	"fgd-alterra-29/business/threads"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -32,8 +31,6 @@ func (DB *MysqlThreadRepository) GetProfileThreads(ctx context.Context, id int) 
 	if result.Error != nil {
 		return []threads.Domain{}, result.Error
 	}
-
-	fmt.Println("This Thread", Thread)
 
 	return ToListDomain(Thread), nil
 }

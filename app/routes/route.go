@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fgd-alterra-29/controllers/categories"
 	"fgd-alterra-29/controllers/comments"
 	"fgd-alterra-29/controllers/follows"
 	"fgd-alterra-29/controllers/threads"
@@ -16,6 +17,7 @@ type ControllerList struct {
 	ThreadController    threads.ThreadController
 	CommentController   comments.CommentController
 	FollowController    follows.FollowController
+	CategoryController  categories.CategoryController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {

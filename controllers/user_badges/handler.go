@@ -3,7 +3,6 @@ package userbadges
 import (
 	userbadges "fgd-alterra-29/business/user_badges"
 	"fgd-alterra-29/controllers"
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -27,6 +26,5 @@ func (handler UserBadgeController) GetProfileUserBadges(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	fmt.Println(userbadges)
-	return controllers.NewSuccessResponse(c, nil)
+	return controllers.NewSuccessResponse(c, userbadges)
 }

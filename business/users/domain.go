@@ -36,11 +36,10 @@ type Domain struct {
 
 type UseCase interface {
 	GetUsersController(ctx context.Context) ([]Domain, error)
-	GetProfileController(ctx context.Context, id int) (Domain, []threads.Domain, error)
+	GetProfileController(ctx context.Context, id int) (Domain, error)
 }
 
 type Repository interface {
 	GetUsers(ctx context.Context) ([]Domain, error)
 	GetProfile(ctx context.Context, id int) (Domain, error)
-	GetCategoryActive(ctx context.Context, id int) ([]threads.Domain, error)
 }

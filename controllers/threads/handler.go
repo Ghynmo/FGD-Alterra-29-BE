@@ -3,8 +3,10 @@ package threads
 import (
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/threads/responses"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -20,13 +22,13 @@ func NewThreadController(threadUseCase threads.UseCase) *ThreadController {
 }
 
 func (handler ThreadController) GetProfileThreads(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
-	id := 2
 
 	thread, err := handler.ThreadUseCase.GetProfileThreads(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	fmt.Println(thread)
-	return controllers.NewSuccessResponse(c, nil)
+	return controllers.NewSuccessResponse(c, responses.ToListProfileThread(thread))
 }

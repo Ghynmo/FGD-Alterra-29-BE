@@ -4,7 +4,6 @@ import (
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/threads/responses"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -29,6 +28,5 @@ func (handler ThreadController) GetProfileThreads(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	fmt.Println(thread)
 	return controllers.NewSuccessResponse(c, responses.ToListProfileThread(thread))
 }

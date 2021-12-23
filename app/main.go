@@ -18,13 +18,16 @@ import (
 	_commentController "fgd-alterra-29/controllers/comments"
 	_commentRepository "fgd-alterra-29/drivers/databases/comments"
 
+	_followUseCase "fgd-alterra-29/business/follows"
+	_followController "fgd-alterra-29/controllers/follows"
+	_followRepository "fgd-alterra-29/drivers/databases/follows"
+
 	_userbadgeUseCase "fgd-alterra-29/business/user_badges"
 	_userbadgeController "fgd-alterra-29/controllers/user_badges"
 	_userbadgeRepository "fgd-alterra-29/drivers/databases/user_badges"
 
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_categoryRepository "fgd-alterra-29/drivers/databases/categories"
-	_followRepository "fgd-alterra-29/drivers/databases/follows"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 
 	"github.com/labstack/echo/v4"
@@ -79,6 +82,10 @@ func main() {
 	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
 	commentController := _commentController.NewCommentController(commentUseCase)
 
+	followRepository := _followRepository.NewMysqlFollowRepository(Conn)
+	followUseCase := _followUseCase.NewFollowUseCase(followRepository, timeoutContext)
+	followController := _followController.NewFollowController(followUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase)
@@ -88,6 +95,7 @@ func main() {
 		UserBadgeController: *userbadgeController,
 		ThreadController:    *threadController,
 		CommentController:   *commentController,
+		FollowController:    *followController,
 	}
 
 	routesInit.RouteRegister(*e)

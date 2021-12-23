@@ -26,3 +26,13 @@ func (uc FollowUseCase) GetFollowers(ctx context.Context, id int) ([]Domain, err
 
 	return followers, nil
 }
+
+func (uc FollowUseCase) GetFollowing(ctx context.Context, id int) ([]Domain, error) {
+	following, err := uc.Repo.GetFollowing(ctx, id)
+
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return following, nil
+}

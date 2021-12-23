@@ -21,8 +21,8 @@ type ControllerList struct {
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("users", cl.UserController.GetUsersController)
 	e.GET("profile/:id", cl.UserController.GetProfileController)
-	e.GET("comment/:id", cl.CommentController.GetProfileComments)
+	e.GET("post/:id", cl.CommentController.GetProfileComments)
 	e.GET("thread/:id", cl.ThreadController.GetProfileThreads)
 	e.GET("followers/:id", cl.FollowController.GetFollowers)
-	e.GET("following/:id", cl.ThreadController.GetProfileThreads)
+	e.GET("following/:id", cl.FollowController.GetFollowing)
 }

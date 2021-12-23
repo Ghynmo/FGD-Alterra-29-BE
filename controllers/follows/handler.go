@@ -32,3 +32,16 @@ func (handler FollowController) GetFollowers(c echo.Context) error {
 
 	return controllers.NewSuccessResponse(c, responses.ToListFollowerList(follows))
 }
+
+func (handler FollowController) GetFollowing(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	follows, err := handler.FollowUseCase.GetFollowing(ctx, id)
+
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, responses.ToListFollowingList(follows))
+}

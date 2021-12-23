@@ -12,6 +12,7 @@ type Follows struct {
 	Unfollowed_at time.Time
 	Photo         string `gorm:"-:migration;->"`
 	FollowerName  string `gorm:"-:migration;->"`
+	FollowingName string `gorm:"-:migration;->"`
 	Reputation    string `gorm:"-:migration;->"`
 }
 
@@ -23,6 +24,7 @@ func (Follow *Follows) ToDomain() follows.Domain {
 		Unfollowed_at: Follow.Unfollowed_at,
 		Photo:         Follow.Photo,
 		FollowerName:  Follow.FollowerName,
+		FollowingName: Follow.FollowingName,
 		Reputation:    Follow.Reputation,
 	}
 }

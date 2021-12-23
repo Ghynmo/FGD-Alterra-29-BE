@@ -32,3 +32,18 @@ func (DB *MysqlFollowRepository) GetFollowers(ctx context.Context, id int) ([]fo
 	fmt.Println("Followers", Follow)
 	return ToListDomain(Follow), nil
 }
+
+func (DB *MysqlFollowRepository) GetFollowing(ctx context.Context, id int) ([]follows.Domain, error) {
+	var Follow []Follows
+
+	result := DB.Conn.Table("follows").Select("photo_url as Photo, name as FollowingName, reputation").Where("follower_id = (?)", id).
+		Joins("join users on follows.user_id = users.id").Joins("join reputations on users.reputation_id = reputations.id").
+		Find(&Follow)
+
+	if result.Error != nil {
+		return []follows.Domain{}, result.Error
+	}
+
+	fmt.Println("Followers", Follow)
+	return ToListDomain(Follow), nil
+}

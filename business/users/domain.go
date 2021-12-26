@@ -4,6 +4,7 @@ import (
 	"context"
 	"fgd-alterra-29/business/comments"
 	"fgd-alterra-29/business/follows"
+	threadlikes "fgd-alterra-29/business/thread_likes"
 	"fgd-alterra-29/business/threads"
 	userbadges "fgd-alterra-29/business/user_badges"
 	"time"
@@ -25,6 +26,7 @@ type Domain struct {
 	Following     []follows.Domain
 	Followers     []follows.Domain
 	Comments      []comments.Domain
+	ThreadLikes   []threadlikes.Domain
 	Q_Followers   int
 	Q_Following   int
 	Q_Post        int

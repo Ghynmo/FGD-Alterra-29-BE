@@ -3,6 +3,7 @@ package threads
 import (
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/drivers/databases/comments"
+	threadlikes "fgd-alterra-29/drivers/databases/thread_likes"
 )
 
 type Threads struct {
@@ -12,14 +13,17 @@ type Threads struct {
 	Title         string
 	Content       string
 	Thumbnail_url string
-	Comments      []comments.Comments `gorm:"foreignKey:Thread_id"`
+	Comments      []comments.Comments       `gorm:"foreignKey:Thread_id"`
+	Likes         []threadlikes.ThreadLikes `gorm:"foreignKey:Thread_id"`
 	// Created_at    time.Time
 	// Updated_at    time.Time
 	// Deleted_at    time.Time
+	Name          string `gorm:"-:migration;->"`
 	Category      string `gorm:"-:migration;->"`
+	RecentReplier string `gorm:"-:migration;->"`
 	Comment       string `gorm:"-:migration;->"`
 	Q_Comment     int    `gorm:"-:migration;->"`
-	RecentReplier string `gorm:"-:migration;->"`
+	Q_Like        int    `gorm:"-:migration;->"`
 }
 
 func (Thread *Threads) ToDomain() threads.Domain {
@@ -31,13 +35,16 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		Content:       Thread.Content,
 		Thumbnail_url: Thread.Thumbnail_url,
 		Comments:      comments.ToListDomain(Thread.Comments),
+		Likes:         threadlikes.ToListDomain(Thread.Likes),
 		// Created_at:    Thread.Created_at,
 		// Updated_at:    Thread.Updated_at,
 		// Deleted_at:    Thread.Deleted_at,
+		Name:          Thread.Name,
 		Category:      Thread.Category,
+		RecentReplier: Thread.RecentReplier,
 		Comment:       Thread.Comment,
 		Q_Comment:     Thread.Q_Comment,
-		RecentReplier: Thread.RecentReplier,
+		Q_Like:        Thread.Q_Like,
 	}
 }
 

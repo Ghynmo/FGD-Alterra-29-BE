@@ -18,10 +18,19 @@ func NewCommentUseCase(repo Repository, timeout time.Duration) UseCase {
 }
 
 func (uc *CommentUseCase) GetCommentProfile(ctx context.Context, id int) ([]Domain, error) {
-	thread, err := uc.Repo.GetCommentProfile(ctx, id)
+	comments, err := uc.Repo.GetCommentProfile(ctx, id)
 	if err != nil {
 		return []Domain{}, err
 	}
 
-	return thread, nil
+	return comments, nil
+}
+
+func (uc *CommentUseCase) GetCommentByThread(ctx context.Context, id int) ([]Domain, error) {
+	comments, err := uc.Repo.GetCommentByThread(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return comments, nil
 }

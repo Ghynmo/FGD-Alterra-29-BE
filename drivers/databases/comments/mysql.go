@@ -30,3 +30,15 @@ func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int)
 
 	return ToListDomain(Comment), nil
 }
+
+func (DB *MysqlCommentRepository) GetCommentByThread(ctx context.Context, id int) ([]comments.Domain, error) {
+	var Comment []Comments
+
+	result := DB.Conn.Table("comments").Where("thread_id = 3").Find(&Comment)
+
+	if result.Error != nil {
+		return []comments.Domain{}, result.Error
+	}
+
+	return ToListDomain(Comment), nil
+}

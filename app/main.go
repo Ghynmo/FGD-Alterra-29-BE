@@ -32,6 +32,7 @@ import (
 
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
+	_threadlikeRepository "fgd-alterra-29/drivers/databases/thread_likes"
 
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -55,6 +56,7 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_threadRepository.Threads{})
 	db.AutoMigrate(&_commentRepository.Comments{})
 	db.AutoMigrate(&_userbadgeRepository.UserBadges{})
+	db.AutoMigrate(&_threadlikeRepository.ThreadLikes{})
 }
 
 func main() {
@@ -73,17 +75,17 @@ func main() {
 	e := echo.New()
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
+	commentRepository := _commentRepository.NewMysqlCommentRepository(Conn)
+	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
+	commentController := _commentController.NewCommentController(commentUseCase)
+
 	threadRepository := _threadRepository.NewMysqlThreadRepository(Conn)
 	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext)
-	threadController := _threadController.NewThreadController(threadUseCase)
+	threadController := _threadController.NewThreadController(threadUseCase, commentUseCase)
 
 	userbadgeRepository := _userbadgeRepository.NewMysqlUserBadgeRepository(Conn)
 	userbadgeUseCase := _userbadgeUseCase.NewUserBadgeUseCase(userbadgeRepository, timeoutContext)
 	userbadgeController := _userbadgeController.NewUserBadgeController(userbadgeUseCase)
-
-	commentRepository := _commentRepository.NewMysqlCommentRepository(Conn)
-	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
-	commentController := _commentController.NewCommentController(commentUseCase)
 
 	followRepository := _followRepository.NewMysqlFollowRepository(Conn)
 	followUseCase := _followUseCase.NewFollowUseCase(followRepository, timeoutContext)

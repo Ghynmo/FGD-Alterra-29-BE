@@ -27,4 +27,5 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("thread/:id", cl.ThreadController.GetProfileThreads)
 	e.GET("followers/:id", cl.FollowController.GetFollowers)
 	e.GET("following/:id", cl.FollowController.GetFollowing)
+	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads)
 }

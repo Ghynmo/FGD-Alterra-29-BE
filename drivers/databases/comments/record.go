@@ -17,6 +17,7 @@ type Comments struct {
 	Deleted_at time.Time
 	Name       string `gorm:"-:migration;->"`
 	Thread     string `gorm:"-:migration;->"`
+	Q_Post     int    `gorm:"-:migration;->"`
 }
 
 func (Comment *Comments) ToDomain() comments.Domain {
@@ -32,6 +33,7 @@ func (Comment *Comments) ToDomain() comments.Domain {
 		Deleted_at: Comment.Deleted_at,
 		Name:       Comment.Name,
 		Thread:     Comment.Thread,
+		Q_Post:     Comment.Q_Post,
 	}
 }
 

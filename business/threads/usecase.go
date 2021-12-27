@@ -25,3 +25,12 @@ func (uc *ThreadUseCase) GetProfileThreads(ctx context.Context, id int) ([]Domai
 
 	return thread, nil
 }
+
+func (uc *ThreadUseCase) GetThreadQuantity(ctx context.Context) (Domain, error) {
+	thread, err := uc.Repo.GetThreadQuantity(ctx)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return thread, nil
+}

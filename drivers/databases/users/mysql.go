@@ -20,7 +20,7 @@ func NewMysqlUserRepository(conn *gorm.DB) users.Repository {
 func (DB *MysqlUserRepository) GetUsers(ctx context.Context) ([]users.Domain, error) {
 	var User []Users
 
-	result := DB.Conn.Table("users").Find(&User)
+	result := DB.Conn.Table("users").Select("status, photo_url, name, email").Find(&User)
 
 	if result.Error != nil {
 		return []users.Domain{}, result.Error
@@ -45,5 +45,16 @@ func (DB *MysqlUserRepository) GetProfile(ctx context.Context, id int) (users.Do
 		return users.Domain{}, result.Error
 	}
 
+	return User.ToDomain(), nil
+}
+
+func (DB *MysqlUserRepository) GetUsersQuantity(ctx context.Context) (users.Domain, error) {
+	var User Users
+
+	result := DB.Conn.Table("users").Select("count(id) as Q_User").Find(&User)
+
+	if result.Error != nil {
+		return users.Domain{}, result.Error
+	}
 	return User.ToDomain(), nil
 }

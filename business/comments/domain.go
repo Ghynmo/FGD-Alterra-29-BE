@@ -17,12 +17,15 @@ type Domain struct {
 	Deleted_at time.Time
 	Name       string
 	Thread     string
+	Q_Post     int
 }
 
 type UseCase interface {
 	GetCommentProfile(ctx context.Context, id int) ([]Domain, error)
+	GetPostQuantity(ctx context.Context) (Domain, error)
 }
 
 type Repository interface {
 	GetCommentProfile(ctx context.Context, id int) ([]Domain, error)
+	GetPostQuantity(ctx context.Context) (Domain, error)
 }

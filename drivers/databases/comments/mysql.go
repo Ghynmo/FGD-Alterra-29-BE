@@ -30,3 +30,15 @@ func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int)
 
 	return ToListDomain(Comment), nil
 }
+
+func (DB *MysqlCommentRepository) GetPostQuantity(ctx context.Context) (comments.Domain, error) {
+	var Comment Comments
+
+	result := DB.Conn.Table("comments").Select("count(id) as Q_Post").Find(&Comment)
+
+	if result.Error != nil {
+		return comments.Domain{}, result.Error
+	}
+
+	return Comment.ToDomain(), nil
+}

@@ -34,3 +34,12 @@ func (uc *UserUseCase) GetProfileController(ctx context.Context, id int) (Domain
 
 	return user, nil
 }
+
+func (uc *UserUseCase) GetUsersQuantity(ctx context.Context) (Domain, error) {
+	user, err := uc.Repo.GetUsersQuantity(ctx)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
+}

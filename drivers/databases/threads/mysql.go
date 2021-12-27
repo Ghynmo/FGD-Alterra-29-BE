@@ -34,3 +34,15 @@ func (DB *MysqlThreadRepository) GetProfileThreads(ctx context.Context, id int) 
 
 	return ToListDomain(Thread), nil
 }
+
+func (DB *MysqlThreadRepository) GetThreadQuantity(ctx context.Context) (threads.Domain, error) {
+	var Thread Threads
+	result := DB.Conn.Table("threads").Select("count(id) as Q_Thread").
+		Find(&Thread)
+
+	if result.Error != nil {
+		return threads.Domain{}, result.Error
+	}
+
+	return Thread.ToDomain(), nil
+}

@@ -3,6 +3,7 @@ package threads
 import (
 	"context"
 	"fgd-alterra-29/business/comments"
+	threadreport "fgd-alterra-29/business/thread_report"
 	"time"
 )
 
@@ -14,6 +15,7 @@ type Domain struct {
 	Content       string
 	Thumbnail_url string
 	Comments      []comments.Domain
+	Report        []threadreport.Domain
 	Created_at    time.Time
 	Updated_at    time.Time
 	Deleted_at    time.Time
@@ -21,12 +23,15 @@ type Domain struct {
 	Comment       string
 	Q_Comment     int
 	RecentReplier string
+	Q_Thread      int
 }
 
 type UseCase interface {
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
+	GetThreadQuantity(ctx context.Context) (Domain, error)
 }
 
 type Repository interface {
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
+	GetThreadQuantity(ctx context.Context) (Domain, error)
 }

@@ -30,7 +30,12 @@ import (
 	_categoryController "fgd-alterra-29/controllers/categories"
 	_categoryRepository "fgd-alterra-29/drivers/databases/categories"
 
+	_threadreportUseCase "fgd-alterra-29/business/thread_report"
+	_threadreportController "fgd-alterra-29/controllers/thread_report"
+	_threadreportRepository "fgd-alterra-29/drivers/databases/thread_report"
+
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
+	_catreportthreadRepository "fgd-alterra-29/drivers/databases/catreportthreads"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 
 	"github.com/labstack/echo/v4"
@@ -55,6 +60,8 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_threadRepository.Threads{})
 	db.AutoMigrate(&_commentRepository.Comments{})
 	db.AutoMigrate(&_userbadgeRepository.UserBadges{})
+	db.AutoMigrate(&_catreportthreadRepository.CatReportT{})
+	db.AutoMigrate(&_threadreportRepository.ThreadReport{})
 }
 
 func main() {
@@ -93,17 +100,22 @@ func main() {
 	categoryUseCase := _categoryUseCase.NewCategoryUseCase(categoryRepository, timeoutContext)
 	categoryController := _categoryController.NewCategoryController(categoryUseCase)
 
+	threadreportRepository := _threadreportRepository.NewMysqlThreadReportRepository(Conn)
+	threadreportUseCase := _threadreportUseCase.NewThreadReportUseCase(threadreportRepository, timeoutContext)
+	threadreportController := _threadreportController.NewThreadReportController(threadreportUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
-	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase)
+	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase)
 
 	routesInit := routes.ControllerList{
-		UserController:      *userController,
-		UserBadgeController: *userbadgeController,
-		ThreadController:    *threadController,
-		CommentController:   *commentController,
-		FollowController:    *followController,
-		CategoryController:  *categoryController,
+		UserController:         *userController,
+		UserBadgeController:    *userbadgeController,
+		ThreadController:       *threadController,
+		CommentController:      *commentController,
+		FollowController:       *followController,
+		CategoryController:     *categoryController,
+		ThreadReportController: *threadreportController,
 	}
 
 	routesInit.RouteRegister(*e)

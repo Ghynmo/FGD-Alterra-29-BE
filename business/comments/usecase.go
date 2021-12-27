@@ -25,3 +25,12 @@ func (uc *CommentUseCase) GetCommentProfile(ctx context.Context, id int) ([]Doma
 
 	return thread, nil
 }
+
+func (uc *CommentUseCase) GetPostQuantity(ctx context.Context) (Domain, error) {
+	post, err := uc.Repo.GetPostQuantity(ctx)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return post, nil
+}

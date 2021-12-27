@@ -12,12 +12,11 @@ type CatReportT struct {
 	ThreadReport   []threadreport.ThreadReport `gorm:"foreignKey:Catreportthread_id"`
 }
 
-func (Badge *CatReportT) ToDomain() catreportthreads.Domain {
+func (Crt *CatReportT) ToDomain() catreportthreads.Domain {
 	return catreportthreads.Domain{
-		ID:             Badge.ID,
-		CategoryReport: Badge.CategoryReport,
-		Description:    Badge.Description,
-		// UserBadges:  userbadges.ToListDomain(Badge.UserBadges),
+		ID:             Crt.ID,
+		CategoryReport: Crt.CategoryReport,
+		Description:    Crt.Description,
 	}
 }
 

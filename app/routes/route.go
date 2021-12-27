@@ -31,5 +31,6 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("following/:id", cl.FollowController.GetFollowing)
 
 	e.GET("dashboard", cl.UserController.GetDashboardController)
+	e.POST("report-thread", cl.ThreadReportController.CreateReportThread)
 
 }

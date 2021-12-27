@@ -14,8 +14,10 @@ type Domain struct {
 
 type UseCase interface {
 	GetThreadReports(ctx context.Context) ([]Domain, error)
+	CreateReportThread(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type Repository interface {
 	GetThreadReports(ctx context.Context) ([]Domain, error)
+	CreateReportThread(ctx context.Context, domain Domain) (Domain, error)
 }

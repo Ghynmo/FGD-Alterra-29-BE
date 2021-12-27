@@ -29,3 +29,15 @@ func (DB *MysqlThreadReportRepository) GetThreadReports(ctx context.Context) ([]
 
 	return ToListDomain(ThreadReport), nil
 }
+
+func (DB *MysqlThreadReportRepository) CreateReportThread(ctx context.Context, domain threadreport.Domain) (threadreport.Domain, error) {
+	var ThreadReport ThreadReport
+
+	result := DB.Conn.Model(&ThreadReport).Create(&domain)
+
+	if result.Error != nil {
+		return threadreport.Domain{}, result.Error
+	}
+
+	return ThreadReport.ToDomain(), nil
+}

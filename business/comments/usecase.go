@@ -34,3 +34,12 @@ func (uc *CommentUseCase) GetPostQuantity(ctx context.Context) (Domain, error) {
 
 	return post, nil
 }
+
+func (uc *CommentUseCase) GetPosts(ctx context.Context) ([]Domain, error) {
+	post, err := uc.Repo.GetPosts(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return post, nil
+}

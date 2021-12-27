@@ -18,14 +18,17 @@ type Domain struct {
 	Name       string
 	Thread     string
 	Q_Post     int
+	Photo      string
 }
 
 type UseCase interface {
 	GetCommentProfile(ctx context.Context, id int) ([]Domain, error)
 	GetPostQuantity(ctx context.Context) (Domain, error)
+	GetPosts(ctx context.Context) ([]Domain, error)
 }
 
 type Repository interface {
 	GetCommentProfile(ctx context.Context, id int) ([]Domain, error)
 	GetPostQuantity(ctx context.Context) (Domain, error)
+	GetPosts(ctx context.Context) ([]Domain, error)
 }

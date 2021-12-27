@@ -18,6 +18,7 @@ type Comments struct {
 	Name       string `gorm:"-:migration;->"`
 	Thread     string `gorm:"-:migration;->"`
 	Q_Post     int    `gorm:"-:migration;->"`
+	Photo      string `gorm:"-:migration;->"`
 }
 
 func (Comment *Comments) ToDomain() comments.Domain {
@@ -34,6 +35,7 @@ func (Comment *Comments) ToDomain() comments.Domain {
 		Name:       Comment.Name,
 		Thread:     Comment.Thread,
 		Q_Post:     Comment.Q_Post,
+		Photo:      Comment.Photo,
 	}
 }
 

@@ -42,3 +42,17 @@ func (DB *MysqlCommentRepository) GetPostQuantity(ctx context.Context) (comments
 
 	return Comment.ToDomain(), nil
 }
+
+func (DB *MysqlCommentRepository) GetPosts(ctx context.Context) ([]comments.Domain, error) {
+	var Comment []Comments
+
+	result := DB.Conn.Table("comments").Select("comments.id, name, photo_url as Photo, comment, comments.created_at").
+		Joins("join users on comments.user_id = users.id").Order("comments.created_at desc").
+		Find(&Comment)
+
+	if result.Error != nil {
+		return []comments.Domain{}, result.Error
+	}
+
+	return ToListDomain(Comment), nil
+}

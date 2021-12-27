@@ -31,3 +31,14 @@ func (handler CommentController) GetProfileComments(c echo.Context) error {
 
 	return controllers.NewSuccessResponse(c, responses.ToListPostProfile(comments))
 }
+
+func (handler CommentController) GetPostsController(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	posts, err := handler.CommentUseCase.GetPosts(ctx)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, responses.ToListPosts(posts))
+}

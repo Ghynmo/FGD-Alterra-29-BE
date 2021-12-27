@@ -30,3 +30,13 @@ func (handler ThreadController) GetProfileThreads(c echo.Context) error {
 	}
 	return controllers.NewSuccessResponse(c, responses.ToListProfileThread(thread))
 }
+
+func (handler ThreadController) GetThreadsController(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetThreads(ctx)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListThread(thread))
+}

@@ -46,3 +46,16 @@ func (DB *MysqlThreadRepository) GetThreadQuantity(ctx context.Context) (threads
 
 	return Thread.ToDomain(), nil
 }
+
+func (DB *MysqlThreadRepository) GetThreads(ctx context.Context) ([]threads.Domain, error) {
+	var Thread []Threads
+	result := DB.Conn.Table("threads").Select("threads.id, name, photo_url as Photo, title, threads.created_at").
+		Joins("join users on threads.user_id = users.id").Order("threads.created_at desc").
+		Find(&Thread)
+
+	if result.Error != nil {
+		return []threads.Domain{}, result.Error
+	}
+
+	return ToListDomain(Thread), nil
+}

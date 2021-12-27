@@ -4,6 +4,7 @@ import (
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/drivers/databases/comments"
 	threadreport "fgd-alterra-29/drivers/databases/thread_report"
+	"time"
 )
 
 type Threads struct {
@@ -15,7 +16,7 @@ type Threads struct {
 	Thumbnail_url string
 	Comments      []comments.Comments         `gorm:"foreignKey:Thread_id"`
 	Report        []threadreport.ThreadReport `gorm:"foreignKey:Thread_id"`
-	// Created_at    time.Time
+	Created_at    time.Time
 	// Updated_at    time.Time
 	// Deleted_at    time.Time
 	Category      string `gorm:"-:migration;->"`
@@ -23,6 +24,8 @@ type Threads struct {
 	Q_Comment     int    `gorm:"-:migration;->"`
 	RecentReplier string `gorm:"-:migration;->"`
 	Q_Thread      int    `gorm:"-:migration;->"`
+	Name          string `gorm:"-:migration;->"`
+	Photo         string `gorm:"-:migration;->"`
 }
 
 func (Thread *Threads) ToDomain() threads.Domain {
@@ -34,7 +37,7 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		Content:       Thread.Content,
 		Thumbnail_url: Thread.Thumbnail_url,
 		Comments:      comments.ToListDomain(Thread.Comments),
-		// Created_at:    Thread.Created_at,
+		Created_at:    Thread.Created_at,
 		// Updated_at:    Thread.Updated_at,
 		// Deleted_at:    Thread.Deleted_at,
 		Category:      Thread.Category,
@@ -42,6 +45,8 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		Q_Comment:     Thread.Q_Comment,
 		RecentReplier: Thread.RecentReplier,
 		Q_Thread:      Thread.Q_Thread,
+		Name:          Thread.Name,
+		Photo:         Thread.Photo,
 	}
 }
 

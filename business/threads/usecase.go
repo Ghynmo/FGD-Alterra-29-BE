@@ -34,3 +34,12 @@ func (uc *ThreadUseCase) GetThreadQuantity(ctx context.Context) (Domain, error) 
 
 	return thread, nil
 }
+
+func (uc *ThreadUseCase) GetThreads(ctx context.Context) ([]Domain, error) {
+	thread, err := uc.Repo.GetThreads(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}

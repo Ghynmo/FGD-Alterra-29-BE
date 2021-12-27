@@ -24,14 +24,18 @@ type Domain struct {
 	Q_Comment     int
 	RecentReplier string
 	Q_Thread      int
+	Name          string
+	Photo         string
 }
 
 type UseCase interface {
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
 	GetThreadQuantity(ctx context.Context) (Domain, error)
+	GetThreads(ctx context.Context) ([]Domain, error)
 }
 
 type Repository interface {
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
 	GetThreadQuantity(ctx context.Context) (Domain, error)
+	GetThreads(ctx context.Context) ([]Domain, error)
 }

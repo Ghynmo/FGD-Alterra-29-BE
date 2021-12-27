@@ -23,7 +23,7 @@ type ControllerList struct {
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
-	e.GET("users", cl.UserController.GetUsersController)
+	e.GET("x", cl.UserController.GetUsersController)
 	e.GET("profile/:id", cl.UserController.GetProfileController)
 	e.GET("post/:id", cl.CommentController.GetProfileComments)
 	e.GET("thread/:id", cl.ThreadController.GetProfileThreads)
@@ -31,5 +31,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("following/:id", cl.FollowController.GetFollowing)
 
 	e.GET("dashboard", cl.UserController.GetDashboardController)
+	e.GET("users", cl.UserController.GetUsersController)
+	e.GET("threads", cl.ThreadController.GetThreadsController)
 
 }

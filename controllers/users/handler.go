@@ -99,3 +99,14 @@ func (handler UserController) GetDashboardController(c echo.Context) error {
 	fmt.Println("ThreadReport ", threadreport)
 	return controllers.NewSuccessResponse(c, responses.ToDashboard(user, threadreport, userqty, threadqty, postqty))
 }
+
+func (handler UserController) GetSettingController(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	user, err := handler.UserUseCase.GetUserSetting(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToUserSetting(user))
+}

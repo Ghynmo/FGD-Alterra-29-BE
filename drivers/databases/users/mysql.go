@@ -58,3 +58,14 @@ func (DB *MysqlUserRepository) GetUsersQuantity(ctx context.Context) (users.Doma
 	}
 	return User.ToDomain(), nil
 }
+
+func (DB *MysqlUserRepository) GetUserSetting(ctx context.Context, id int) (users.Domain, error) {
+	var User Users
+
+	result := DB.Conn.Table("users").Select("id, name, photo_url, email, phone").Where("id = (?)", id).Find(&User)
+
+	if result.Error != nil {
+		return users.Domain{}, result.Error
+	}
+	return User.ToDomain(), nil
+}

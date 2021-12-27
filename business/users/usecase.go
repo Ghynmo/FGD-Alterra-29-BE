@@ -43,3 +43,12 @@ func (uc *UserUseCase) GetUsersQuantity(ctx context.Context) (Domain, error) {
 
 	return user, nil
 }
+
+func (uc *UserUseCase) GetUserSetting(ctx context.Context, id int) (Domain, error) {
+	user, err := uc.Repo.GetUserSetting(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
+}

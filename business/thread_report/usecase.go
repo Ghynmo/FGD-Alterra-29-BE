@@ -25,3 +25,12 @@ func (uc *ThreadReportUseCase) GetThreadReports(ctx context.Context) ([]Domain, 
 
 	return report, nil
 }
+
+func (uc *ThreadReportUseCase) GetReports(ctx context.Context) ([]Domain, error) {
+	report, err := uc.Repo.GetReports(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return report, nil
+}

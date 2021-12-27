@@ -3,6 +3,7 @@ package threadreport
 import (
 	threadreport "fgd-alterra-29/business/thread_report"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/thread_report/responses"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -26,4 +27,14 @@ func (handler ThreadReportController) GetThreadReports(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, threadreport)
+}
+
+func (handler ThreadReportController) GetReports(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	threadreport, err := handler.ThreadReportUseCase.GetReports(ctx)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListReports(threadreport))
 }

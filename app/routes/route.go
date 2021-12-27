@@ -32,5 +32,6 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 
 	e.GET("dashboard", cl.UserController.GetDashboardController)
 	e.GET("settings/:id", cl.UserController.GetSettingController)
+	e.PUT("settings", cl.UserController.UpdateUserSetting)
 
 }

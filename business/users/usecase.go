@@ -52,3 +52,12 @@ func (uc *UserUseCase) GetUserSetting(ctx context.Context, id int) (Domain, erro
 
 	return user, nil
 }
+
+func (uc *UserUseCase) UpdateUserSetting(ctx context.Context, domain Domain, id int) (Domain, error) {
+	user, err := uc.Repo.UpdateUserSetting(ctx, domain, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
+}

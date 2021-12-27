@@ -8,6 +8,7 @@ import (
 	userbadges "fgd-alterra-29/business/user_badges"
 	"fgd-alterra-29/business/users"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/users/request"
 	"fgd-alterra-29/controllers/users/responses"
 	"fmt"
 	"net/http"
@@ -105,6 +106,22 @@ func (handler UserController) GetSettingController(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	user, err := handler.UserUseCase.GetUserSetting(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToUserSetting(user))
+}
+
+func (handler UserController) UpdateUserSetting(c echo.Context) error {
+	id, _ := strconv.Atoi(c.FormValue("id"))
+	Updateuser := request.UpdateSetting{}
+	c.Bind(&Updateuser)
+
+	Domain := Updateuser.ToDomain()
+
+	ctx := c.Request().Context()
+
+	user, err := handler.UserUseCase.UpdateUserSetting(ctx, Domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

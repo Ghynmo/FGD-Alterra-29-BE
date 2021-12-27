@@ -69,3 +69,14 @@ func (DB *MysqlUserRepository) GetUserSetting(ctx context.Context, id int) (user
 	}
 	return User.ToDomain(), nil
 }
+
+func (DB *MysqlUserRepository) UpdateUserSetting(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
+	var User Users
+
+	result := DB.Conn.Model(&User).Where("id = (?)", id).Updates(domain)
+
+	if result.Error != nil {
+		return users.Domain{}, result.Error
+	}
+	return User.ToDomain(), nil
+}

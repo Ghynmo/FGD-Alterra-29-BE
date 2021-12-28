@@ -34,3 +34,14 @@ func (DB *MysqlThreadRepository) GetProfileThreads(ctx context.Context, id int) 
 
 	return ToListDomain(Thread), nil
 }
+
+func (DB *MysqlThreadRepository) CreateThread(ctx context.Context, domain threads.Domain) (threads.Domain, error) {
+	var Thread Threads
+	result := DB.Conn.Model(&Thread).Create(&domain)
+
+	if result.Error != nil {
+		return threads.Domain{}, result.Error
+	}
+
+	return Thread.ToDomain(), nil
+}

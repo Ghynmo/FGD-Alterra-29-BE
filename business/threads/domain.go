@@ -25,8 +25,10 @@ type Domain struct {
 
 type UseCase interface {
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
+	CreateThread(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type Repository interface {
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
+	CreateThread(ctx context.Context, domain Domain) (Domain, error)
 }

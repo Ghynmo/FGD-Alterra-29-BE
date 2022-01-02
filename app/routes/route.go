@@ -33,5 +33,6 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("dashboard", cl.UserController.GetDashboardController)
 	e.GET("users", cl.UserController.GetUsersController)
 	e.GET("threads", cl.ThreadController.GetThreadsController)
+	e.DELETE("thread/:id", cl.ThreadController.DeleteThread)
 
 }

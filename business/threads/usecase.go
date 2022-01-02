@@ -43,3 +43,12 @@ func (uc *ThreadUseCase) GetThreads(ctx context.Context) ([]Domain, error) {
 
 	return thread, nil
 }
+
+func (uc *ThreadUseCase) DeleteThread(ctx context.Context, id int) (Domain, error) {
+	thread, err := uc.Repo.DeleteThread(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return thread, nil
+}

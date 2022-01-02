@@ -59,3 +59,14 @@ func (DB *MysqlThreadRepository) GetThreads(ctx context.Context) ([]threads.Doma
 
 	return ToListDomain(Thread), nil
 }
+
+func (DB *MysqlThreadRepository) DeleteThread(ctx context.Context, id int) (threads.Domain, error) {
+	var Thread Threads
+	result := DB.Conn.Delete(&Thread, id)
+
+	if result.Error != nil {
+		return threads.Domain{}, result.Error
+	}
+
+	return Thread.ToDomain(), nil
+}

@@ -40,3 +40,14 @@ func (handler ThreadController) GetThreadsController(c echo.Context) error {
 	}
 	return controllers.NewSuccessResponse(c, responses.ToListThread(thread))
 }
+
+func (handler ThreadController) DeleteThread(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	_, err := handler.ThreadUseCase.DeleteThread(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, "Delete Success")
+}

@@ -59,10 +59,10 @@ func (DB *MysqlUserRepository) GetUsersQuantity(ctx context.Context) (users.Doma
 	return User.ToDomain(), nil
 }
 
-func (DB *MysqlUserRepository) GetUserSetting(ctx context.Context, id int) (users.Domain, error) {
+func (DB *MysqlUserRepository) GetProfileSetting(ctx context.Context, id int) (users.Domain, error) {
 	var User Users
 
-	result := DB.Conn.Table("users").Select("id, name, photo_url, email, phone").Where("id = (?)", id).Find(&User)
+	result := DB.Conn.Table("users").Select("id, name, photo_url, email, phone, bio, address").Where("id = (?)", id).Find(&User)
 
 	if result.Error != nil {
 		return users.Domain{}, result.Error
@@ -70,7 +70,7 @@ func (DB *MysqlUserRepository) GetUserSetting(ctx context.Context, id int) (user
 	return User.ToDomain(), nil
 }
 
-func (DB *MysqlUserRepository) UpdateUserSetting(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
+func (DB *MysqlUserRepository) UpdateSetting(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
 	var User Users
 
 	result := DB.Conn.Model(&User).Where("id = (?)", id).Updates(domain)

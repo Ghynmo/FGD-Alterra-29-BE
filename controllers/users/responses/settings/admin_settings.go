@@ -1,18 +1,18 @@
-package responses
+package settings
 
 import (
 	"fgd-alterra-29/business/users"
 )
 
-type UserSetting struct {
+type AdminSetting struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 	Photo string `json:"photo"`
 	Phone string `json:"phone"`
 }
 
-func ToUserSetting(domain users.Domain) UserSetting {
-	return UserSetting{
+func ToAdminSetting(domain users.Domain) AdminSetting {
+	return AdminSetting{
 		Name:  domain.Name,
 		Email: domain.Email,
 		Photo: domain.Photo_url,

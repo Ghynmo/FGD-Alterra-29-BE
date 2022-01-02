@@ -10,6 +10,7 @@ import (
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/users/request"
 	"fgd-alterra-29/controllers/users/responses"
+	"fgd-alterra-29/controllers/users/responses/settings"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -101,15 +102,42 @@ func (handler UserController) GetDashboardController(c echo.Context) error {
 	return controllers.NewSuccessResponse(c, responses.ToDashboard(user, threadreport, userqty, threadqty, postqty))
 }
 
-func (handler UserController) GetSettingController(c echo.Context) error {
+func (handler UserController) GetAdminSettingController(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
 
-	user, err := handler.UserUseCase.GetUserSetting(ctx, id)
+	user, err := handler.UserUseCase.GetProfileSetting(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToUserSetting(user))
+	return controllers.NewSuccessResponse(c, settings.ToAdminSetting(user))
+}
+
+func (handler UserController) GetUserSettingController(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	user, err := handler.UserUseCase.GetProfileSetting(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, settings.ToUserSetting(user))
+}
+
+func (handler UserController) UpdateAdminSetting(c echo.Context) error {
+	id, _ := strconv.Atoi(c.FormValue("id"))
+	Updateadmin := request.UpdateSetting{}
+	c.Bind(&Updateadmin)
+
+	Domain := Updateadmin.ToDomain()
+
+	ctx := c.Request().Context()
+
+	user, err := handler.UserUseCase.UpdateSetting(ctx, Domain, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, settings.ToAdminSetting(user))
 }
 
 func (handler UserController) UpdateUserSetting(c echo.Context) error {
@@ -121,9 +149,9 @@ func (handler UserController) UpdateUserSetting(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	user, err := handler.UserUseCase.UpdateUserSetting(ctx, Domain, id)
+	user, err := handler.UserUseCase.UpdateSetting(ctx, Domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToUserSetting(user))
+	return controllers.NewSuccessResponse(c, settings.ToUserSetting(user))
 }

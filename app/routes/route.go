@@ -31,7 +31,9 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("following/:id", cl.FollowController.GetFollowing)
 
 	e.GET("dashboard", cl.UserController.GetDashboardController)
-	e.GET("settings/:id", cl.UserController.GetSettingController)
-	e.PUT("settings", cl.UserController.UpdateUserSetting)
+	e.GET("admin-settings/:id", cl.UserController.GetAdminSettingController)
+	e.GET("user-settings/:id", cl.UserController.GetUserSettingController)
+	e.PUT("settings", cl.UserController.UpdateAdminSetting)
+	e.PUT("user-settings", cl.UserController.UpdateUserSetting)
 
 }

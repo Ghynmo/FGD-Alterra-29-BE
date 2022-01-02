@@ -44,8 +44,8 @@ func (uc *UserUseCase) GetUsersQuantity(ctx context.Context) (Domain, error) {
 	return user, nil
 }
 
-func (uc *UserUseCase) GetUserSetting(ctx context.Context, id int) (Domain, error) {
-	user, err := uc.Repo.GetUserSetting(ctx, id)
+func (uc *UserUseCase) GetProfileSetting(ctx context.Context, id int) (Domain, error) {
+	user, err := uc.Repo.GetProfileSetting(ctx, id)
 	if err != nil {
 		return Domain{}, err
 	}
@@ -53,11 +53,11 @@ func (uc *UserUseCase) GetUserSetting(ctx context.Context, id int) (Domain, erro
 	return user, nil
 }
 
-func (uc *UserUseCase) UpdateUserSetting(ctx context.Context, domain Domain, id int) (Domain, error) {
-	user, err := uc.Repo.UpdateUserSetting(ctx, domain, id)
+func (uc *UserUseCase) UpdateSetting(ctx context.Context, domain Domain, id int) (Domain, error) {
+	admin, err := uc.Repo.UpdateSetting(ctx, domain, id)
 	if err != nil {
 		return Domain{}, err
 	}
 
-	return user, nil
+	return admin, nil
 }

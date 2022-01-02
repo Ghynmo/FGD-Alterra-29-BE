@@ -42,14 +42,14 @@ type UseCase interface {
 	GetUsersController(ctx context.Context) ([]Domain, error)
 	GetProfileController(ctx context.Context, id int) (Domain, error)
 	GetUsersQuantity(ctx context.Context) (Domain, error)
-	GetUserSetting(ctx context.Context, id int) (Domain, error)
-	UpdateUserSetting(ctx context.Context, domain Domain, id int) (Domain, error)
+	GetProfileSetting(ctx context.Context, id int) (Domain, error)
+	UpdateSetting(ctx context.Context, domain Domain, id int) (Domain, error)
 }
 
 type Repository interface {
 	GetUsers(ctx context.Context) ([]Domain, error)
 	GetProfile(ctx context.Context, id int) (Domain, error)
 	GetUsersQuantity(ctx context.Context) (Domain, error)
-	GetUserSetting(ctx context.Context, id int) (Domain, error)
-	UpdateUserSetting(ctx context.Context, domain Domain, id int) (Domain, error)
+	GetProfileSetting(ctx context.Context, id int) (Domain, error)
+	UpdateSetting(ctx context.Context, domain Domain, id int) (Domain, error)
 }

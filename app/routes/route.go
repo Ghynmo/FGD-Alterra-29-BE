@@ -33,7 +33,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("dashboard", cl.UserController.GetDashboardController)
 	e.GET("admin-settings/:id", cl.UserController.GetAdminSettingController)
 	e.GET("user-settings/:id", cl.UserController.GetUserSettingController)
-	e.PUT("settings", cl.UserController.UpdateAdminSetting)
+	e.PUT("admin-settings", cl.UserController.UpdateAdminSetting)
 	e.PUT("user-settings", cl.UserController.UpdateUserSetting)
 
 }

@@ -5,16 +5,16 @@ import (
 )
 
 type PostProfile struct {
-	Name    string
-	Thread  string
-	Comment string
+	TargetName string
+	Thread     string
+	Comment    string
 }
 
 func ToPostProfile(Domain comments.Domain) PostProfile {
 	return PostProfile{
-		Name:    Domain.Name,
-		Thread:  Domain.Thread,
-		Comment: Domain.Comment,
+		TargetName: Domain.Name,
+		Thread:     Domain.Thread,
+		Comment:    Domain.Comment,
 	}
 }
 

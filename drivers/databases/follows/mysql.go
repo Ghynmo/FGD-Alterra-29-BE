@@ -20,7 +20,7 @@ func NewMysqlFollowRepository(conn *gorm.DB) follows.Repository {
 func (DB *MysqlFollowRepository) GetFollowers(ctx context.Context, id int) ([]follows.Domain, error) {
 	var Follow []Follows
 
-	result := DB.Conn.Table("follows").Select("photo_url as Photo, name as FollowerName, reputation").Where("user_id = (?)", id).
+	result := DB.Conn.Table("follows").Select("follower_id as Follower_id, photo_url as Photo, name as FollowerName, reputation").Where("user_id = (?)", id).
 		Joins("join users on follows.follower_id = users.id").Joins("join reputations on users.reputation_id = reputations.id").
 		Find(&Follow)
 
@@ -34,7 +34,7 @@ func (DB *MysqlFollowRepository) GetFollowers(ctx context.Context, id int) ([]fo
 func (DB *MysqlFollowRepository) GetFollowing(ctx context.Context, id int) ([]follows.Domain, error) {
 	var Follow []Follows
 
-	result := DB.Conn.Table("follows").Select("photo_url as Photo, name as FollowingName, reputation").Where("follower_id = (?)", id).
+	result := DB.Conn.Table("follows").Select("user_id as User_id, photo_url as Photo, name as FollowingName, reputation").Where("follower_id = (?)", id).
 		Joins("join users on follows.user_id = users.id").Joins("join reputations on users.reputation_id = reputations.id").
 		Find(&Follow)
 

@@ -44,6 +44,8 @@ func (DB *MysqlThreadRepository) GetRecommendationThreads(ctx context.Context, i
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
 
 	result := DB.Conn.Table("threads").Select("*, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
+		Where("thread_follows.user_id = (?)", id).
+		Joins("join thread_follows on threads.id = thread_follows.thread_id").
 		Preload("Comments", func(db *gorm.DB) *gorm.DB {
 			return db.Table("comments").Select("*").
 				Joins("join users on comments.user_id = users.id").Find(&Comment)

@@ -2,8 +2,7 @@ package responses
 
 import (
 	"fgd-alterra-29/business/threads"
-	"fgd-alterra-29/controllers/threads/responses/recommendation"
-	"fmt"
+	"fgd-alterra-29/controllers/threads/responses/home"
 )
 
 type RecommendationThreads struct {
@@ -12,7 +11,7 @@ type RecommendationThreads struct {
 	Content   string
 	Q_Like    int
 	Q_Comment int
-	Comments  []recommendation.CommentRecommendation
+	Comments  []home.CommentRecommendation
 }
 
 func ToRecommendationThreads(Domain threads.Domain) RecommendationThreads {
@@ -22,7 +21,7 @@ func ToRecommendationThreads(Domain threads.Domain) RecommendationThreads {
 		Content:   Domain.Content,
 		Q_Like:    Domain.Q_Like,
 		Q_Comment: Domain.Q_Comment,
-		Comments:  recommendation.ToListCommentRecommendation(Domain.Comments),
+		Comments:  home.ToListCommentRecommendation(Domain.Comments),
 	}
 }
 
@@ -32,6 +31,5 @@ func ToListRecommendationThreads(t []threads.Domain) []RecommendationThreads {
 	for _, val := range t {
 		Domains = append(Domains, ToRecommendationThreads(val))
 	}
-	fmt.Println("oy asu", Domains)
 	return Domains
 }

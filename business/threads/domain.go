@@ -31,12 +31,14 @@ type Domain struct {
 
 type UseCase interface {
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
+	GetHomepageThreads(ctx context.Context, id int) ([]Domain, error)
 	GetRecommendationThreads(ctx context.Context, id int) ([]Domain, error)
-	GetHotThreads(ctx context.Context, id int) ([]Domain, error)
+	GetHotThreads(ctx context.Context) ([]Domain, error)
 }
 
 type Repository interface {
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
+	GetHomepageThreads(ctx context.Context, id int) ([]Domain, error)
 	GetRecommendationThreads(ctx context.Context, id int) ([]Domain, error)
-	GetHotThreads(ctx context.Context, id int) ([]Domain, error)
+	GetHotThreads(ctx context.Context) ([]Domain, error)
 }

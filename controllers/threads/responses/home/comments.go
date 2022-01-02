@@ -1,4 +1,4 @@
-package recommendation
+package home
 
 import "fgd-alterra-29/business/comments"
 

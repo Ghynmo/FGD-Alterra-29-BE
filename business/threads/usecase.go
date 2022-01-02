@@ -26,6 +26,15 @@ func (uc *ThreadUseCase) GetProfileThreads(ctx context.Context, id int) ([]Domai
 	return thread, nil
 }
 
+func (uc *ThreadUseCase) GetHomepageThreads(ctx context.Context, id int) ([]Domain, error) {
+	thread, err := uc.Repo.GetHomepageThreads(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}
+
 func (uc *ThreadUseCase) GetRecommendationThreads(ctx context.Context, id int) ([]Domain, error) {
 	thread, err := uc.Repo.GetRecommendationThreads(ctx, id)
 	if err != nil {
@@ -35,8 +44,8 @@ func (uc *ThreadUseCase) GetRecommendationThreads(ctx context.Context, id int) (
 	return thread, nil
 }
 
-func (uc *ThreadUseCase) GetHotThreads(ctx context.Context, id int) ([]Domain, error) {
-	thread, err := uc.Repo.GetHotThreads(ctx, id)
+func (uc *ThreadUseCase) GetHotThreads(ctx context.Context) ([]Domain, error) {
+	thread, err := uc.Repo.GetHotThreads(ctx)
 	if err != nil {
 		return []Domain{}, err
 	}

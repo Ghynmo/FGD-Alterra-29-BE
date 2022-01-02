@@ -83,7 +83,7 @@ func main() {
 
 	threadRepository := _threadRepository.NewMysqlThreadRepository(Conn)
 	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext)
-	threadController := _threadController.NewThreadController(threadUseCase, commentUseCase)
+	threadController := _threadController.NewThreadController(threadUseCase)
 
 	userbadgeRepository := _userbadgeRepository.NewMysqlUserBadgeRepository(Conn)
 	userbadgeUseCase := _userbadgeUseCase.NewUserBadgeUseCase(userbadgeRepository, timeoutContext)

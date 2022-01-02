@@ -31,6 +31,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("following/:id", cl.FollowController.GetFollowing)
 
 	e.GET("dashboard", cl.UserController.GetDashboardController)
-	e.GET("post", cl.CommentController.GetPostsController)
+	e.GET("posts", cl.CommentController.GetPostsController)
+	e.DELETE("post/:id", cl.CommentController.DeletePost)
 
 }

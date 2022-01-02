@@ -43,3 +43,12 @@ func (uc *CommentUseCase) GetPosts(ctx context.Context) ([]Domain, error) {
 
 	return post, nil
 }
+
+func (uc *CommentUseCase) DeletePost(ctx context.Context, id int) (Domain, error) {
+	thread, err := uc.Repo.DeletePost(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return thread, nil
+}

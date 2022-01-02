@@ -42,3 +42,15 @@ func (handler CommentController) GetPostsController(c echo.Context) error {
 
 	return controllers.NewSuccessResponse(c, responses.ToListPosts(posts))
 }
+
+func (handler CommentController) DeletePost(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	_, err := handler.CommentUseCase.DeletePost(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, "Post deleted success")
+}

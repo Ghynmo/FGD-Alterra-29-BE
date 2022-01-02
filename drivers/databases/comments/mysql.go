@@ -56,3 +56,15 @@ func (DB *MysqlCommentRepository) GetPosts(ctx context.Context) ([]comments.Doma
 
 	return ToListDomain(Comment), nil
 }
+
+func (DB *MysqlCommentRepository) DeletePost(ctx context.Context, id int) (comments.Domain, error) {
+	var Comment Comments
+
+	result := DB.Conn.Delete(&Comment, id)
+
+	if result.Error != nil {
+		return comments.Domain{}, result.Error
+	}
+
+	return Comment.ToDomain(), nil
+}

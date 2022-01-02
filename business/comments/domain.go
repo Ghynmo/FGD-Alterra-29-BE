@@ -16,6 +16,7 @@ type Domain struct {
 	Updated_at time.Time
 	Deleted_at time.Time
 	Name       string
+	Photo_url  string
 	Thread     string
 }
 

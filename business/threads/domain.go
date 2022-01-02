@@ -3,6 +3,7 @@ package threads
 import (
 	"context"
 	"fgd-alterra-29/business/comments"
+	threadfollows "fgd-alterra-29/business/thread_follows"
 	threadlikes "fgd-alterra-29/business/thread_likes"
 	"time"
 )
@@ -16,6 +17,7 @@ type Domain struct {
 	Thumbnail_url string
 	Comments      []comments.Domain
 	Likes         []threadlikes.Domain
+	Followers     []threadfollows.Domain
 	Created_at    time.Time
 	Updated_at    time.Time
 	Deleted_at    time.Time

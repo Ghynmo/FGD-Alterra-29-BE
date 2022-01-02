@@ -16,6 +16,7 @@ type Comments struct {
 	Updated_at time.Time
 	Deleted_at time.Time
 	Name       string `gorm:"-:migration;->"`
+	Photo_url  string `gorm:"-:migration;->"`
 	Thread     string `gorm:"-:migration;->"`
 }
 
@@ -31,6 +32,7 @@ func (Comment *Comments) ToDomain() comments.Domain {
 		Updated_at: Comment.Updated_at,
 		Deleted_at: Comment.Deleted_at,
 		Name:       Comment.Name,
+		Photo_url:  Comment.Photo_url,
 		Thread:     Comment.Thread,
 	}
 }

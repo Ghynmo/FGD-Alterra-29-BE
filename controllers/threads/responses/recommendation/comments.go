@@ -3,14 +3,16 @@ package recommendation
 import "fgd-alterra-29/business/comments"
 
 type CommentRecommendation struct {
-	Name    string
-	Comment string
+	Name      string
+	Photo_url string
+	Comment   string
 }
 
 func ToCommentRecommendation(Domain comments.Domain) CommentRecommendation {
 	return CommentRecommendation{
-		Name:    Domain.Name,
-		Comment: Domain.Comment,
+		Name:      Domain.Name,
+		Photo_url: Domain.Photo_url,
+		Comment:   Domain.Comment,
 	}
 }
 

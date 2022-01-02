@@ -32,6 +32,7 @@ import (
 
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
+	_threadfollowRepository "fgd-alterra-29/drivers/databases/thread_follows"
 	_threadlikeRepository "fgd-alterra-29/drivers/databases/thread_likes"
 
 	"github.com/labstack/echo/v4"
@@ -57,6 +58,7 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_commentRepository.Comments{})
 	db.AutoMigrate(&_userbadgeRepository.UserBadges{})
 	db.AutoMigrate(&_threadlikeRepository.ThreadLikes{})
+	db.AutoMigrate(&_threadfollowRepository.ThreadFollows{})
 }
 
 func main() {

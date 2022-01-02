@@ -43,3 +43,14 @@ func (DB *MysqlThreadReportRepository) GetReports(ctx context.Context) ([]thread
 
 	return ToListDomain(ThreadReport), nil
 }
+
+func (DB *MysqlThreadReportRepository) DeleteThreadReport(ctx context.Context, id int) (threadreport.Domain, error) {
+	var ThreadReport ThreadReport
+	result := DB.Conn.Delete(&ThreadReport, id)
+
+	if result.Error != nil {
+		return threadreport.Domain{}, result.Error
+	}
+
+	return ThreadReport.ToDomain(), nil
+}

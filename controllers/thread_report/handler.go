@@ -5,6 +5,7 @@ import (
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/thread_report/responses"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -37,4 +38,15 @@ func (handler ThreadReportController) GetReports(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, responses.ToListReports(threadreport))
+}
+
+func (handler ThreadReportController) DeleteThreadReport(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	_, err := handler.ThreadReportUseCase.DeleteThreadReport(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, "Report deleted success")
 }

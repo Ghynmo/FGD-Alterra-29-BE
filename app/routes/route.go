@@ -31,6 +31,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("following/:id", cl.FollowController.GetFollowing)
 
 	e.GET("dashboard", cl.UserController.GetDashboardController)
-	e.GET("thread_reports", cl.ThreadReportController.GetReports)
+	e.GET("thread-reports", cl.ThreadReportController.GetReports)
+	e.DELETE("thread-report/:id", cl.ThreadReportController.DeleteThreadReport)
 
 }

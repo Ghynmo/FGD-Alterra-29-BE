@@ -22,9 +22,11 @@ type Domain struct {
 type UseCase interface {
 	GetThreadReports(ctx context.Context) ([]Domain, error)
 	GetReports(ctx context.Context) ([]Domain, error)
+	DeleteThreadReport(ctx context.Context, id int) (Domain, error)
 }
 
 type Repository interface {
 	GetThreadReports(ctx context.Context) ([]Domain, error)
 	GetReports(ctx context.Context) ([]Domain, error)
+	DeleteThreadReport(ctx context.Context, id int) (Domain, error)
 }

@@ -34,3 +34,12 @@ func (uc *ThreadReportUseCase) GetReports(ctx context.Context) ([]Domain, error)
 
 	return report, nil
 }
+
+func (uc *ThreadReportUseCase) DeleteThreadReport(ctx context.Context, id int) (Domain, error) {
+	report, err := uc.Repo.DeleteThreadReport(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return report, nil
+}

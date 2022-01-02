@@ -34,3 +34,12 @@ func (uc *ThreadUseCase) GetRecommendationThreads(ctx context.Context, id int) (
 
 	return thread, nil
 }
+
+func (uc *ThreadUseCase) GetHotThreads(ctx context.Context, id int) ([]Domain, error) {
+	thread, err := uc.Repo.GetHotThreads(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}

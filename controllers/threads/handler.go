@@ -50,3 +50,14 @@ func (handler ThreadController) GetRecommendationThreads(c echo.Context) error {
 	fmt.Println("Thread in Ctrl", thread)
 	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
 }
+
+func (handler ThreadController) GetHotThreads(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetHotThreads(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+}

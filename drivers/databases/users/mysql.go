@@ -58,3 +58,25 @@ func (DB *MysqlUserRepository) GetUsersQuantity(ctx context.Context) (users.Doma
 	}
 	return User.ToDomain(), nil
 }
+
+func (DB *MysqlUserRepository) BannedUser(ctx context.Context, id int) (users.Domain, error) {
+	var User Users
+
+	result := DB.Conn.Model(&User).Where("users.id = (?)", id).Update("status", "banned")
+
+	if result.Error != nil {
+		return users.Domain{}, result.Error
+	}
+	return User.ToDomain(), nil
+}
+
+func (DB *MysqlUserRepository) UnbannedUser(ctx context.Context, id int) (users.Domain, error) {
+	var User Users
+
+	result := DB.Conn.Model(&User).Where("users.id = (?)", id).Update("status", "active")
+
+	if result.Error != nil {
+		return users.Domain{}, result.Error
+	}
+	return User.ToDomain(), nil
+}

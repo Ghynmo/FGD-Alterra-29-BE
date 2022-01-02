@@ -43,3 +43,21 @@ func (uc *UserUseCase) GetUsersQuantity(ctx context.Context) (Domain, error) {
 
 	return user, nil
 }
+
+func (uc *UserUseCase) BannedUser(ctx context.Context, id int) (Domain, error) {
+	user, err := uc.Repo.BannedUser(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
+}
+
+func (uc *UserUseCase) UnbannedUser(ctx context.Context, id int) (Domain, error) {
+	user, err := uc.Repo.UnbannedUser(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
+}

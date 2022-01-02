@@ -32,4 +32,6 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 
 	e.GET("dashboard", cl.UserController.GetDashboardController)
 
+	e.PUT("banned-user/:id", cl.UserController.BannedUser)
+	e.PUT("unbanned-user/:id", cl.UserController.UnbannedUser)
 }

@@ -25,7 +25,7 @@ func (JwtConf *ConfigJWT) Init() middleware.JWTConfig {
 	}
 }
 
-func GenerateToken(id int) (string, error) {
+func (JwtConf *ConfigJWT) GenerateToken(id int) (string, error) {
 	claims := JWTClaims{
 		id,
 		jwt.RegisteredClaims{

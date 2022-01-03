@@ -50,7 +50,7 @@ func main() {
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
-	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
+	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext, ConfigJWT)
 	userController := _userController.NewUserController(userUseCase)
 
 	routesInit := routes.ControllerList{

@@ -44,3 +44,5 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+require golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect

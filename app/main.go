@@ -1,6 +1,7 @@
 package main
 
 import (
+	_middlewares "fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/app/routes"
 	_mysqlDriver "fgd-alterra-29/drivers/mysql"
 	"log"
@@ -37,6 +38,11 @@ func main() {
 		DB_Database: viper.GetString(`database.name`),
 	}
 
+	ConfigJWT := _middlewares.ConfigJWT{
+		Secret:    viper.GetString(`jwt.secret`),
+		ExpiresAt: viper.GetInt64(`jwt.expired`),
+	}
+
 	Conn := configDB.InitialDB()
 	DbMigrate(Conn)
 
@@ -48,6 +54,7 @@ func main() {
 	userController := _userController.NewUserController(userUseCase)
 
 	routesInit := routes.ControllerList{
+		JwtConfig:      ConfigJWT.Init(),
 		UserController: *userController,
 	}
 

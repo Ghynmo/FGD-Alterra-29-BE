@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/viper"
 )
 
@@ -12,12 +13,15 @@ type JWTClaims struct {
 	jwt.RegisteredClaims
 }
 
-//Initialize Viper just for get data from JSON file
-func init() {
-	viper.SetConfigFile(`app/configs/config.json`)
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(err)
+type ConfigJWT struct {
+	Secret    string
+	ExpiresAt int64
+}
+
+func (JwtConf *ConfigJWT) Init() middleware.JWTConfig {
+	return middleware.JWTConfig{
+		Claims:     &JWTClaims{},
+		SigningKey: []byte(JwtConf.Secret),
 	}
 }
 

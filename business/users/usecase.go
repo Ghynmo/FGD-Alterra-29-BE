@@ -71,7 +71,7 @@ func (uc *UserUseCase) LoginController(ctx context.Context, domain Domain) (Doma
 	}
 
 	var errT error
-	user.Token, errT = uc.ConfigJwt.GenerateToken(domain.ID)
+	user.Token, errT = uc.ConfigJwt.GenerateToken(user.ID)
 	if errT != nil {
 		return Domain{}, err
 	}

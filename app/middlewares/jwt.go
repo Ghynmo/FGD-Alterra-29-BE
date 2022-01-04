@@ -29,7 +29,7 @@ func (JwtConf *ConfigJWT) GenerateToken(id int) (string, error) {
 	claims := JWTClaims{
 		id,
 		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Unix(viper.GetInt64(`jwt.expired`)*3600, 0)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(viper.GetInt64(`jwt.expired`)))),
 		},
 	}
 

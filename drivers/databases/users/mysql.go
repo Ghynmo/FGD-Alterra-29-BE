@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"fgd-alterra-29/business/users"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -37,8 +36,6 @@ func (DB *MysqlUserRepository) Login(ctx context.Context, domain users.Domain) (
 	if result.Error != nil {
 		return users.Domain{}, result.Error
 	}
-
-	fmt.Println(User.ToDomain())
 
 	return User.ToDomain(), nil
 }

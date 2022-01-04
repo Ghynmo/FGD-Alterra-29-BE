@@ -20,6 +20,21 @@ func NewUserController(userUseCase users.UseCase) *UserController {
 	}
 }
 
+func (handler UserController) RegisterController(c echo.Context) error {
+	var NewRegister request.Register
+	c.Bind(&NewRegister)
+
+	domain := NewRegister.FromRegister()
+
+	ctx := c.Request().Context()
+
+	user, err := handler.UserUseCase.RegisterController(ctx, domain)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToLoginResponse(user))
+}
+
 func (handler UserController) LoginController(c echo.Context) error {
 	var NewLogin request.Login
 	c.Bind(&NewLogin)

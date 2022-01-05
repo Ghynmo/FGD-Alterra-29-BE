@@ -1,9 +1,9 @@
 package responses
 
 import (
+	"fgd-alterra-29/business/badges"
 	"fgd-alterra-29/business/categories"
 	"fgd-alterra-29/business/threads"
-	userbadges "fgd-alterra-29/business/user_badges"
 	"fgd-alterra-29/business/users"
 	"fgd-alterra-29/controllers/users/responses/profile"
 )
@@ -25,7 +25,7 @@ type Profile struct {
 	ThreadProfile  []profile.ThreadProfile    `json:"thread_on_profile"`
 }
 
-func ToProfile(domain users.Domain, badge []userbadges.Domain, catthread []categories.Domain, thread []threads.Domain) Profile {
+func ToProfile(domain users.Domain, badge []badges.Domain, catthread []categories.Domain, thread []threads.Domain) Profile {
 	return Profile{
 		ID:             domain.ID,
 		Role_id:        domain.Role_id,

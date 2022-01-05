@@ -1,9 +1,9 @@
 package users
 
 import (
+	"fgd-alterra-29/business/badges"
 	"fgd-alterra-29/business/categories"
 	"fgd-alterra-29/business/threads"
-	userbadges "fgd-alterra-29/business/user_badges"
 	"fgd-alterra-29/business/users"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/users/responses"
@@ -14,18 +14,18 @@ import (
 )
 
 type UserController struct {
-	UserUseCase      users.UseCase
-	ThreadUseCase    threads.UseCase
-	UserBadgeUseCase userbadges.UseCase
-	CategoryUseCase  categories.UseCase
+	UserUseCase     users.UseCase
+	ThreadUseCase   threads.UseCase
+	BadgeUseCase    badges.UseCase
+	CategoryUseCase categories.UseCase
 }
 
-func NewUserController(userUC users.UseCase, threadUC threads.UseCase, userbadgeUC userbadges.UseCase, categoryUC categories.UseCase) *UserController {
+func NewUserController(userUC users.UseCase, threadUC threads.UseCase, badgeUC badges.UseCase, categoryUC categories.UseCase) *UserController {
 	return &UserController{
-		UserUseCase:      userUC,
-		ThreadUseCase:    threadUC,
-		UserBadgeUseCase: userbadgeUC,
-		CategoryUseCase:  categoryUC,
+		UserUseCase:     userUC,
+		ThreadUseCase:   threadUC,
+		BadgeUseCase:    badgeUC,
+		CategoryUseCase: categoryUC,
 	}
 }
 
@@ -41,12 +41,13 @@ func (handler UserController) GetUsersController(c echo.Context) error {
 
 func (handler UserController) GetProfileController(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
+	point, _ := strconv.Atoi(c.QueryParam("point"))
 
 	ctx := c.Request().Context()
 
 	user, err := handler.UserUseCase.GetProfileController(ctx, id)
 	thread, err1 := handler.ThreadUseCase.GetProfileThreads(ctx, id)
-	userbadges, err2 := handler.UserBadgeUseCase.GetUserBadge(ctx, id)
+	badges, err2 := handler.BadgeUseCase.GetBadgesByPointController(ctx, point)
 	catthreads, err3 := handler.CategoryUseCase.GetUserActiveInCategory(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
@@ -60,5 +61,5 @@ func (handler UserController) GetProfileController(c echo.Context) error {
 	if err3 != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToProfile(user, userbadges, catthreads, thread))
+	return controllers.NewSuccessResponse(c, responses.ToProfile(user, badges, catthreads, thread))
 }

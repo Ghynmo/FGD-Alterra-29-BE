@@ -34,7 +34,10 @@ import (
 	_userpointController "fgd-alterra-29/controllers/user_points"
 	_userpointRepository "fgd-alterra-29/drivers/databases/user_points"
 
+	_badgeUseCase "fgd-alterra-29/business/badges"
+	_badgeController "fgd-alterra-29/controllers/badges"
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
+
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 
 	"github.com/labstack/echo/v4"
@@ -102,9 +105,13 @@ func main() {
 	categoryUseCase := _categoryUseCase.NewCategoryUseCase(categoryRepository, timeoutContext)
 	categoryController := _categoryController.NewCategoryController(categoryUseCase)
 
+	badgeRepository := _badgeRepository.NewMysqlBadgeRepository(Conn)
+	badgeUseCase := _badgeUseCase.NewBadgeUseCase(badgeRepository, timeoutContext)
+	badgeController := _badgeController.NewBadgeController(badgeUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
-	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase)
+	userController := _userController.NewUserController(userUseCase, threadUseCase, badgeUseCase, categoryUseCase)
 
 	routesInit := routes.ControllerList{
 		UserController:      *userController,
@@ -114,6 +121,7 @@ func main() {
 		FollowController:    *followController,
 		CategoryController:  *categoryController,
 		UserPointController: *userpointController,
+		BadgeController:     *badgeController,
 	}
 
 	routesInit.RouteRegister(*e)

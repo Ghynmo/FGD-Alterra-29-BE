@@ -1,18 +1,20 @@
 package profile
 
-import userbadges "fgd-alterra-29/business/user_badges"
+import "fgd-alterra-29/business/badges"
 
 type ProfileBadges struct {
-	Badge string
+	Badge    string
+	BadgeUrl string
 }
 
-func ToProfileBadges(Domain userbadges.Domain) ProfileBadges {
+func ToProfileBadges(Domain badges.Domain) ProfileBadges {
 	return ProfileBadges{
-		Badge: Domain.Badge,
+		Badge:    Domain.Badge,
+		BadgeUrl: Domain.BadgeURL,
 	}
 }
 
-func ToListProfileBadges(u []userbadges.Domain) []ProfileBadges {
+func ToListProfileBadges(u []badges.Domain) []ProfileBadges {
 	var Domains []ProfileBadges
 
 	for _, val := range u {

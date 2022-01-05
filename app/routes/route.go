@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fgd-alterra-29/controllers/badges"
 	"fgd-alterra-29/controllers/categories"
 	"fgd-alterra-29/controllers/comments"
 	"fgd-alterra-29/controllers/follows"
@@ -20,6 +21,7 @@ type ControllerList struct {
 	FollowController    follows.FollowController
 	CategoryController  categories.CategoryController
 	UserPointController userpoints.UserPointController
+	BadgeController     badges.BadgeController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {

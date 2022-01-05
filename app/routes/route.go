@@ -30,4 +30,5 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("home/:id", cl.ThreadController.GetHomepageThreads)
 	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads)
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
+	e.GET("search", cl.ThreadController.GetSearch)
 }

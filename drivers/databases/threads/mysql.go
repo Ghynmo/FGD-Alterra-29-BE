@@ -4,6 +4,7 @@ import (
 	"context"
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/drivers/databases/comments"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -116,4 +117,28 @@ func (DB *MysqlThreadRepository) GetCategories(id int, index int) *gorm.DB {
 		Limit(1).Offset(index)
 
 	return Categories1
+}
+
+func (DB *MysqlThreadRepository) GetSearch(ctx context.Context, threadname string) ([]threads.Domain, error) {
+	var Thread []Threads
+	var Comment comments.Comments
+
+	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
+	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
+
+	result := DB.Conn.Table("threads").Select("*, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
+		Where("title = (?)", threadname).
+		Preload("Comments", func(db *gorm.DB) *gorm.DB {
+			return db.Table("comments").Select("*").
+				Joins("join users on comments.user_id = users.id").Find(&Comment)
+		}).
+		Find(&Thread)
+
+	if result.Error != nil {
+		return []threads.Domain{}, result.Error
+	}
+
+	fmt.Println(ToListDomain(Thread))
+
+	return ToListDomain(Thread), nil
 }

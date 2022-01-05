@@ -52,3 +52,12 @@ func (uc *ThreadUseCase) GetHotThreads(ctx context.Context) ([]Domain, error) {
 
 	return thread, nil
 }
+
+func (uc *ThreadUseCase) GetSearch(ctx context.Context, threadname string) ([]Domain, error) {
+	thread, err := uc.Repo.GetSearch(ctx, threadname)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}

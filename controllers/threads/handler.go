@@ -62,3 +62,14 @@ func (handler ThreadController) GetHotThreads(c echo.Context) error {
 	}
 	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
 }
+
+func (handler ThreadController) GetSearch(c echo.Context) error {
+	threadname := c.QueryParam("threadname")
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetSearch(ctx, threadname)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+}

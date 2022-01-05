@@ -6,6 +6,7 @@ import (
 	"fgd-alterra-29/controllers/follows"
 	"fgd-alterra-29/controllers/threads"
 	userbadges "fgd-alterra-29/controllers/user_badges"
+	userpoints "fgd-alterra-29/controllers/user_points"
 	"fgd-alterra-29/controllers/users"
 
 	"github.com/labstack/echo/v4"
@@ -18,6 +19,7 @@ type ControllerList struct {
 	CommentController   comments.CommentController
 	FollowController    follows.FollowController
 	CategoryController  categories.CategoryController
+	UserPointController userpoints.UserPointController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {

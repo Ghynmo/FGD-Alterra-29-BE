@@ -6,6 +6,7 @@ import (
 	"fgd-alterra-29/drivers/databases/follows"
 	"fgd-alterra-29/drivers/databases/threads"
 	userbadges "fgd-alterra-29/drivers/databases/user_badges"
+	userpoints "fgd-alterra-29/drivers/databases/user_points"
 )
 
 type Users struct {
@@ -24,6 +25,7 @@ type Users struct {
 	Following     []follows.Follows       `gorm:"foreignKey:User_id"`
 	Followers     []follows.Follows       `gorm:"foreignKey:Follower_id"`
 	Comments      []comments.Comments     `gorm:"foreignKey:User_id"`
+	Points        userpoints.UserPoints   `gorm:"foreignKey:User_id"`
 	Q_Following   int                     `gorm:"-:migration;->"`
 	Q_Followers   int                     `gorm:"-:migration;->"`
 	Q_Post        int                     `gorm:"-:migration;->"`

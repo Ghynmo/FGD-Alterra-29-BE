@@ -2,18 +2,21 @@ package threads
 
 import (
 	"context"
+	userpoints "fgd-alterra-29/business/user_points"
 	"time"
 )
 
 type ThreadUseCase struct {
 	Repo           Repository
 	contextTimeout time.Duration
+	RepoPoint      userpoints.Repository
 }
 
-func NewThreadUseCase(repo Repository, timeout time.Duration) UseCase {
+func NewThreadUseCase(repo Repository, timeout time.Duration, up userpoints.Repository) UseCase {
 	return &ThreadUseCase{
 		Repo:           repo,
 		contextTimeout: timeout,
+		RepoPoint:      up,
 	}
 }
 
@@ -31,6 +34,8 @@ func (uc *ThreadUseCase) CreateThread(ctx context.Context, domain Domain) (Domai
 	if err != nil {
 		return Domain{}, err
 	}
+
+	uc.RepoPoint.AddThreadPoint(ctx, domain.User_id)
 
 	return thread, nil
 }

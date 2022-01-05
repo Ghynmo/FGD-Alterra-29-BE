@@ -6,5 +6,6 @@ type Domain struct {
 	ID          int
 	Badge       string
 	Description string
+	Point       int
 	UserBadges  []userbadges.Domain
 }

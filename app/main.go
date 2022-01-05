@@ -30,6 +30,10 @@ import (
 	_categoryController "fgd-alterra-29/controllers/categories"
 	_categoryRepository "fgd-alterra-29/drivers/databases/categories"
 
+	_userpointUseCase "fgd-alterra-29/business/user_points"
+	_userpointController "fgd-alterra-29/controllers/user_points"
+	_userpointRepository "fgd-alterra-29/drivers/databases/user_points"
+
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 
@@ -55,6 +59,7 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_threadRepository.Threads{})
 	db.AutoMigrate(&_commentRepository.Comments{})
 	db.AutoMigrate(&_userbadgeRepository.UserBadges{})
+	db.AutoMigrate(&_userpointRepository.UserPoints{})
 }
 
 func main() {
@@ -73,8 +78,12 @@ func main() {
 	e := echo.New()
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
+	userpointRepository := _userpointRepository.NewMysqlUserPointRepository(Conn)
+	userpointUseCase := _userpointUseCase.NewUserPointUseCase(userpointRepository, timeoutContext)
+	userpointController := _userpointController.NewUserPointController(userpointUseCase)
+
 	threadRepository := _threadRepository.NewMysqlThreadRepository(Conn)
-	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext)
+	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext, userpointRepository)
 	threadController := _threadController.NewThreadController(threadUseCase)
 
 	userbadgeRepository := _userbadgeRepository.NewMysqlUserBadgeRepository(Conn)
@@ -104,6 +113,7 @@ func main() {
 		CommentController:   *commentController,
 		FollowController:    *followController,
 		CategoryController:  *categoryController,
+		UserPointController: *userpointController,
 	}
 
 	routesInit.RouteRegister(*e)

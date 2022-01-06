@@ -7,6 +7,7 @@ import (
 	"fgd-alterra-29/drivers/databases/follows"
 	threadfollows "fgd-alterra-29/drivers/databases/thread_follows"
 	threadlikes "fgd-alterra-29/drivers/databases/thread_likes"
+	threadsaves "fgd-alterra-29/drivers/databases/thread_saves"
 	"fgd-alterra-29/drivers/databases/threads"
 	userbadges "fgd-alterra-29/drivers/databases/user_badges"
 )
@@ -30,6 +31,7 @@ type Users struct {
 	CommentLikes  []commentlikes.CommentLikes   `gorm:"foreignKey:Liker_id"`
 	ThreadLikes   []threadlikes.ThreadLikes     `gorm:"foreignKey:User_id"`
 	ThreadFollows []threadfollows.ThreadFollows `gorm:"foreignKey:User_id"`
+	ThreadSaves   []threadsaves.ThreadSaves     `gorm:"foreignKey:User_id"`
 	Q_Following   int                           `gorm:"-:migration;->"`
 	Q_Followers   int                           `gorm:"-:migration;->"`
 	Q_Post        int                           `gorm:"-:migration;->"`

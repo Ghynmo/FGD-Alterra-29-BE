@@ -5,6 +5,7 @@ import (
 	"fgd-alterra-29/drivers/databases/comments"
 	threadfollows "fgd-alterra-29/drivers/databases/thread_follows"
 	threadlikes "fgd-alterra-29/drivers/databases/thread_likes"
+	threadsaves "fgd-alterra-29/drivers/databases/thread_saves"
 )
 
 type Threads struct {
@@ -17,6 +18,7 @@ type Threads struct {
 	Comments      []comments.Comments           `gorm:"foreignKey:Thread_id"`
 	Likes         []threadlikes.ThreadLikes     `gorm:"foreignKey:Thread_id"`
 	Followers     []threadfollows.ThreadFollows `gorm:"foreignKey:Thread_id"`
+	Saves         []threadsaves.ThreadSaves     `gorm:"foreignKey:Thread_id"`
 	// Created_at    time.Time
 	// Updated_at    time.Time
 	// Deleted_at    time.Time
@@ -39,6 +41,7 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		Comments:      comments.ToListDomain(Thread.Comments),
 		Likes:         threadlikes.ToListDomain(Thread.Likes),
 		Followers:     threadfollows.ToListDomain(Thread.Followers),
+		// Saves: threadsaves.ToListDomain(Thread.Saves),
 		// Created_at:    Thread.Created_at,
 		// Updated_at:    Thread.Updated_at,
 		// Deleted_at:    Thread.Deleted_at,

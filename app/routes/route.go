@@ -6,6 +6,7 @@ import (
 	"fgd-alterra-29/controllers/comments"
 	"fgd-alterra-29/controllers/follows"
 	threadlikes "fgd-alterra-29/controllers/thread_likes"
+	threadsaves "fgd-alterra-29/controllers/thread_saves"
 	"fgd-alterra-29/controllers/threads"
 	userbadges "fgd-alterra-29/controllers/user_badges"
 	"fgd-alterra-29/controllers/users"
@@ -22,6 +23,7 @@ type ControllerList struct {
 	CategoryController    categories.CategoryController
 	ThreadLikeController  threadlikes.ThreadLikeController
 	CommentLikeController commentlikes.CommentLikeController
+	ThreadSaveController  threadsaves.ThreadSaveController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {

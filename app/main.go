@@ -38,6 +38,10 @@ import (
 	_commentlikeController "fgd-alterra-29/controllers/comment_likes"
 	_commentlikeRepository "fgd-alterra-29/drivers/databases/comment_likes"
 
+	_threadsaveUseCase "fgd-alterra-29/business/thread_saves"
+	_threadsaveController "fgd-alterra-29/controllers/thread_saves"
+	_threadsaveRepository "fgd-alterra-29/drivers/databases/thread_saves"
+
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 	_threadfollowRepository "fgd-alterra-29/drivers/databases/thread_follows"
@@ -67,6 +71,7 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_threadlikeRepository.ThreadLikes{})
 	db.AutoMigrate(&_threadfollowRepository.ThreadFollows{})
 	db.AutoMigrate(&_commentlikeRepository.CommentLikes{})
+	db.AutoMigrate(&_threadsaveRepository.ThreadSaves{})
 }
 
 func main() {
@@ -113,6 +118,10 @@ func main() {
 	commentlikeUseCase := _commentlikeUseCase.NewCommentLikeUseCase(commentlikeRepository, timeoutContext)
 	commentlikeController := _commentlikeController.NewCommentLikeController(commentlikeUseCase)
 
+	threadsaveRepository := _threadsaveRepository.NewMysqlThreadSaveRepository(Conn)
+	threadsaveUseCase := _threadsaveUseCase.NewThreadSaveUseCase(threadsaveRepository, timeoutContext)
+	threadsaveController := _threadsaveController.NewThreadSaveController(threadsaveUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase)
@@ -126,6 +135,7 @@ func main() {
 		CategoryController:    *categoryController,
 		ThreadLikeController:  *threadlikeController,
 		CommentLikeController: *commentlikeController,
+		ThreadSaveController:  *threadsaveController,
 	}
 
 	routesInit.RouteRegister(*e)

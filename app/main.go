@@ -30,10 +30,13 @@ import (
 	_categoryController "fgd-alterra-29/controllers/categories"
 	_categoryRepository "fgd-alterra-29/drivers/databases/categories"
 
+	_threadlikeUseCase "fgd-alterra-29/business/thread_likes"
+	_threadlikeController "fgd-alterra-29/controllers/thread_likes"
+	_threadlikeRepository "fgd-alterra-29/drivers/databases/thread_likes"
+
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 	_threadfollowRepository "fgd-alterra-29/drivers/databases/thread_follows"
-	_threadlikeRepository "fgd-alterra-29/drivers/databases/thread_likes"
 
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -97,17 +100,22 @@ func main() {
 	categoryUseCase := _categoryUseCase.NewCategoryUseCase(categoryRepository, timeoutContext)
 	categoryController := _categoryController.NewCategoryController(categoryUseCase)
 
+	threadlikeRepository := _threadlikeRepository.NewMysqlThreadLikeRepository(Conn)
+	threadlikeUseCase := _threadlikeUseCase.NewThreadLikeUseCase(threadlikeRepository, timeoutContext)
+	threadlikeController := _threadlikeController.NewThreadLikeController(threadlikeUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase)
 
 	routesInit := routes.ControllerList{
-		UserController:      *userController,
-		UserBadgeController: *userbadgeController,
-		ThreadController:    *threadController,
-		CommentController:   *commentController,
-		FollowController:    *followController,
-		CategoryController:  *categoryController,
+		UserController:       *userController,
+		UserBadgeController:  *userbadgeController,
+		ThreadController:     *threadController,
+		CommentController:    *commentController,
+		FollowController:     *followController,
+		CategoryController:   *categoryController,
+		ThreadLikeController: *threadlikeController,
 	}
 
 	routesInit.RouteRegister(*e)

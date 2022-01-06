@@ -43,7 +43,8 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.DELETE("threadlike", cl.ThreadLikeController.DeleteLikes)
 	e.POST("commentlike", cl.CommentLikeController.CreateLikes)
 	e.DELETE("commentlike", cl.CommentLikeController.DeleteLikes)
+	e.POST("threadsave", cl.ThreadSaveController.SaveThread)
+	e.DELETE("threadsave", cl.ThreadSaveController.Unsaves)
 
-	e.POST("threadsave", cl.ThreadController.GetSearch)
 	e.POST("threadshare", cl.ThreadController.GetSearch)
 }

@@ -41,7 +41,7 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		Comments:      comments.ToListDomain(Thread.Comments),
 		Likes:         threadlikes.ToListDomain(Thread.Likes),
 		Followers:     threadfollows.ToListDomain(Thread.Followers),
-		// Saves: threadsaves.ToListDomain(Thread.Saves),
+		Saves:         threadsaves.ToListDomain(Thread.Saves),
 		// Created_at:    Thread.Created_at,
 		// Updated_at:    Thread.Updated_at,
 		// Deleted_at:    Thread.Deleted_at,

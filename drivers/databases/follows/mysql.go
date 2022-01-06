@@ -3,6 +3,7 @@ package follows
 import (
 	"context"
 	"fgd-alterra-29/business/follows"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -43,4 +44,33 @@ func (DB *MysqlFollowRepository) GetFollowing(ctx context.Context, id int) ([]fo
 	}
 
 	return ToListDomain(Follow), nil
+}
+
+func (DB *MysqlFollowRepository) Follows(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+
+	data := Follows{
+		User_id:     domain.User_id,
+		Follower_id: domain.Follower_id,
+		Followed_at: time.Now(),
+	}
+
+	result := DB.Conn.Create(&data)
+
+	if result.Error != nil {
+		return follows.Domain{}, result.Error
+	}
+
+	return follows.Domain{}, nil
+}
+
+func (DB *MysqlFollowRepository) Unfollow(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+	var Follow Follows
+
+	result := DB.Conn.Where("user_id = ? AND follower_id = ?", domain.User_id, domain.Follower_id).Delete(&Follow)
+
+	if result.Error != nil {
+		return follows.Domain{}, result.Error
+	}
+
+	return follows.Domain{}, nil
 }

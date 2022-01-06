@@ -53,8 +53,8 @@ func (uc *UserUseCase) GetProfileSetting(ctx context.Context, id int) (Domain, e
 	return user, nil
 }
 
-func (uc *UserUseCase) UpdateSetting(ctx context.Context, domain Domain, id int) (Domain, error) {
-	admin, err := uc.Repo.UpdateSetting(ctx, domain, id)
+func (uc *UserUseCase) UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error) {
+	admin, err := uc.Repo.UpdateProfile(ctx, domain, id)
 	if err != nil {
 		return Domain{}, err
 	}

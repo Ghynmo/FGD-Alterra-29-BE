@@ -1,18 +1,18 @@
-package settings
+package editprofile
 
 import (
 	"fgd-alterra-29/business/users"
 )
 
-type AdminSetting struct {
+type AdminEdit struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 	Photo string `json:"photo"`
 	Phone string `json:"phone"`
 }
 
-func ToAdminSetting(domain users.Domain) AdminSetting {
-	return AdminSetting{
+func ToAdminEdit(domain users.Domain) AdminEdit {
+	return AdminEdit{
 		Name:  domain.Name,
 		Email: domain.Email,
 		Photo: domain.Photo_url,

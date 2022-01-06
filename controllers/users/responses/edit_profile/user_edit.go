@@ -1,10 +1,10 @@
-package settings
+package editprofile
 
 import (
 	"fgd-alterra-29/business/users"
 )
 
-type UserSetting struct {
+type UserEdit struct {
 	Name    string `json:"name"`
 	Email   string `json:"email"`
 	Photo   string `json:"photo"`
@@ -13,8 +13,8 @@ type UserSetting struct {
 	Address string `json:"address"`
 }
 
-func ToUserSetting(domain users.Domain) UserSetting {
-	return UserSetting{
+func ToUserEdit(domain users.Domain) UserEdit {
+	return UserEdit{
 		Name:    domain.Name,
 		Email:   domain.Email,
 		Photo:   domain.Photo_url,

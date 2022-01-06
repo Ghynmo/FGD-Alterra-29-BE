@@ -70,7 +70,7 @@ func (DB *MysqlUserRepository) GetProfileSetting(ctx context.Context, id int) (u
 	return User.ToDomain(), nil
 }
 
-func (DB *MysqlUserRepository) UpdateSetting(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
+func (DB *MysqlUserRepository) UpdateProfile(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
 	var User Users
 
 	result := DB.Conn.Model(&User).Where("id = (?)", id).Updates(domain)

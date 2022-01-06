@@ -43,7 +43,7 @@ type UseCase interface {
 	GetProfileController(ctx context.Context, id int) (Domain, error)
 	GetUsersQuantity(ctx context.Context) (Domain, error)
 	GetProfileSetting(ctx context.Context, id int) (Domain, error)
-	UpdateSetting(ctx context.Context, domain Domain, id int) (Domain, error)
+	UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error)
 }
 
 type Repository interface {
@@ -51,5 +51,5 @@ type Repository interface {
 	GetProfile(ctx context.Context, id int) (Domain, error)
 	GetUsersQuantity(ctx context.Context) (Domain, error)
 	GetProfileSetting(ctx context.Context, id int) (Domain, error)
-	UpdateSetting(ctx context.Context, domain Domain, id int) (Domain, error)
+	UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error)
 }

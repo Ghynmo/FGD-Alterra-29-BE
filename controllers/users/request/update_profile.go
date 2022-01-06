@@ -2,7 +2,7 @@ package request
 
 import "fgd-alterra-29/business/users"
 
-type UpdateSetting struct {
+type UpdateProfile struct {
 	Name    string `form:"name"`
 	Photo   string `form:"photo"`
 	Email   string `form:"email"`
@@ -11,7 +11,7 @@ type UpdateSetting struct {
 	Address string `form:"address"`
 }
 
-func (us *UpdateSetting) ToDomain() users.Domain {
+func (us *UpdateProfile) ToDomain() users.Domain {
 	return users.Domain{
 		Name:      us.Name,
 		Photo_url: us.Photo,

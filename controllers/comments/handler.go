@@ -3,6 +3,7 @@ package comments
 import (
 	"fgd-alterra-29/business/comments"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/comments/request"
 	"fgd-alterra-29/controllers/comments/responses"
 	"net/http"
 	"strconv"
@@ -30,4 +31,20 @@ func (handler CommentController) GetProfileComments(c echo.Context) error {
 	}
 
 	return controllers.NewSuccessResponse(c, responses.ToListPostProfile(comments))
+}
+
+func (handler CommentController) CreateCommentController(c echo.Context) error {
+	NewComment := request.CreateComment{}
+	c.Bind(&NewComment)
+
+	domain := NewComment.ToDomain()
+
+	ctx := c.Request().Context()
+
+	comments, err := handler.CommentUseCase.CreateCommentController(ctx, domain)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, comments)
 }

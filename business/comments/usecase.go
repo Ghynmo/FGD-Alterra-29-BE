@@ -34,3 +34,12 @@ func (uc *CommentUseCase) GetCommentByThread(ctx context.Context, id int) ([]Dom
 
 	return comments, nil
 }
+
+func (uc *CommentUseCase) CreateCommentController(ctx context.Context, domain Domain) (Domain, error) {
+	comments, err := uc.Repo.CreateComment(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return comments, nil
+}

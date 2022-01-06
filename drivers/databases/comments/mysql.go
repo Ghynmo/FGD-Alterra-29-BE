@@ -3,6 +3,7 @@ package comments
 import (
 	"context"
 	"fgd-alterra-29/business/comments"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -41,4 +42,16 @@ func (DB *MysqlCommentRepository) GetCommentByThread(ctx context.Context, id int
 	}
 
 	return ToListDomain(Comment), nil
+}
+
+func (DB *MysqlCommentRepository) CreateComment(ctx context.Context, domain comments.Domain) (comments.Domain, error) {
+	var Comment Comments
+	fmt.Println(domain)
+	result := DB.Conn.Model(&Comment).Create(&domain)
+
+	if result.Error != nil {
+		return comments.Domain{}, result.Error
+	}
+
+	return Comment.ToDomain(), nil
 }

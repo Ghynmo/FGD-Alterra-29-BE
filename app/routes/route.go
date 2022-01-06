@@ -31,4 +31,12 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads)
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
 	e.GET("search", cl.ThreadController.GetSearch)
+
+	e.POST("comment", cl.CommentController.CreateCommentController)
+	e.POST("commentlike", cl.ThreadController.GetSearch)
+	e.DELETE("commentunlike", cl.ThreadController.GetSearch)
+	e.POST("threadlike", cl.ThreadController.GetSearch)
+	e.DELETE("threadunlike", cl.ThreadController.GetSearch)
+	e.POST("threadsave", cl.ThreadController.GetSearch)
+	e.POST("threadshare", cl.ThreadController.GetSearch)
 }

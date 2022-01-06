@@ -3,7 +3,6 @@ package comments
 import (
 	"context"
 	"fgd-alterra-29/business/comments"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -46,11 +45,19 @@ func (DB *MysqlCommentRepository) GetCommentByThread(ctx context.Context, id int
 
 func (DB *MysqlCommentRepository) CreateComment(ctx context.Context, domain comments.Domain) (comments.Domain, error) {
 	var Comment Comments
-	fmt.Println(domain)
-	result := DB.Conn.Model(&Comment).Create(&domain)
 
-	if result.Error != nil {
-		return comments.Domain{}, result.Error
+	if domain.ReplyOf == 0 {
+		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of) VALUES (?, ?, ?, NULL)",
+			domain.Thread_id, domain.User_id, domain.Comment)
+		if result.Error != nil {
+			return comments.Domain{}, result.Error
+		}
+	} else {
+		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of) VALUES (?, ?, ?, ?)",
+			domain.Thread_id, domain.User_id, domain.Comment, domain.ReplyOf)
+		if result.Error != nil {
+			return comments.Domain{}, result.Error
+		}
 	}
 
 	return Comment.ToDomain(), nil

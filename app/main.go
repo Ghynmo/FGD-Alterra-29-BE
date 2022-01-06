@@ -34,6 +34,10 @@ import (
 	_threadlikeController "fgd-alterra-29/controllers/thread_likes"
 	_threadlikeRepository "fgd-alterra-29/drivers/databases/thread_likes"
 
+	_commentlikeUseCase "fgd-alterra-29/business/comment_likes"
+	_commentlikeController "fgd-alterra-29/controllers/comment_likes"
+	_commentlikeRepository "fgd-alterra-29/drivers/databases/comment_likes"
+
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 	_threadfollowRepository "fgd-alterra-29/drivers/databases/thread_follows"
@@ -62,6 +66,7 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_userbadgeRepository.UserBadges{})
 	db.AutoMigrate(&_threadlikeRepository.ThreadLikes{})
 	db.AutoMigrate(&_threadfollowRepository.ThreadFollows{})
+	db.AutoMigrate(&_commentlikeRepository.CommentLikes{})
 }
 
 func main() {
@@ -104,18 +109,23 @@ func main() {
 	threadlikeUseCase := _threadlikeUseCase.NewThreadLikeUseCase(threadlikeRepository, timeoutContext)
 	threadlikeController := _threadlikeController.NewThreadLikeController(threadlikeUseCase)
 
+	commentlikeRepository := _commentlikeRepository.NewMysqlCommentLikeRepository(Conn)
+	commentlikeUseCase := _commentlikeUseCase.NewCommentLikeUseCase(commentlikeRepository, timeoutContext)
+	commentlikeController := _commentlikeController.NewCommentLikeController(commentlikeUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase)
 
 	routesInit := routes.ControllerList{
-		UserController:       *userController,
-		UserBadgeController:  *userbadgeController,
-		ThreadController:     *threadController,
-		CommentController:    *commentController,
-		FollowController:     *followController,
-		CategoryController:   *categoryController,
-		ThreadLikeController: *threadlikeController,
+		UserController:        *userController,
+		UserBadgeController:   *userbadgeController,
+		ThreadController:      *threadController,
+		CommentController:     *commentController,
+		FollowController:      *followController,
+		CategoryController:    *categoryController,
+		ThreadLikeController:  *threadlikeController,
+		CommentLikeController: *commentlikeController,
 	}
 
 	routesInit.RouteRegister(*e)

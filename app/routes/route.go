@@ -2,6 +2,7 @@ package routes
 
 import (
 	"fgd-alterra-29/controllers/categories"
+	commentlikes "fgd-alterra-29/controllers/comment_likes"
 	"fgd-alterra-29/controllers/comments"
 	"fgd-alterra-29/controllers/follows"
 	threadlikes "fgd-alterra-29/controllers/thread_likes"
@@ -13,13 +14,14 @@ import (
 )
 
 type ControllerList struct {
-	UserController       users.UserController
-	UserBadgeController  userbadges.UserBadgeController
-	ThreadController     threads.ThreadController
-	CommentController    comments.CommentController
-	FollowController     follows.FollowController
-	CategoryController   categories.CategoryController
-	ThreadLikeController threadlikes.ThreadLikeController
+	UserController        users.UserController
+	UserBadgeController   userbadges.UserBadgeController
+	ThreadController      threads.ThreadController
+	CommentController     comments.CommentController
+	FollowController      follows.FollowController
+	CategoryController    categories.CategoryController
+	ThreadLikeController  threadlikes.ThreadLikeController
+	CommentLikeController commentlikes.CommentLikeController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
@@ -37,9 +39,9 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.POST("comment", cl.CommentController.CreateCommentController)
 	e.POST("threadlike", cl.ThreadLikeController.CreateLikes)
 	e.DELETE("threadlike", cl.ThreadLikeController.DeleteLikes)
+	e.POST("commentlike", cl.CommentLikeController.CreateLikes)
+	e.DELETE("commentlike", cl.CommentLikeController.DeleteLikes)
 
-	e.POST("commentlike", cl.ThreadController.GetSearch)
-	e.DELETE("commentunlike", cl.ThreadController.GetSearch)
 	e.POST("threadsave", cl.ThreadController.GetSearch)
 	e.POST("threadshare", cl.ThreadController.GetSearch)
 }

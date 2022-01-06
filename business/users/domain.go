@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	commentlikes "fgd-alterra-29/business/comment_likes"
 	"fgd-alterra-29/business/comments"
 	"fgd-alterra-29/business/follows"
 	threadfollows "fgd-alterra-29/business/thread_follows"
@@ -27,6 +28,7 @@ type Domain struct {
 	Following     []follows.Domain
 	Followers     []follows.Domain
 	Comments      []comments.Domain
+	CommentLikes  []commentlikes.Domain
 	ThreadLikes   []threadlikes.Domain
 	ThreadFollows []threadfollows.Domain
 	Q_Followers   int

@@ -2,6 +2,7 @@ package users
 
 import (
 	"fgd-alterra-29/business/users"
+	commentlikes "fgd-alterra-29/drivers/databases/comment_likes"
 	"fgd-alterra-29/drivers/databases/comments"
 	"fgd-alterra-29/drivers/databases/follows"
 	threadfollows "fgd-alterra-29/drivers/databases/thread_follows"
@@ -26,6 +27,7 @@ type Users struct {
 	Following     []follows.Follows             `gorm:"foreignKey:User_id"`
 	Followers     []follows.Follows             `gorm:"foreignKey:Follower_id"`
 	Comments      []comments.Comments           `gorm:"foreignKey:User_id"`
+	CommentLikes  []commentlikes.CommentLikes   `gorm:"foreignKey:Liker_id"`
 	ThreadLikes   []threadlikes.ThreadLikes     `gorm:"foreignKey:User_id"`
 	ThreadFollows []threadfollows.ThreadFollows `gorm:"foreignKey:User_id"`
 	Q_Following   int                           `gorm:"-:migration;->"`
@@ -55,6 +57,7 @@ func (user *Users) ToDomain() users.Domain {
 		Following:     follows.ToListDomain(user.Following),
 		Followers:     follows.ToListDomain(user.Followers),
 		Comments:      comments.ToListDomain(user.Comments),
+		CommentLikes:  commentlikes.ToListDomain(user.CommentLikes),
 		ThreadLikes:   threadlikes.ToListDomain(user.ThreadLikes),
 		ThreadFollows: threadfollows.ToListDomain(user.ThreadFollows),
 		Q_Following:   user.Q_Following,

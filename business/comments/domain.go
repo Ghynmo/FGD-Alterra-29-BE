@@ -2,6 +2,7 @@ package comments
 
 import (
 	"context"
+	commentlikes "fgd-alterra-29/business/comment_likes"
 	"time"
 )
 
@@ -12,6 +13,7 @@ type Domain struct {
 	Comment    string
 	Replies    []Domain
 	ReplyOf    int
+	Likes      []commentlikes.Domain
 	Created_at time.Time
 	Updated_at time.Time
 	Deleted_at time.Time

@@ -3,6 +3,7 @@ package threads
 import (
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/drivers/databases/comments"
+	"time"
 )
 
 type Threads struct {
@@ -13,9 +14,9 @@ type Threads struct {
 	Content       string
 	Thumbnail_url string
 	Comments      []comments.Comments `gorm:"foreignKey:Thread_id"`
-	// Created_at    time.Time
-	// Updated_at    time.Time
-	// Deleted_at    time.Time
+	Created_at    time.Time
+	Updated_at    time.Time
+	Deleted_at    time.Time
 	Category      string `gorm:"-:migration;->"`
 	Comment       string `gorm:"-:migration;->"`
 	Q_Comment     int    `gorm:"-:migration;->"`
@@ -31,9 +32,9 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		Content:       Thread.Content,
 		Thumbnail_url: Thread.Thumbnail_url,
 		Comments:      comments.ToListDomain(Thread.Comments),
-		// Created_at:    Thread.Created_at,
-		// Updated_at:    Thread.Updated_at,
-		// Deleted_at:    Thread.Deleted_at,
+		Created_at:    Thread.Created_at,
+		Updated_at:    Thread.Updated_at,
+		Deleted_at:    Thread.Deleted_at,
 		Category:      Thread.Category,
 		Comment:       Thread.Comment,
 		Q_Comment:     Thread.Q_Comment,

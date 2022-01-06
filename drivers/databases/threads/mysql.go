@@ -25,8 +25,8 @@ func (DB *MysqlThreadRepository) GetProfileThreads(ctx context.Context, id int) 
 
 	Comment := DB.Conn.Table("comments").Select("comment").Where("comments.thread_id = threads.id").Limit(1)
 
-	result := DB.Conn.Table("threads").Where("threads.user_id = 1").Select("title, (?) as Comment, (?) as RecentReplier", Comment, Replier).
-		Find(&Thread)
+	result := DB.Conn.Table("threads").Where("threads.user_id = 1").Select("id, title, (?) as Comment, (?) as RecentReplier", Comment, Replier).
+		Order("created_at desc").Find(&Thread)
 
 	if result.Error != nil {
 		return []threads.Domain{}, result.Error

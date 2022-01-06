@@ -8,6 +8,7 @@ import (
 type Domain struct {
 	ID       int
 	Category string
+	IconUrl  string
 	Threads  []threads.Domain
 	Q_Title  int
 }

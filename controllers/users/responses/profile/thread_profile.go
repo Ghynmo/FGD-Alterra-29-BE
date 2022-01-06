@@ -3,13 +3,15 @@ package profile
 import "fgd-alterra-29/business/threads"
 
 type ThreadProfile struct {
-	Title         string
-	RecentComment string
-	RecentReplier string
+	ID            int    `json:"thread_id"`
+	Title         string `json:"title"`
+	RecentComment string `json:"recent_comment"`
+	RecentReplier string `json:"recent_replier"`
 }
 
 func ToThreadProfile(Domain threads.Domain) ThreadProfile {
 	return ThreadProfile{
+		ID:            Domain.ID,
 		Title:         Domain.Title,
 		RecentComment: Domain.Comment,
 		RecentReplier: Domain.RecentReplier,

@@ -3,10 +3,10 @@ package responses
 import "fgd-alterra-29/business/follows"
 
 type FollowerList struct {
-	User_ID      int
-	Photo        string
-	FollowerName string
-	Reputation   string
+	User_ID      int    `json:"user_id"`
+	Photo        string `json:"photo"`
+	FollowerName string `json:"name"`
+	Reputation   string `json:"reputation"`
 }
 
 func ToFollowerList(Domain follows.Domain) FollowerList {

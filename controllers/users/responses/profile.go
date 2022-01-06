@@ -9,17 +9,17 @@ import (
 )
 
 type Profile struct {
-	ID             int
-	Role_id        int
-	Reputation_id  int
-	Name           string
-	Header_url     string
-	Photo_url      string
-	Bio            string
-	Q_Following    int
-	Q_Followers    int
-	Q_Post         int
-	Q_Thread       int
+	ID             int                        `json:"user_id"`
+	Role_id        int                        `json:"role_id"`
+	Reputation_id  int                        `json:"reputation_id"`
+	Name           string                     `json:"name"`
+	Header_url     string                     `json:"header_url"`
+	Photo_url      string                     `json:"photo_url"`
+	Bio            string                     `json:"bio"`
+	Q_Following    int                        `json:"following_quantity"`
+	Q_Followers    int                        `json:"followers_quantity"`
+	Q_Post         int                        `json:"post_quantity"`
+	Q_Thread       int                        `json:"thread_quantity"`
 	UserBadgesTrue []profile.ProfileBadges    `json:"badge_list"`
 	ActiveCategory []profile.ActiveOnCategory `json:"active_on_category"`
 	ThreadProfile  []profile.ThreadProfile    `json:"thread_on_profile"`

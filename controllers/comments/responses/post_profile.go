@@ -5,9 +5,9 @@ import (
 )
 
 type PostProfile struct {
-	TargetName string
-	Thread     string
-	Comment    string
+	TargetName string `json:"comment_target"`
+	Thread     string `json:"thread"`
+	Comment    string `json:"comment"`
 }
 
 func ToPostProfile(Domain comments.Domain) PostProfile {

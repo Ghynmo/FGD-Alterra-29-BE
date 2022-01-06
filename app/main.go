@@ -32,6 +32,7 @@ import (
 
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
+	_roleRepository "fgd-alterra-29/drivers/databases/roles"
 
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -48,6 +49,7 @@ func init() {
 
 func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_userRepository.Users{})
+	db.AutoMigrate(&_roleRepository.Roles{})
 	db.AutoMigrate(&_reputationRepository.Reputations{})
 	db.AutoMigrate(&_badgeRepository.Badges{})
 	db.AutoMigrate(&_categoryRepository.Categories{})

@@ -20,7 +20,7 @@ func NewMysqlCategoryRepository(conn *gorm.DB) categories.Repository {
 func (DB *MysqlCategoryRepository) GetUserActiveInCategory(ctx context.Context, id int) ([]categories.Domain, error) {
 	var Category []Categories
 
-	result := DB.Conn.Table("categories").Select("count(title) as Q_Title, category").Where("threads.user_id = 1").
+	result := DB.Conn.Table("categories").Select("count(title) as Q_Title, category, icon_url").Where("threads.user_id = 1").
 		Joins("join threads on categories.id = threads.category_id").
 		Group("category_id").
 		Find(&Category)

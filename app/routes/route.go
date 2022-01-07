@@ -25,7 +25,7 @@ type ControllerList struct {
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
-	e.GET("users", cl.UserController.GetUsersController)
+	e.GET("x", cl.UserController.GetUsersController)
 	e.GET("profile/:id", cl.UserController.GetProfileController)
 	e.GET("post/:id", cl.CommentController.GetProfileComments)
 	e.GET("thread/:id", cl.ThreadController.GetProfileThreads)
@@ -39,6 +39,10 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.PUT("user-edit", cl.UserController.UpdateUserProfile)
 	e.GET("report-thread", cl.CatReportThreadController.GetReportForm)
 	e.POST("report-thread", cl.ThreadReportController.CreateReportThread)
+	e.GET("users", cl.UserController.GetUsersController)
+	e.GET("threads", cl.ThreadController.GetThreadsController)
+	e.DELETE("thread/:id", cl.ThreadController.DeleteThread)
+	e.GET("search-thread/:title", cl.ThreadController.GetThreadsByTitleController)
 
 	e.PUT("banned-user/:id", cl.UserController.BannedUser)
 	e.PUT("unbanned-user/:id", cl.UserController.UnbannedUser)

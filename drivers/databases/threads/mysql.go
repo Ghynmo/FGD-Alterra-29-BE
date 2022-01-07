@@ -17,6 +17,20 @@ func NewMysqlThreadRepository(conn *gorm.DB) threads.Repository {
 	}
 }
 
+func (DB *MysqlThreadRepository) GetThreadsByTitle(ctx context.Context, title string) ([]threads.Domain, error) {
+	var Thread []Threads
+	var NewTitle = ("%" + title + "%")
+
+	result := DB.Conn.Table("threads").Select("threads.id, name, photo_url as Photo, title, threads.created_at").
+		Joins("join users on threads.user_id = users.id").Where("title LIKE ?", NewTitle).Find(&Thread)
+
+	if result.Error != nil {
+		return []threads.Domain{}, result.Error
+	}
+
+	return ToListDomain(Thread), nil
+}
+
 func (DB *MysqlThreadRepository) GetProfileThreads(ctx context.Context, id int) ([]threads.Domain, error) {
 	var Thread []Threads
 
@@ -39,6 +53,30 @@ func (DB *MysqlThreadRepository) GetThreadQuantity(ctx context.Context) (threads
 	var Thread Threads
 	result := DB.Conn.Table("threads").Select("count(id) as Q_Thread").
 		Find(&Thread)
+
+	if result.Error != nil {
+		return threads.Domain{}, result.Error
+	}
+
+	return Thread.ToDomain(), nil
+}
+
+func (DB *MysqlThreadRepository) GetThreads(ctx context.Context) ([]threads.Domain, error) {
+	var Thread []Threads
+	result := DB.Conn.Table("threads").Select("threads.id, name, photo_url as Photo, title, threads.created_at").
+		Joins("join users on threads.user_id = users.id").Order("threads.created_at desc").
+		Find(&Thread)
+
+	if result.Error != nil {
+		return []threads.Domain{}, result.Error
+	}
+
+	return ToListDomain(Thread), nil
+}
+
+func (DB *MysqlThreadRepository) DeleteThread(ctx context.Context, id int) (threads.Domain, error) {
+	var Thread Threads
+	result := DB.Conn.Delete(&Thread, id)
 
 	if result.Error != nil {
 		return threads.Domain{}, result.Error

@@ -9,11 +9,11 @@ import (
 )
 
 type Dashboard struct {
-	Users      []dashboard.UserList
-	ThreadStat []dashboard.ThreadReportStat
-	Q_Users    int
-	Q_Thread   int
-	Q_Post     int
+	Users      []dashboard.UserList         `json:"users_list"`
+	ThreadStat []dashboard.ThreadReportStat `json:"report_statistic"`
+	Q_Users    int                          `json:"users_total"`
+	Q_Thread   int                          `json:"threads_total"`
+	Q_Post     int                          `json:"posts_total"`
 }
 
 func ToDashboard(users []users.Domain, treport []threadreport.Domain, quser users.Domain, qthread threads.Domain, qpost comments.Domain) Dashboard {

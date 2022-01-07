@@ -3,12 +3,14 @@ package dashboard
 import threadreport "fgd-alterra-29/business/thread_report"
 
 type ThreadReportStat struct {
-	CategoryReport string
-	Q_Cat          int
+	ID             int    `json:"category_report_id"`
+	CategoryReport string `json:"category_report"`
+	Q_Cat          int    `json:"report_total"`
 }
 
 func ToThreadReportStat(Domain threadreport.Domain) ThreadReportStat {
 	return ThreadReportStat{
+		ID:             Domain.ID,
 		CategoryReport: Domain.CategoryReport,
 		Q_Cat:          Domain.Q_Cat,
 	}

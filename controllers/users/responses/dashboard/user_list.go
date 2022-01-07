@@ -3,11 +3,11 @@ package dashboard
 import "fgd-alterra-29/business/users"
 
 type UserList struct {
-	ID     int
-	Name   string
-	Email  string
-	Photo  string
-	Status string
+	ID     int    `json:"user_id"`
+	Name   string `json:"name"`
+	Email  string `json:"email"`
+	Photo  string `json:"photo_url"`
+	Status string `json:"status"`
 }
 
 func ToUserList(Domain users.Domain) UserList {

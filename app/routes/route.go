@@ -32,26 +32,37 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("followers/:id", cl.FollowController.GetFollowers)
 	e.GET("following/:id", cl.FollowController.GetFollowing)
 
+	//Main Page of Admin
 	e.GET("dashboard", cl.UserController.GetDashboardController)
+
+	//Report Thread page
+	e.GET("report-thread", cl.CatReportThreadController.GetReportForm)
+	e.POST("report-thread", cl.ThreadReportController.CreateReportThread)
+
+	//List of Users (Admin Access)
+	e.GET("users", cl.UserController.GetUsersController)
+	e.GET("search-user/:name", cl.UserController.GetUsersByName)
+	e.PUT("banned-user/:id", cl.UserController.BannedUser)
+	e.PUT("unbanned-user/:id", cl.UserController.UnbannedUser)
+
+	//List of Threads (Admin Access)
+	e.GET("threads", cl.ThreadController.GetThreadsController)
+	e.GET("search-thread/:title", cl.ThreadController.GetThreadsByTitleController)
+	e.DELETE("thread/:id", cl.ThreadController.DeleteThread)
+
+	//List of Posts (Admin Access)
+	e.GET("posts", cl.CommentController.GetPostsController)
+	e.GET("search-post/:comment", cl.CommentController.GetPostsByCommentController)
+	e.DELETE("post/:id", cl.CommentController.DeletePost)
+
+	//List of Reports (Admin Access)
+	e.GET("thread-reports", cl.ThreadReportController.GetReports)
+	e.GET("search-report/:category", cl.ThreadReportController.GetReportsByCategoryController)
+	e.DELETE("thread-report/:id", cl.ThreadReportController.DeleteThreadReport)
+
+	//Edit Profile page
 	e.GET("admin-edit/:id", cl.UserController.GetAdminSettingController)
 	e.GET("user-edit/:id", cl.UserController.GetUserSettingController)
 	e.PUT("admin-edit", cl.UserController.UpdateAdminProfile)
 	e.PUT("user-edit", cl.UserController.UpdateUserProfile)
-	e.GET("report-thread", cl.CatReportThreadController.GetReportForm)
-	e.POST("report-thread", cl.ThreadReportController.CreateReportThread)
-	e.GET("users", cl.UserController.GetUsersController)
-	e.GET("threads", cl.ThreadController.GetThreadsController)
-	e.DELETE("thread/:id", cl.ThreadController.DeleteThread)
-	e.GET("search-thread/:title", cl.ThreadController.GetThreadsByTitleController)
-	e.GET("posts", cl.CommentController.GetPostsController)
-	e.DELETE("post/:id", cl.CommentController.DeletePost)
-	e.GET("search-post/:comment", cl.CommentController.GetPostsByCommentController)
-
-	e.PUT("banned-user/:id", cl.UserController.BannedUser)
-	e.PUT("unbanned-user/:id", cl.UserController.UnbannedUser)
-	e.GET("search-user/:name", cl.UserController.GetUsersByName)
-	e.GET("thread-reports", cl.ThreadReportController.GetReports)
-	e.DELETE("thread-report/:id", cl.ThreadReportController.DeleteThreadReport)
-
-	e.GET("search-report/:category", cl.ThreadReportController.GetReportsByCategoryController)
 }

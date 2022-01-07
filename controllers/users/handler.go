@@ -11,7 +11,6 @@ import (
 	"fgd-alterra-29/controllers/users/request"
 	"fgd-alterra-29/controllers/users/responses"
 	editprofile "fgd-alterra-29/controllers/users/responses/edit_profile"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -107,10 +106,6 @@ func (handler UserController) GetDashboardController(c echo.Context) error {
 	if err4 != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err3)
 	}
-	fmt.Println("ThreadQty ", threadqty)
-	fmt.Println("UserQty ", userqty)
-	fmt.Println("PostQty ", postqty)
-	fmt.Println("ThreadReport ", threadreport)
 	return controllers.NewSuccessResponse(c, responses.ToDashboard(user, threadreport, userqty, threadqty, postqty))
 }
 

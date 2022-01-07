@@ -35,7 +35,7 @@ func (DB *MysqlThreadReportRepository) GetReportsByCategory(ctx context.Context,
 
 func (DB *MysqlThreadReportRepository) GetThreadReports(ctx context.Context) ([]threadreport.Domain, error) {
 	var ThreadReport []ThreadReport
-	result := DB.Conn.Table("thread_reports").Select("count(thread_reports.id) as Q_Cat, category_report as CategoryReport").
+	result := DB.Conn.Table("thread_reports").Select("thread_reports.id ,count(thread_reports.id) as Q_Cat, category_report as CategoryReport").
 		Joins("join cat_report_ts on thread_reports.catreportthread_id = cat_report_ts.id").Group("category_report").
 		Find(&ThreadReport)
 

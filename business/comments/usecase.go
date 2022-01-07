@@ -17,13 +17,22 @@ func NewCommentUseCase(repo Repository, timeout time.Duration) UseCase {
 	}
 }
 
-func (uc *CommentUseCase) GetCommentProfile(ctx context.Context, id int) ([]Domain, error) {
-	thread, err := uc.Repo.GetCommentProfile(ctx, id)
+func (uc *CommentUseCase) GetPostsByCommentController(ctx context.Context, comment string) ([]Domain, error) {
+	post, err := uc.Repo.GetPostsByComment(ctx, comment)
 	if err != nil {
 		return []Domain{}, err
 	}
 
-	return thread, nil
+	return post, nil
+}
+
+func (uc *CommentUseCase) GetCommentProfile(ctx context.Context, id int) ([]Domain, error) {
+	post, err := uc.Repo.GetCommentProfile(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return post, nil
 }
 
 func (uc *CommentUseCase) GetPostQuantity(ctx context.Context) (Domain, error) {
@@ -45,10 +54,10 @@ func (uc *CommentUseCase) GetPosts(ctx context.Context) ([]Domain, error) {
 }
 
 func (uc *CommentUseCase) DeletePost(ctx context.Context, id int) (Domain, error) {
-	thread, err := uc.Repo.DeletePost(ctx, id)
+	post, err := uc.Repo.DeletePost(ctx, id)
 	if err != nil {
 		return Domain{}, err
 	}
 
-	return thread, nil
+	return post, nil
 }

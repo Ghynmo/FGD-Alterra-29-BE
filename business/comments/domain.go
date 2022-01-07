@@ -22,6 +22,7 @@ type Domain struct {
 }
 
 type UseCase interface {
+	GetPostsByCommentController(ctx context.Context, comment string) ([]Domain, error)
 	GetCommentProfile(ctx context.Context, id int) ([]Domain, error)
 	GetPostQuantity(ctx context.Context) (Domain, error)
 	GetPosts(ctx context.Context) ([]Domain, error)
@@ -29,6 +30,7 @@ type UseCase interface {
 }
 
 type Repository interface {
+	GetPostsByComment(ctx context.Context, comment string) ([]Domain, error)
 	GetCommentProfile(ctx context.Context, id int) ([]Domain, error)
 	GetPostQuantity(ctx context.Context) (Domain, error)
 	GetPosts(ctx context.Context) ([]Domain, error)

@@ -33,5 +33,6 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("dashboard", cl.UserController.GetDashboardController)
 	e.GET("posts", cl.CommentController.GetPostsController)
 	e.DELETE("post/:id", cl.CommentController.DeletePost)
+	e.GET("search-post/:comment", cl.CommentController.GetPostsByCommentController)
 
 }

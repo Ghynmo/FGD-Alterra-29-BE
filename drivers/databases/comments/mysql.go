@@ -17,6 +17,21 @@ func NewMysqlCommentRepository(conn *gorm.DB) comments.Repository {
 	}
 }
 
+func (DB *MysqlCommentRepository) GetPostsByComment(ctx context.Context, comment string) ([]comments.Domain, error) {
+	var Comment []Comments
+	var NewComment = ("%" + comment + "%")
+
+	result := DB.Conn.Table("comments").Select("comments.id, name, photo_url as Photo, comment, comments.created_at").
+		Where("comment LIKE ?", NewComment).Joins("join users on comments.user_id = users.id").
+		Find(&Comment)
+
+	if result.Error != nil {
+		return []comments.Domain{}, result.Error
+	}
+
+	return ToListDomain(Comment), nil
+}
+
 func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int) ([]comments.Domain, error) {
 	var Comment []Comments
 

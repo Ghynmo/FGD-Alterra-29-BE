@@ -26,6 +26,15 @@ func (uc *UserUseCase) GetUsersController(ctx context.Context) ([]Domain, error)
 	return user, nil
 }
 
+func (uc *UserUseCase) GetUsersByNameController(ctx context.Context, name string) ([]Domain, error) {
+	user, err := uc.Repo.GetUsersByName(ctx, name)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return user, nil
+}
+
 func (uc *UserUseCase) GetProfileController(ctx context.Context, id int) (Domain, error) {
 	user, err := uc.Repo.GetProfile(ctx, id)
 	if err != nil {

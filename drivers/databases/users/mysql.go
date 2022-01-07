@@ -20,7 +20,19 @@ func NewMysqlUserRepository(conn *gorm.DB) users.Repository {
 func (DB *MysqlUserRepository) GetUsers(ctx context.Context) ([]users.Domain, error) {
 	var User []Users
 
-	result := DB.Conn.Table("users").Select("status, photo_url, name, email").Find(&User)
+	result := DB.Conn.Table("users").Select("id, status, photo_url, name, email").Find(&User)
+
+	if result.Error != nil {
+		return []users.Domain{}, result.Error
+	}
+	return ToListDomain(User), nil
+}
+
+func (DB *MysqlUserRepository) GetUsersByName(ctx context.Context, name string) ([]users.Domain, error) {
+	var User []Users
+	var NewName = ("%" + name + "%")
+
+	result := DB.Conn.Table("users").Select("id, status, photo_url, name, email").Where("name LIKE ?", NewName).Find(&User)
 
 	if result.Error != nil {
 		return []users.Domain{}, result.Error

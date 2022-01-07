@@ -43,6 +43,9 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("threads", cl.ThreadController.GetThreadsController)
 	e.DELETE("thread/:id", cl.ThreadController.DeleteThread)
 	e.GET("search-thread/:title", cl.ThreadController.GetThreadsByTitleController)
+	e.GET("posts", cl.CommentController.GetPostsController)
+	e.DELETE("post/:id", cl.CommentController.DeletePost)
+	e.GET("search-post/:comment", cl.CommentController.GetPostsByCommentController)
 
 	e.PUT("banned-user/:id", cl.UserController.BannedUser)
 	e.PUT("unbanned-user/:id", cl.UserController.UnbannedUser)

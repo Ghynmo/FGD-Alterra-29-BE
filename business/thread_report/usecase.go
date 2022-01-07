@@ -25,3 +25,12 @@ func (uc *ThreadReportUseCase) GetThreadReports(ctx context.Context) ([]Domain, 
 
 	return report, nil
 }
+
+func (uc *ThreadReportUseCase) CreateReportThread(ctx context.Context, domain Domain) (Domain, error) {
+	report, err := uc.Repo.CreateReportThread(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return report, nil
+}

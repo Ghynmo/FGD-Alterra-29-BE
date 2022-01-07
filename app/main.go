@@ -30,12 +30,15 @@ import (
 	_categoryController "fgd-alterra-29/controllers/categories"
 	_categoryRepository "fgd-alterra-29/drivers/databases/categories"
 
+	_catreportthreadUseCase "fgd-alterra-29/business/catreportthreads"
+	_catreportthreadController "fgd-alterra-29/controllers/catreportthreads"
+	_catreportthreadRepository "fgd-alterra-29/drivers/databases/catreportthreads"
+
 	_threadreportUseCase "fgd-alterra-29/business/thread_report"
 	_threadreportController "fgd-alterra-29/controllers/thread_report"
 	_threadreportRepository "fgd-alterra-29/drivers/databases/thread_report"
 
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
-	_catreportthreadRepository "fgd-alterra-29/drivers/databases/catreportthreads"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 
 	"github.com/labstack/echo/v4"
@@ -100,6 +103,10 @@ func main() {
 	categoryUseCase := _categoryUseCase.NewCategoryUseCase(categoryRepository, timeoutContext)
 	categoryController := _categoryController.NewCategoryController(categoryUseCase)
 
+	catreportthreadRepository := _catreportthreadRepository.NewMysqlCatReportThreadRepository(Conn)
+	catreportthreadUseCase := _catreportthreadUseCase.NewCatReportThreadUseCase(catreportthreadRepository, timeoutContext)
+	catreportthreadController := _catreportthreadController.NewCatReportThreadController(catreportthreadUseCase)
+
 	threadreportRepository := _threadreportRepository.NewMysqlThreadReportRepository(Conn)
 	threadreportUseCase := _threadreportUseCase.NewThreadReportUseCase(threadreportRepository, timeoutContext)
 	threadreportController := _threadreportController.NewThreadReportController(threadreportUseCase)
@@ -109,13 +116,14 @@ func main() {
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase)
 
 	routesInit := routes.ControllerList{
-		UserController:         *userController,
-		UserBadgeController:    *userbadgeController,
-		ThreadController:       *threadController,
-		CommentController:      *commentController,
-		FollowController:       *followController,
-		CategoryController:     *categoryController,
-		ThreadReportController: *threadreportController,
+		UserController:            *userController,
+		UserBadgeController:       *userbadgeController,
+		ThreadController:          *threadController,
+		CommentController:         *commentController,
+		FollowController:          *followController,
+		CategoryController:        *categoryController,
+		CatReportThreadController: *catreportthreadController,
+		ThreadReportController:    *threadreportController,
 	}
 
 	routesInit.RouteRegister(*e)

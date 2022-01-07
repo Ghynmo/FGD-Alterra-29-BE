@@ -36,3 +36,17 @@ func NewErrorResponse(c echo.Context, status int, err error) error {
 	response.Data = nil
 	return c.JSON(status, response)
 }
+
+func BannedSuccessResponse(c echo.Context, data interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Banned Success"
+	return c.JSON(http.StatusOK, response)
+}
+
+func UnbannedSuccessResponse(c echo.Context, data interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Unbanned Success"
+	return c.JSON(http.StatusOK, response)
+}

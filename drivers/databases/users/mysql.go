@@ -89,10 +89,10 @@ func (DB *MysqlUserRepository) BannedUser(ctx context.Context, id int) (users.Do
 	return User.ToDomain(), nil
 }
 
-func (DB *MysqlUserRepository) UpdateProfile(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
+func (DB *MysqlUserRepository) UnbannedUser(ctx context.Context, id int) (users.Domain, error) {
 	var User Users
 
-	result := DB.Conn.Model(&User).Where("id = (?)", id).Updates(domain)
+	result := DB.Conn.Model(&User).Where("users.id = (?)", id).Update("status", "active")
 
 	if result.Error != nil {
 		return users.Domain{}, result.Error
@@ -100,10 +100,10 @@ func (DB *MysqlUserRepository) UpdateProfile(ctx context.Context, domain users.D
 	return User.ToDomain(), nil
 }
 
-func (DB *MysqlUserRepository) UnbannedUser(ctx context.Context, id int) (users.Domain, error) {
+func (DB *MysqlUserRepository) UpdateProfile(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
 	var User Users
 
-	result := DB.Conn.Model(&User).Where("users.id = (?)", id).Update("status", "active")
+	result := DB.Conn.Model(&User).Where("id = (?)", id).Updates(domain)
 
 	if result.Error != nil {
 		return users.Domain{}, result.Error

@@ -172,7 +172,7 @@ func (handler UserController) BannedUser(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, responses.FromDomain(user))
+	return controllers.BannedSuccessResponse(c, user)
 }
 
 func (handler UserController) UnbannedUser(c echo.Context) error {
@@ -184,5 +184,5 @@ func (handler UserController) UnbannedUser(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, responses.FromDomain(user))
+	return controllers.UnbannedSuccessResponse(c, user)
 }

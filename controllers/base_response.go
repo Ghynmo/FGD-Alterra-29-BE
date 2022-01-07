@@ -37,6 +37,13 @@ func NewErrorResponse(c echo.Context, status int, err error) error {
 	return c.JSON(status, response)
 }
 
+func DeleteSuccessResponse(c echo.Context, data interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Delete Success"
+	return c.JSON(http.StatusOK, response)
+}
+
 func BannedSuccessResponse(c echo.Context, data interface{}) error {
 	response := BaseResponse{}
 	response.Meta.Status = http.StatusOK

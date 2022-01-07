@@ -21,8 +21,9 @@ func (DB *MysqlThreadRepository) GetThreadsByTitle(ctx context.Context, title st
 	var Thread []Threads
 	var NewTitle = ("%" + title + "%")
 
-	result := DB.Conn.Table("threads").Select("threads.id, name, photo_url as Photo, title, threads.created_at").
-		Joins("join users on threads.user_id = users.id").Where("title LIKE ?", NewTitle).Find(&Thread)
+	result := DB.Conn.Table("threads").Select("threads.id, name, photo_url as Photo, title, category, threads.created_at").
+		Joins("join users on threads.user_id = users.id").Joins("join categories on threads.category_id = categories.id").
+		Where("title LIKE ?", NewTitle).Find(&Thread)
 
 	if result.Error != nil {
 		return []threads.Domain{}, result.Error
@@ -63,9 +64,9 @@ func (DB *MysqlThreadRepository) GetThreadQuantity(ctx context.Context) (threads
 
 func (DB *MysqlThreadRepository) GetThreads(ctx context.Context) ([]threads.Domain, error) {
 	var Thread []Threads
-	result := DB.Conn.Table("threads").Select("threads.id, name, photo_url as Photo, title, threads.created_at").
-		Joins("join users on threads.user_id = users.id").Order("threads.created_at desc").
-		Find(&Thread)
+	result := DB.Conn.Table("threads").Select("threads.id, name, photo_url as Photo, title, category, threads.created_at").
+		Joins("join users on threads.user_id = users.id").Joins("join categories on threads.category_id = categories.id").
+		Order("threads.created_at desc").Find(&Thread)
 
 	if result.Error != nil {
 		return []threads.Domain{}, result.Error

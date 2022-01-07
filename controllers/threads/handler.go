@@ -28,7 +28,7 @@ func (handler ThreadController) GetThreadsByTitleController(c echo.Context) erro
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToListProfileThread(thread))
+	return controllers.NewSuccessResponse(c, responses.ToListThread(thread))
 }
 
 func (handler ThreadController) GetProfileThreads(c echo.Context) error {
@@ -56,9 +56,9 @@ func (handler ThreadController) DeleteThread(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
 
-	_, err := handler.ThreadUseCase.DeleteThread(ctx, id)
+	thread, err := handler.ThreadUseCase.DeleteThread(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, "Delete Success")
+	return controllers.DeleteSuccessResponse(c, thread)
 }

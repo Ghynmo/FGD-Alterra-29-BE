@@ -5,6 +5,7 @@ import (
 )
 
 type UserResponse struct {
+	ID     int    `json:"id"`
 	Name   string `json:"name"`
 	Email  string `json:"email"`
 	Photo  string `json:"photo"`
@@ -13,6 +14,7 @@ type UserResponse struct {
 
 func FromDomain(domain users.Domain) UserResponse {
 	return UserResponse{
+		ID:     domain.ID,
 		Name:   domain.Name,
 		Email:  domain.Email,
 		Photo:  domain.Photo_url,

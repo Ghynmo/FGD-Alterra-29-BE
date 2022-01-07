@@ -48,6 +48,18 @@ func (handler UserController) GetUsersController(c echo.Context) error {
 	return controllers.NewSuccessResponse(c, responses.FromListDomain(user))
 }
 
+func (handler UserController) GetUsersByName(c echo.Context) error {
+	name := c.Param("name")
+
+	ctx := c.Request().Context()
+
+	user, err := handler.UserUseCase.GetUsersByNameController(ctx, name)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.FromListDomain(user))
+}
+
 func (handler UserController) GetProfileController(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 
@@ -154,4 +166,28 @@ func (handler UserController) UpdateUserProfile(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, editprofile.ToUserEdit(user))
+}
+
+func (handler UserController) BannedUser(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	user, err := handler.UserUseCase.BannedUser(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, responses.FromDomain(user))
+}
+
+func (handler UserController) UnbannedUser(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	user, err := handler.UserUseCase.UnbannedUser(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, responses.FromDomain(user))
 }

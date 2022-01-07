@@ -26,6 +26,15 @@ func (uc *UserUseCase) GetUsersController(ctx context.Context) ([]Domain, error)
 	return user, nil
 }
 
+func (uc *UserUseCase) GetUsersByNameController(ctx context.Context, name string) ([]Domain, error) {
+	user, err := uc.Repo.GetUsersByName(ctx, name)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return user, nil
+}
+
 func (uc *UserUseCase) GetProfileController(ctx context.Context, id int) (Domain, error) {
 	user, err := uc.Repo.GetProfile(ctx, id)
 	if err != nil {
@@ -53,6 +62,15 @@ func (uc *UserUseCase) GetProfileSetting(ctx context.Context, id int) (Domain, e
 	return user, nil
 }
 
+func (uc *UserUseCase) BannedUser(ctx context.Context, id int) (Domain, error) {
+	user, err := uc.Repo.BannedUser(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
+}
+
 func (uc *UserUseCase) UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error) {
 	admin, err := uc.Repo.UpdateProfile(ctx, domain, id)
 	if err != nil {
@@ -60,4 +78,13 @@ func (uc *UserUseCase) UpdateProfile(ctx context.Context, domain Domain, id int)
 	}
 
 	return admin, nil
+}
+
+func (uc *UserUseCase) UnbannedUser(ctx context.Context, id int) (Domain, error) {
+	user, err := uc.Repo.UnbannedUser(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
 }

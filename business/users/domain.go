@@ -40,16 +40,22 @@ type Domain struct {
 
 type UseCase interface {
 	GetUsersController(ctx context.Context) ([]Domain, error)
+	GetUsersByNameController(ctx context.Context, name string) ([]Domain, error)
 	GetProfileController(ctx context.Context, id int) (Domain, error)
 	GetUsersQuantity(ctx context.Context) (Domain, error)
 	GetProfileSetting(ctx context.Context, id int) (Domain, error)
 	UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error)
+	BannedUser(ctx context.Context, id int) (Domain, error)
+	UnbannedUser(ctx context.Context, id int) (Domain, error)
 }
 
 type Repository interface {
 	GetUsers(ctx context.Context) ([]Domain, error)
+	GetUsersByName(ctx context.Context, name string) ([]Domain, error)
 	GetProfile(ctx context.Context, id int) (Domain, error)
 	GetUsersQuantity(ctx context.Context) (Domain, error)
 	GetProfileSetting(ctx context.Context, id int) (Domain, error)
 	UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error)
+	BannedUser(ctx context.Context, id int) (Domain, error)
+	UnbannedUser(ctx context.Context, id int) (Domain, error)
 }

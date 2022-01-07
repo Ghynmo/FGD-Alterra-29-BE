@@ -6,6 +6,7 @@ import (
 	threadfollows "fgd-alterra-29/business/thread_follows"
 	threadlikes "fgd-alterra-29/business/thread_likes"
 	threadsaves "fgd-alterra-29/business/thread_saves"
+	threadshares "fgd-alterra-29/business/thread_shares"
 	"time"
 )
 
@@ -20,6 +21,7 @@ type Domain struct {
 	Likes         []threadlikes.Domain
 	Followers     []threadfollows.Domain
 	Saves         []threadsaves.Domain
+	Shares        []threadshares.Domain
 	Created_at    time.Time
 	Updated_at    time.Time
 	Deleted_at    time.Time

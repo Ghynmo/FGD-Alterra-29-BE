@@ -8,6 +8,7 @@ import (
 	threadfollows "fgd-alterra-29/drivers/databases/thread_follows"
 	threadlikes "fgd-alterra-29/drivers/databases/thread_likes"
 	threadsaves "fgd-alterra-29/drivers/databases/thread_saves"
+	threadshares "fgd-alterra-29/drivers/databases/thread_shares"
 	"fgd-alterra-29/drivers/databases/threads"
 	userbadges "fgd-alterra-29/drivers/databases/user_badges"
 )
@@ -32,6 +33,7 @@ type Users struct {
 	ThreadLikes   []threadlikes.ThreadLikes     `gorm:"foreignKey:User_id"`
 	ThreadFollows []threadfollows.ThreadFollows `gorm:"foreignKey:User_id"`
 	ThreadSaves   []threadsaves.ThreadSaves     `gorm:"foreignKey:User_id"`
+	ThreadShares  []threadshares.ThreadShares   `gorm:"foreignKey:User_id"`
 	Q_Following   int                           `gorm:"-:migration;->"`
 	Q_Followers   int                           `gorm:"-:migration;->"`
 	Q_Post        int                           `gorm:"-:migration;->"`
@@ -62,6 +64,8 @@ func (user *Users) ToDomain() users.Domain {
 		CommentLikes:  commentlikes.ToListDomain(user.CommentLikes),
 		ThreadLikes:   threadlikes.ToListDomain(user.ThreadLikes),
 		ThreadFollows: threadfollows.ToListDomain(user.ThreadFollows),
+		ThreadSaves:   threadsaves.ToListDomain(user.ThreadSaves),
+		ThreadShares:  threadshares.ToListDomain(user.ThreadShares),
 		Q_Following:   user.Q_Following,
 		Q_Followers:   user.Q_Followers,
 		Q_Post:        user.Q_Post,

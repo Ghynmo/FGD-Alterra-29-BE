@@ -7,6 +7,7 @@ import (
 	"fgd-alterra-29/controllers/follows"
 	threadlikes "fgd-alterra-29/controllers/thread_likes"
 	threadsaves "fgd-alterra-29/controllers/thread_saves"
+	threadshares "fgd-alterra-29/controllers/thread_shares"
 	"fgd-alterra-29/controllers/threads"
 	userbadges "fgd-alterra-29/controllers/user_badges"
 	"fgd-alterra-29/controllers/users"
@@ -24,6 +25,7 @@ type ControllerList struct {
 	ThreadLikeController  threadlikes.ThreadLikeController
 	CommentLikeController commentlikes.CommentLikeController
 	ThreadSaveController  threadsaves.ThreadSaveController
+	ThreadShareController threadshares.ThreadShareController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
@@ -45,6 +47,5 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.DELETE("commentlike", cl.CommentLikeController.DeleteLikes)
 	e.POST("threadsave", cl.ThreadSaveController.SaveThread)
 	e.DELETE("threadsave", cl.ThreadSaveController.Unsaves)
-
-	e.POST("threadshare", cl.ThreadController.GetSearch)
+	e.POST("threadshare", cl.ThreadShareController.ShareThread)
 }

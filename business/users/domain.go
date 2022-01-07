@@ -8,6 +8,7 @@ import (
 	threadfollows "fgd-alterra-29/business/thread_follows"
 	threadlikes "fgd-alterra-29/business/thread_likes"
 	threadsaves "fgd-alterra-29/business/thread_saves"
+	threadshares "fgd-alterra-29/business/thread_shares"
 	"fgd-alterra-29/business/threads"
 	userbadges "fgd-alterra-29/business/user_badges"
 	"time"
@@ -33,6 +34,7 @@ type Domain struct {
 	ThreadLikes   []threadlikes.Domain
 	ThreadFollows []threadfollows.Domain
 	ThreadSaves   []threadsaves.Domain
+	ThreadShares  []threadshares.Domain
 	Q_Followers   int
 	Q_Following   int
 	Q_Post        int

@@ -17,6 +17,15 @@ func NewThreadReportUseCase(repo Repository, timeout time.Duration) UseCase {
 	}
 }
 
+func (uc *ThreadReportUseCase) GetReportsByCategoryController(ctx context.Context, category string) ([]Domain, error) {
+	report, err := uc.Repo.GetReportsByCategory(ctx, category)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return report, nil
+}
+
 func (uc *ThreadReportUseCase) GetThreadReports(ctx context.Context) ([]Domain, error) {
 	report, err := uc.Repo.GetThreadReports(ctx)
 	if err != nil {

@@ -20,6 +20,17 @@ func NewThreadReportController(threadUseCase threadreport.UseCase) *ThreadReport
 	}
 }
 
+func (handler ThreadReportController) GetReportsByCategoryController(c echo.Context) error {
+	category := c.Param("category")
+	ctx := c.Request().Context()
+
+	threadreport, err := handler.ThreadReportUseCase.GetReportsByCategoryController(ctx, category)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, threadreport)
+}
+
 func (handler ThreadReportController) GetThreadReports(c echo.Context) error {
 	ctx := c.Request().Context()
 

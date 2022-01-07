@@ -20,12 +20,14 @@ type Domain struct {
 }
 
 type UseCase interface {
+	GetReportsByCategoryController(ctx context.Context, category string) ([]Domain, error)
 	GetThreadReports(ctx context.Context) ([]Domain, error)
 	GetReports(ctx context.Context) ([]Domain, error)
 	DeleteThreadReport(ctx context.Context, id int) (Domain, error)
 }
 
 type Repository interface {
+	GetReportsByCategory(ctx context.Context, category string) ([]Domain, error)
 	GetThreadReports(ctx context.Context) ([]Domain, error)
 	GetReports(ctx context.Context) ([]Domain, error)
 	DeleteThreadReport(ctx context.Context, id int) (Domain, error)

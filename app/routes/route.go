@@ -34,4 +34,5 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("thread-reports", cl.ThreadReportController.GetReports)
 	e.DELETE("thread-report/:id", cl.ThreadReportController.DeleteThreadReport)
 
+	e.GET("search-report/:category", cl.ThreadReportController.GetReportsByCategoryController)
 }

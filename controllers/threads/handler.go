@@ -20,6 +20,17 @@ func NewThreadController(threadUseCase threads.UseCase) *ThreadController {
 	}
 }
 
+func (handler ThreadController) GetThreadsByTitleController(c echo.Context) error {
+	title := c.Param("title")
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetThreadsByTitleController(ctx, title)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListProfileThread(thread))
+}
+
 func (handler ThreadController) GetProfileThreads(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()

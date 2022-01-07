@@ -17,6 +17,15 @@ func NewThreadUseCase(repo Repository, timeout time.Duration) UseCase {
 	}
 }
 
+func (uc *ThreadUseCase) GetThreadsByTitleController(ctx context.Context, title string) ([]Domain, error) {
+	thread, err := uc.Repo.GetThreadsByTitle(ctx, title)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}
+
 func (uc *ThreadUseCase) GetProfileThreads(ctx context.Context, id int) ([]Domain, error) {
 	thread, err := uc.Repo.GetProfileThreads(ctx, id)
 	if err != nil {

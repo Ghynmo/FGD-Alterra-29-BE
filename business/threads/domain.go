@@ -29,6 +29,7 @@ type Domain struct {
 }
 
 type UseCase interface {
+	GetThreadsByTitleController(ctx context.Context, title string) ([]Domain, error)
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
 	GetThreadQuantity(ctx context.Context) (Domain, error)
 	GetThreads(ctx context.Context) ([]Domain, error)
@@ -36,6 +37,7 @@ type UseCase interface {
 }
 
 type Repository interface {
+	GetThreadsByTitle(ctx context.Context, title string) ([]Domain, error)
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
 	GetThreadQuantity(ctx context.Context) (Domain, error)
 	GetThreads(ctx context.Context) ([]Domain, error)

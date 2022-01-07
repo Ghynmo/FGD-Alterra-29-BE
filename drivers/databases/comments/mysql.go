@@ -21,7 +21,7 @@ func (DB *MysqlCommentRepository) GetPostsByComment(ctx context.Context, comment
 	var Comment []Comments
 	var NewComment = ("%" + comment + "%")
 
-	result := DB.Conn.Table("comments").Select("comments.id, name, photo_url as Photo, comment, comments.created_at").
+	result := DB.Conn.Table("comments").Select("comments.id, name, photo_url as Photo, comment, active, comments.created_at").
 		Where("comment LIKE ?", NewComment).Joins("join users on comments.user_id = users.id").
 		Find(&Comment)
 
@@ -35,7 +35,7 @@ func (DB *MysqlCommentRepository) GetPostsByComment(ctx context.Context, comment
 func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int) ([]comments.Domain, error) {
 	var Comment []Comments
 
-	result := DB.Conn.Table("comments").Where("comments.user_id = 1").Select("title as Thread, comment, name").
+	result := DB.Conn.Table("comments").Where("comments.user_id = 1 AND comments.active = 1").Select("comments.id, title as Thread, comment, name").
 		Joins("join threads on comments.thread_id = threads.id").Joins("join users on comments.user_id = users.id").
 		Find(&Comment)
 
@@ -61,7 +61,7 @@ func (DB *MysqlCommentRepository) GetPostQuantity(ctx context.Context) (comments
 func (DB *MysqlCommentRepository) GetPosts(ctx context.Context) ([]comments.Domain, error) {
 	var Comment []Comments
 
-	result := DB.Conn.Table("comments").Select("comments.id, name, photo_url as Photo, comment, comments.created_at").
+	result := DB.Conn.Table("comments").Select("comments.id, name, photo_url as Photo, comment, active, comments.created_at").
 		Joins("join users on comments.user_id = users.id").Order("comments.created_at desc").
 		Find(&Comment)
 
@@ -72,10 +72,22 @@ func (DB *MysqlCommentRepository) GetPosts(ctx context.Context) ([]comments.Doma
 	return ToListDomain(Comment), nil
 }
 
-func (DB *MysqlCommentRepository) DeletePost(ctx context.Context, id int) (comments.Domain, error) {
+func (DB *MysqlCommentRepository) UnactivatingPost(ctx context.Context, id int) (comments.Domain, error) {
 	var Comment Comments
 
-	result := DB.Conn.Delete(&Comment, id)
+	result := DB.Conn.Model(&Comment).Where("comments.id = ?", id).Update("active", "false")
+
+	if result.Error != nil {
+		return comments.Domain{}, result.Error
+	}
+
+	return Comment.ToDomain(), nil
+}
+
+func (DB *MysqlCommentRepository) ActivatingPost(ctx context.Context, id int) (comments.Domain, error) {
+	var Comment Comments
+
+	result := DB.Conn.Model(&Comment).Where("comments.id = ?", id).Update("active", "true")
 
 	if result.Error != nil {
 		return comments.Domain{}, result.Error

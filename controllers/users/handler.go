@@ -90,7 +90,7 @@ func (handler UserController) GetDashboardController(c echo.Context) error {
 	threadreport, err1 := handler.ThreadReportUseCase.GetThreadReports(ctx)
 	threadqty, err2 := handler.ThreadUseCase.GetThreadQuantity(ctx)
 	userqty, err3 := handler.UserUseCase.GetUsersQuantity(ctx)
-	postqty, err4 := handler.CommentUseCase.GetPostQuantity(ctx)
+	postqty, err4 := handler.CommentUseCase.GetPostQuantityController(ctx)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

@@ -5,20 +5,22 @@ import (
 )
 
 type Posts struct {
-	ID    int    `json:"id"`
-	Name  string `json:"name"`
-	Photo string `json:"photo_url"`
-	Post  string `json:"post"`
-	Date  string `json:"created_at"`
+	ID     int    `json:"post_id"`
+	Name   string `json:"name"`
+	Photo  string `json:"photo_url"`
+	Post   string `json:"post"`
+	Date   string `json:"created_at"`
+	Active bool   `json:"active"`
 }
 
 func ToPosts(Domain comments.Domain) Posts {
 	return Posts{
-		ID:    Domain.ID,
-		Name:  Domain.Name,
-		Photo: Domain.Photo,
-		Post:  Domain.Comment,
-		Date:  Domain.Created_at.String(),
+		ID:     Domain.ID,
+		Name:   Domain.Name,
+		Photo:  Domain.Photo,
+		Post:   Domain.Comment,
+		Date:   Domain.Created_at.String(),
+		Active: Domain.Active,
 	}
 }
 

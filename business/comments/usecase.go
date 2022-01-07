@@ -26,7 +26,7 @@ func (uc *CommentUseCase) GetPostsByCommentController(ctx context.Context, comme
 	return post, nil
 }
 
-func (uc *CommentUseCase) GetCommentProfile(ctx context.Context, id int) ([]Domain, error) {
+func (uc *CommentUseCase) GetCommentProfileController(ctx context.Context, id int) ([]Domain, error) {
 	post, err := uc.Repo.GetCommentProfile(ctx, id)
 	if err != nil {
 		return []Domain{}, err
@@ -35,7 +35,7 @@ func (uc *CommentUseCase) GetCommentProfile(ctx context.Context, id int) ([]Doma
 	return post, nil
 }
 
-func (uc *CommentUseCase) GetPostQuantity(ctx context.Context) (Domain, error) {
+func (uc *CommentUseCase) GetPostQuantityController(ctx context.Context) (Domain, error) {
 	post, err := uc.Repo.GetPostQuantity(ctx)
 	if err != nil {
 		return Domain{}, err
@@ -44,7 +44,7 @@ func (uc *CommentUseCase) GetPostQuantity(ctx context.Context) (Domain, error) {
 	return post, nil
 }
 
-func (uc *CommentUseCase) GetPosts(ctx context.Context) ([]Domain, error) {
+func (uc *CommentUseCase) GetPostsController(ctx context.Context) ([]Domain, error) {
 	post, err := uc.Repo.GetPosts(ctx)
 	if err != nil {
 		return []Domain{}, err
@@ -53,8 +53,17 @@ func (uc *CommentUseCase) GetPosts(ctx context.Context) ([]Domain, error) {
 	return post, nil
 }
 
-func (uc *CommentUseCase) DeletePost(ctx context.Context, id int) (Domain, error) {
-	post, err := uc.Repo.DeletePost(ctx, id)
+func (uc *CommentUseCase) UnactivatingPostController(ctx context.Context, id int) (Domain, error) {
+	post, err := uc.Repo.UnactivatingPost(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return post, nil
+}
+
+func (uc *CommentUseCase) ActivatingPostController(ctx context.Context, id int) (Domain, error) {
+	post, err := uc.Repo.ActivatingPost(ctx, id)
 	if err != nil {
 		return Domain{}, err
 	}

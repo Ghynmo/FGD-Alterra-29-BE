@@ -29,14 +29,14 @@ func (handler CommentController) GetPostsByCommentController(c echo.Context) err
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, responses.ToListPostProfile(comments))
+	return controllers.NewSuccessResponse(c, responses.ToListPosts(comments))
 }
 
-func (handler CommentController) GetProfileComments(c echo.Context) error {
+func (handler CommentController) GetProfileCommentsController(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
 
-	comments, err := handler.CommentUseCase.GetCommentProfile(ctx, id)
+	comments, err := handler.CommentUseCase.GetCommentProfileController(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
@@ -47,7 +47,7 @@ func (handler CommentController) GetProfileComments(c echo.Context) error {
 func (handler CommentController) GetPostsController(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	posts, err := handler.CommentUseCase.GetPosts(ctx)
+	posts, err := handler.CommentUseCase.GetPostsController(ctx)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
@@ -55,14 +55,26 @@ func (handler CommentController) GetPostsController(c echo.Context) error {
 	return controllers.NewSuccessResponse(c, responses.ToListPosts(posts))
 }
 
-func (handler CommentController) DeletePost(c echo.Context) error {
+func (handler CommentController) UnactivatingPostController(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
 
-	_, err := handler.CommentUseCase.DeletePost(ctx, id)
+	_, err := handler.CommentUseCase.UnactivatingPostController(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, "Post deleted success")
+	return controllers.NewSuccessResponse(c, "Post Unactivated")
+}
+
+func (handler CommentController) ActivatingPostController(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	_, err := handler.CommentUseCase.ActivatingPostController(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, "Post Activated")
 }

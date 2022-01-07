@@ -27,7 +27,7 @@ type ControllerList struct {
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("x", cl.UserController.GetUsersController)
 	e.GET("profile/:id", cl.UserController.GetProfileController)
-	e.GET("post/:id", cl.CommentController.GetProfileComments)
+	e.GET("post/:id", cl.CommentController.GetProfileCommentsController)
 	e.GET("thread/:id", cl.ThreadController.GetProfileThreads)
 	e.GET("followers/:id", cl.FollowController.GetFollowers)
 	e.GET("following/:id", cl.FollowController.GetFollowing)
@@ -44,17 +44,17 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	//List of Threads (Admin Access)
 	e.GET("admin/threads", cl.ThreadController.GetThreadsController)
 	e.GET("admin/threads/search/:title", cl.ThreadController.GetThreadsByTitleController)
-	e.DELETE("admin/threads/delete/:id", cl.ThreadController.DeleteThread)
+	e.DELETE("admin/threads/thread/:id", cl.ThreadController.DeleteThread)
 
 	//List of Posts (Admin Access)
 	e.GET("admin/posts", cl.CommentController.GetPostsController)
 	e.GET("admin/posts/search/:comment", cl.CommentController.GetPostsByCommentController)
-	e.DELETE("admin/posts/delete/:id", cl.CommentController.DeletePost)
+	e.DELETE("admin/posts/post/:id", cl.CommentController.UnactivatingPostController)
 
 	//List of Reports (Admin Access)
 	e.GET("admin/thread-reports", cl.ThreadReportController.GetReports)
 	e.GET("admin/thread-reports/search/:category", cl.ThreadReportController.GetReportsByCategoryController)
-	e.DELETE("admin/thread-reports/delete/:id", cl.ThreadReportController.DeleteThreadReport)
+	e.DELETE("admin/thread-reports/thread-report/:id", cl.ThreadReportController.DeleteThreadReport)
 
 	//Edit Profile page
 	e.GET("admin/edit/:id", cl.UserController.GetAdminSettingController)

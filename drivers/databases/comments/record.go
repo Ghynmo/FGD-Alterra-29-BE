@@ -12,6 +12,7 @@ type Comments struct {
 	Comment    string
 	Replies    []Comments `gorm:"foreignKey:ReplyOf"`
 	ReplyOf    int
+	Active     bool
 	Created_at time.Time
 	Updated_at time.Time
 	Deleted_at time.Time
@@ -29,6 +30,7 @@ func (Comment *Comments) ToDomain() comments.Domain {
 		Comment:    Comment.Comment,
 		Replies:    ToListDomain(Comment.Replies),
 		ReplyOf:    Comment.ReplyOf,
+		Active:     Comment.Active,
 		Created_at: Comment.Created_at,
 		Updated_at: Comment.Updated_at,
 		Deleted_at: Comment.Deleted_at,

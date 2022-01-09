@@ -14,6 +14,7 @@ type Domain struct {
 	Title         string
 	Content       string
 	Thumbnail_url string
+	Active        bool
 	Comments      []comments.Domain
 	Report        []threadreport.Domain
 	Created_at    time.Time

@@ -2,6 +2,7 @@ package comments
 
 import (
 	"fgd-alterra-29/business/comments"
+	commentreport "fgd-alterra-29/drivers/databases/comment_report"
 	"time"
 )
 
@@ -12,6 +13,7 @@ type Comments struct {
 	Comment    string
 	Replies    []Comments `gorm:"foreignKey:ReplyOf"`
 	ReplyOf    int
+	Report     []commentreport.CommentReport `gorm:"foreignKey:Comment_id"`
 	Active     bool
 	Created_at time.Time
 	Updated_at time.Time

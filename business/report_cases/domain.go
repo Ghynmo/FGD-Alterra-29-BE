@@ -1,15 +1,17 @@
-package catreportthreads
+package reportcases
 
 import (
 	"context"
+	commentreport "fgd-alterra-29/business/comment_report"
 	threadreport "fgd-alterra-29/business/thread_report"
 )
 
 type Domain struct {
-	ID             int
-	CategoryReport string
-	Description    string
-	ThreadReport   []threadreport.Domain
+	ID            int
+	Case          string
+	Description   string
+	ThreadReport  []threadreport.Domain
+	CommentReport []commentreport.Domain
 }
 
 type UseCase interface {

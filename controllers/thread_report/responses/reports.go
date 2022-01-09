@@ -5,18 +5,18 @@ import (
 )
 
 type ThreadReport struct {
-	ID             int    `json:"report_id"`
-	Thread         string `json:"title_thread"`
-	Message        string `json:"message"`
-	CategoryReport string `json:"report_category"`
+	ID      int    `json:"report_id"`
+	Thread  string `json:"title_thread"`
+	Message string `json:"message"`
+	Case    string `json:"report_case"`
 }
 
 func ToReports(Domain threadreport.Domain) ThreadReport {
 	return ThreadReport{
-		ID:             Domain.ID,
-		Thread:         Domain.Thread,
-		Message:        Domain.Message,
-		CategoryReport: Domain.CategoryReport,
+		ID:      Domain.ID,
+		Thread:  Domain.Thread,
+		Message: Domain.Message,
+		Case:    Domain.Case,
 	}
 }
 

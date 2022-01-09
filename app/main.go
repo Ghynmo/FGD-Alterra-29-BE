@@ -30,13 +30,17 @@ import (
 	_categoryController "fgd-alterra-29/controllers/categories"
 	_categoryRepository "fgd-alterra-29/drivers/databases/categories"
 
-	_catreportthreadUseCase "fgd-alterra-29/business/catreportthreads"
-	_catreportthreadController "fgd-alterra-29/controllers/catreportthreads"
-	_catreportthreadRepository "fgd-alterra-29/drivers/databases/catreportthreads"
+	_reportcaseUseCase "fgd-alterra-29/business/report_cases"
+	_reportcaseController "fgd-alterra-29/controllers/report_cases"
+	_reportcaseRepository "fgd-alterra-29/drivers/databases/report_cases"
 
 	_threadreportUseCase "fgd-alterra-29/business/thread_report"
 	_threadreportController "fgd-alterra-29/controllers/thread_report"
 	_threadreportRepository "fgd-alterra-29/drivers/databases/thread_report"
+
+	_commentreportUseCase "fgd-alterra-29/business/comment_report"
+	_commentreportController "fgd-alterra-29/controllers/comment_report"
+	_commentreportRepository "fgd-alterra-29/drivers/databases/comment_report"
 
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
@@ -63,8 +67,9 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_threadRepository.Threads{})
 	db.AutoMigrate(&_commentRepository.Comments{})
 	db.AutoMigrate(&_userbadgeRepository.UserBadges{})
-	db.AutoMigrate(&_catreportthreadRepository.CatReportT{})
+	db.AutoMigrate(&_reportcaseRepository.ReportCases{})
 	db.AutoMigrate(&_threadreportRepository.ThreadReport{})
+	db.AutoMigrate(&_commentreportRepository.CommentReport{})
 }
 
 func main() {
@@ -103,27 +108,32 @@ func main() {
 	categoryUseCase := _categoryUseCase.NewCategoryUseCase(categoryRepository, timeoutContext)
 	categoryController := _categoryController.NewCategoryController(categoryUseCase)
 
-	catreportthreadRepository := _catreportthreadRepository.NewMysqlCatReportThreadRepository(Conn)
-	catreportthreadUseCase := _catreportthreadUseCase.NewCatReportThreadUseCase(catreportthreadRepository, timeoutContext)
-	catreportthreadController := _catreportthreadController.NewCatReportThreadController(catreportthreadUseCase)
+	reportcaseRepository := _reportcaseRepository.NewMysqlReportCaseRepository(Conn)
+	reportcaseUseCase := _reportcaseUseCase.NewReportCaseUseCase(reportcaseRepository, timeoutContext)
+	reportcaseController := _reportcaseController.NewReportCaseController(reportcaseUseCase)
 
 	threadreportRepository := _threadreportRepository.NewMysqlThreadReportRepository(Conn)
 	threadreportUseCase := _threadreportUseCase.NewThreadReportUseCase(threadreportRepository, timeoutContext)
 	threadreportController := _threadreportController.NewThreadReportController(threadreportUseCase)
+
+	commentreportRepository := _commentreportRepository.NewMysqlCommentReportRepository(Conn)
+	commentreportUseCase := _commentreportUseCase.NewCommentReportUseCase(commentreportRepository, timeoutContext)
+	commentreportController := _commentreportController.NewCommentReportController(commentreportUseCase)
 
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase)
 
 	routesInit := routes.ControllerList{
-		UserController:            *userController,
-		UserBadgeController:       *userbadgeController,
-		ThreadController:          *threadController,
-		CommentController:         *commentController,
-		FollowController:          *followController,
-		CategoryController:        *categoryController,
-		CatReportThreadController: *catreportthreadController,
-		ThreadReportController:    *threadreportController,
+		UserController:          *userController,
+		UserBadgeController:     *userbadgeController,
+		ThreadController:        *threadController,
+		CommentController:       *commentController,
+		FollowController:        *followController,
+		CategoryController:      *categoryController,
+		ReportCaseController:    *reportcaseController,
+		ThreadReportController:  *threadreportController,
+		CommentReportController: *commentreportController,
 	}
 
 	routesInit.RouteRegister(*e)

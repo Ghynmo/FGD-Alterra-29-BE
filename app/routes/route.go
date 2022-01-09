@@ -2,9 +2,10 @@ package routes
 
 import (
 	"fgd-alterra-29/controllers/categories"
-	"fgd-alterra-29/controllers/catreportthreads"
+	commentreport "fgd-alterra-29/controllers/comment_report"
 	"fgd-alterra-29/controllers/comments"
 	"fgd-alterra-29/controllers/follows"
+	reportcases "fgd-alterra-29/controllers/report_cases"
 	threadreport "fgd-alterra-29/controllers/thread_report"
 	"fgd-alterra-29/controllers/threads"
 	userbadges "fgd-alterra-29/controllers/user_badges"
@@ -14,14 +15,15 @@ import (
 )
 
 type ControllerList struct {
-	UserController            users.UserController
-	UserBadgeController       userbadges.UserBadgeController
-	ThreadController          threads.ThreadController
-	CommentController         comments.CommentController
-	FollowController          follows.FollowController
-	CategoryController        categories.CategoryController
-	CatReportThreadController catreportthreads.CatReportThreadController
-	ThreadReportController    threadreport.ThreadReportController
+	UserController          users.UserController
+	UserBadgeController     userbadges.UserBadgeController
+	ThreadController        threads.ThreadController
+	CommentController       comments.CommentController
+	FollowController        follows.FollowController
+	CategoryController      categories.CategoryController
+	ReportCaseController    reportcases.ReportCaseController
+	ThreadReportController  threadreport.ThreadReportController
+	CommentReportController commentreport.CommentReportController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
@@ -51,9 +53,14 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("admin/posts/search/:comment", cl.CommentController.GetPostsByCommentController)
 	e.DELETE("admin/posts/post/:id", cl.CommentController.UnactivatingPostController)
 
-	//List of Reports (Admin Access)
-	e.GET("admin/thread-reports", cl.ThreadReportController.GetReports)
-	e.GET("admin/thread-reports/search/:category", cl.ThreadReportController.GetReportsByCategoryController)
+	//List of Comment's Reports (Admin Access)
+	e.GET("admin/comment-reports", cl.CommentReportController.AdminGetReports)
+	e.GET("admin/comment-reports/search/:category", cl.CommentReportController.GetReportsByCategoryController)
+	e.DELETE("admin/comment-reports/comment-report/:id", cl.CommentReportController.DeleteCommentReport)
+
+	//List of Thread's Reports (Admin Access)
+	e.GET("admin/thread-reports", cl.ThreadReportController.AdminGetReports)
+	e.GET("admin/thread-reports/search/:category", cl.ThreadReportController.SearchReportsByCategoryController)
 	e.DELETE("admin/thread-reports/thread-report/:id", cl.ThreadReportController.DeleteThreadReport)
 
 	//Edit Profile page
@@ -62,7 +69,11 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.PUT("admin/edit", cl.UserController.UpdateAdminProfile)
 	e.PUT("user/edit", cl.UserController.UpdateUserProfile)
 
+	//Report Comment page
+	e.GET("admin/report-comment", cl.ReportCaseController.GetReportForm)
+	e.POST("admin/report-comment", cl.CommentReportController.CreateReportComment)
+
 	//Report Thread page
-	e.GET("admin/report-thread", cl.CatReportThreadController.GetReportForm)
-	e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
+	// e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm)
+	// e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
 }

@@ -21,21 +21,21 @@ func NewThreadReportController(threadUseCase threadreport.UseCase) *ThreadReport
 	}
 }
 
-func (handler ThreadReportController) GetReportsByCategoryController(c echo.Context) error {
+func (handler ThreadReportController) SearchReportsByCategoryController(c echo.Context) error {
 	category := c.Param("category")
 	ctx := c.Request().Context()
 
-	threadreport, err := handler.ThreadReportUseCase.GetReportsByCategoryController(ctx, category)
+	threadreport, err := handler.ThreadReportUseCase.SearchReportsByCategoryController(ctx, category)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, threadreport)
 }
 
-func (handler ThreadReportController) GetThreadReports(c echo.Context) error {
+func (handler ThreadReportController) GetThreadReportStat(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	threadreport, err := handler.ThreadReportUseCase.GetThreadReports(ctx)
+	threadreport, err := handler.ThreadReportUseCase.GetThreadReportStat(ctx)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
@@ -57,10 +57,10 @@ func (handler ThreadReportController) CreateReportThread(c echo.Context) error {
 	return controllers.NewSuccessResponse(c, threadreport)
 }
 
-func (handler ThreadReportController) GetReports(c echo.Context) error {
+func (handler ThreadReportController) AdminGetReports(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	threadreport, err := handler.ThreadReportUseCase.GetReports(ctx)
+	threadreport, err := handler.ThreadReportUseCase.AdminGetReports(ctx)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

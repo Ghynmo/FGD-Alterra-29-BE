@@ -87,7 +87,7 @@ func (handler UserController) GetDashboardController(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	user, err := handler.UserUseCase.GetUsersController(ctx)
-	threadreport, err1 := handler.ThreadReportUseCase.GetThreadReports(ctx)
+	threadreport, err1 := handler.ThreadReportUseCase.GetThreadReportStat(ctx)
 	threadqty, err2 := handler.ThreadUseCase.GetThreadQuantity(ctx)
 	userqty, err3 := handler.UserUseCase.GetUsersQuantity(ctx)
 	postqty, err4 := handler.CommentUseCase.GetPostQuantityController(ctx)

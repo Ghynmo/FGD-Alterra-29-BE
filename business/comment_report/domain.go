@@ -1,4 +1,4 @@
-package threadreport
+package commentreport
 
 import (
 	"context"
@@ -7,30 +7,28 @@ import (
 
 type Domain struct {
 	ID            int
-	Thread_id     int
+	Comment_id    int
 	Reporter_id   int
 	ReportCase_id int
 	Message       string
 	Created_at    time.Time
-	Updated_at    time.Time
-	Deleted_at    time.Time
 	Q_Case        int
 	Case          string
-	Thread        string
+	Comment       string
 }
 
 type UseCase interface {
 	SearchReportsByCategoryController(ctx context.Context, category string) ([]Domain, error)
-	GetThreadReportStat(ctx context.Context) ([]Domain, error)
-	CreateReportThread(ctx context.Context, domain Domain) (Domain, error)
+	GetCommentReportStat(ctx context.Context) ([]Domain, error)
+	CreateReportComment(ctx context.Context, domain Domain) (Domain, error)
 	AdminGetReports(ctx context.Context) ([]Domain, error)
-	DeleteThreadReport(ctx context.Context, id int) (Domain, error)
+	DeleteCommentReport(ctx context.Context, id int) (Domain, error)
 }
 
 type Repository interface {
 	SearchReportsByCategory(ctx context.Context, category string) ([]Domain, error)
-	GetThreadReportStat(ctx context.Context) ([]Domain, error)
-	CreateReportThread(ctx context.Context, domain Domain) (Domain, error)
+	GetCommentReportStat(ctx context.Context) ([]Domain, error)
+	CreateReportComment(ctx context.Context, domain Domain) (Domain, error)
 	AdminGetReports(ctx context.Context) ([]Domain, error)
-	DeleteThreadReport(ctx context.Context, id int) (Domain, error)
+	DeleteCommentReport(ctx context.Context, id int) (Domain, error)
 }

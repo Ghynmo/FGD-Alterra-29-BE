@@ -2,6 +2,7 @@ package users
 
 import (
 	"fgd-alterra-29/business/users"
+	commentreport "fgd-alterra-29/drivers/databases/comment_report"
 	"fgd-alterra-29/drivers/databases/comments"
 	"fgd-alterra-29/drivers/databases/follows"
 	threadreport "fgd-alterra-29/drivers/databases/thread_report"
@@ -21,17 +22,18 @@ type Users struct {
 	Photo_url     string
 	Bio           string
 	Status        string
-	UserBadges    []userbadges.UserBadges     `gorm:"foreignKey:User_id"`
-	Threads       []threads.Threads           `gorm:"foreignKey:User_id"`
-	Following     []follows.Follows           `gorm:"foreignKey:User_id"`
-	Followers     []follows.Follows           `gorm:"foreignKey:Follower_id"`
-	Comments      []comments.Comments         `gorm:"foreignKey:User_id"`
-	ThreadReport  []threadreport.ThreadReport `gorm:"foreignKey:User_id"`
-	Q_Following   int                         `gorm:"-:migration;->"`
-	Q_Followers   int                         `gorm:"-:migration;->"`
-	Q_Post        int                         `gorm:"-:migration;->"`
-	Q_Thread      int                         `gorm:"-:migration;->"`
-	Reputation    string                      `gorm:"-:migration;->"`
+	UserBadges    []userbadges.UserBadges       `gorm:"foreignKey:User_id"`
+	Threads       []threads.Threads             `gorm:"foreignKey:User_id"`
+	Following     []follows.Follows             `gorm:"foreignKey:User_id"`
+	Followers     []follows.Follows             `gorm:"foreignKey:Follower_id"`
+	Comments      []comments.Comments           `gorm:"foreignKey:User_id"`
+	ThreadReport  []threadreport.ThreadReport   `gorm:"foreignKey:Reporter_id"`
+	CommentReport []commentreport.CommentReport `gorm:"foreignKey:Reporter_id"`
+	Q_Following   int                           `gorm:"-:migration;->"`
+	Q_Followers   int                           `gorm:"-:migration;->"`
+	Q_Post        int                           `gorm:"-:migration;->"`
+	Q_Thread      int                           `gorm:"-:migration;->"`
+	Reputation    string                        `gorm:"-:migration;->"`
 	// Created_at    time.Time
 	// Updated_at    time.Time
 	// Deleted_at    time.Time

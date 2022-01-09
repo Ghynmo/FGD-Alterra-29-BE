@@ -17,12 +17,12 @@ func NewMysqlThreadReportRepository(conn *gorm.DB) threadreport.Repository {
 	}
 }
 
-func (DB *MysqlThreadReportRepository) GetReportsByCategory(ctx context.Context, category string) ([]threadreport.Domain, error) {
+func (DB *MysqlThreadReportRepository) SearchReportsByCategory(ctx context.Context, category string) ([]threadreport.Domain, error) {
 	var ThreadReport []ThreadReport
 	var NewCategory = ("%" + category + "%")
 
-	result := DB.Conn.Table("thread_reports").Where("category_report LIKE ?", NewCategory).Select("thread_reports.id, title as Thread, message, category_report as CategoryReport").
-		Joins("join cat_report_ts on thread_reports.catreportthread_id = cat_report_ts.id").
+	result := DB.Conn.Table("thread_reports").Where("report_cases.case LIKE ?", NewCategory).Select("thread_reports.id, title as Thread, message, report_cases.case").
+		Joins("join report_cases on thread_reports.report_case_id = report_cases.id").
 		Joins("join threads on thread_reports.thread_id = threads.id").Order("thread_reports.created_at").
 		Find(&ThreadReport)
 
@@ -33,10 +33,10 @@ func (DB *MysqlThreadReportRepository) GetReportsByCategory(ctx context.Context,
 	return ToListDomain(ThreadReport), nil
 }
 
-func (DB *MysqlThreadReportRepository) GetThreadReports(ctx context.Context) ([]threadreport.Domain, error) {
+func (DB *MysqlThreadReportRepository) GetThreadReportStat(ctx context.Context) ([]threadreport.Domain, error) {
 	var ThreadReport []ThreadReport
-	result := DB.Conn.Table("thread_reports").Select("thread_reports.id ,count(thread_reports.id) as Q_Cat, category_report as CategoryReport").
-		Joins("join cat_report_ts on thread_reports.catreportthread_id = cat_report_ts.id").Group("category_report").
+	result := DB.Conn.Table("thread_reports").Select("thread_reports.id, count(thread_reports.id) as Q_Case, report_cases.case").
+		Joins("join report_cases on thread_reports.report_case_id = report_cases.id").Group("report_cases.case").
 		Find(&ThreadReport)
 
 	if result.Error != nil {
@@ -58,10 +58,10 @@ func (DB *MysqlThreadReportRepository) CreateReportThread(ctx context.Context, d
 	return ThreadReport.ToDomain(), nil
 }
 
-func (DB *MysqlThreadReportRepository) GetReports(ctx context.Context) ([]threadreport.Domain, error) {
+func (DB *MysqlThreadReportRepository) AdminGetReports(ctx context.Context) ([]threadreport.Domain, error) {
 	var ThreadReport []ThreadReport
-	result := DB.Conn.Table("thread_reports").Select("thread_reports.id, title as Thread, message, category_report as CategoryReport").
-		Joins("join cat_report_ts on thread_reports.catreportthread_id = cat_report_ts.id").
+	result := DB.Conn.Table("thread_reports").Select("thread_reports.id, title as Thread, message, report_cases.case").
+		Joins("join report_cases on thread_reports.report_case_id = report_cases.id").
 		Joins("join threads on thread_reports.thread_id = threads.id").Order("thread_reports.created_at").
 		Find(&ThreadReport)
 

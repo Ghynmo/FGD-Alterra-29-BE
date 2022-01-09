@@ -17,8 +17,8 @@ func NewThreadReportUseCase(repo Repository, timeout time.Duration) UseCase {
 	}
 }
 
-func (uc *ThreadReportUseCase) GetReportsByCategoryController(ctx context.Context, category string) ([]Domain, error) {
-	report, err := uc.Repo.GetReportsByCategory(ctx, category)
+func (uc *ThreadReportUseCase) SearchReportsByCategoryController(ctx context.Context, category string) ([]Domain, error) {
+	report, err := uc.Repo.SearchReportsByCategory(ctx, category)
 	if err != nil {
 		return []Domain{}, err
 	}
@@ -26,8 +26,8 @@ func (uc *ThreadReportUseCase) GetReportsByCategoryController(ctx context.Contex
 	return report, nil
 }
 
-func (uc *ThreadReportUseCase) GetThreadReports(ctx context.Context) ([]Domain, error) {
-	report, err := uc.Repo.GetThreadReports(ctx)
+func (uc *ThreadReportUseCase) GetThreadReportStat(ctx context.Context) ([]Domain, error) {
+	report, err := uc.Repo.GetThreadReportStat(ctx)
 	if err != nil {
 		return []Domain{}, err
 	}
@@ -44,8 +44,8 @@ func (uc *ThreadReportUseCase) CreateReportThread(ctx context.Context, domain Do
 	return report, nil
 }
 
-func (uc *ThreadReportUseCase) GetReports(ctx context.Context) ([]Domain, error) {
-	report, err := uc.Repo.GetReports(ctx)
+func (uc *ThreadReportUseCase) AdminGetReports(ctx context.Context) ([]Domain, error) {
+	report, err := uc.Repo.AdminGetReports(ctx)
 	if err != nil {
 		return []Domain{}, err
 	}

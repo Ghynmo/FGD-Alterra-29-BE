@@ -14,6 +14,7 @@ type Threads struct {
 	Title         string
 	Content       string
 	Thumbnail_url string
+	Active        bool                        `gorm:"default:true"`
 	Comments      []comments.Comments         `gorm:"foreignKey:Thread_id"`
 	Report        []threadreport.ThreadReport `gorm:"foreignKey:Thread_id"`
 	Created_at    time.Time
@@ -36,6 +37,7 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		Title:         Thread.Title,
 		Content:       Thread.Content,
 		Thumbnail_url: Thread.Thumbnail_url,
+		Active:        Thread.Active,
 		Comments:      comments.ToListDomain(Thread.Comments),
 		Created_at:    Thread.Created_at,
 		// Updated_at:    Thread.Updated_at,

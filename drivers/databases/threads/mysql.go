@@ -77,7 +77,7 @@ func (DB *MysqlThreadRepository) GetThreads(ctx context.Context) ([]threads.Doma
 
 func (DB *MysqlThreadRepository) DeleteThread(ctx context.Context, id int) (threads.Domain, error) {
 	var Thread Threads
-	result := DB.Conn.Delete(&Thread, id)
+	result := DB.Conn.Model(&Thread).Where("threads.id = ?", id).Update("active", "false")
 
 	if result.Error != nil {
 		return threads.Domain{}, result.Error

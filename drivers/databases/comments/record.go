@@ -2,6 +2,7 @@ package comments
 
 import (
 	"fgd-alterra-29/business/comments"
+	commentlikes "fgd-alterra-29/drivers/databases/comment_likes"
 	commentreport "fgd-alterra-29/drivers/databases/comment_report"
 	"time"
 )
@@ -15,10 +16,12 @@ type Comments struct {
 	ReplyOf    int
 	Report     []commentreport.CommentReport `gorm:"foreignKey:Comment_id"`
 	Active     bool
+	Likes      []commentlikes.CommentLikes `gorm:"foreignKey:Comment_id"`
 	Created_at time.Time
 	Updated_at time.Time
 	Deleted_at time.Time
 	Name       string `gorm:"-:migration;->"`
+	Photo_url  string `gorm:"-:migration;->"`
 	Thread     string `gorm:"-:migration;->"`
 	Q_Post     int    `gorm:"-:migration;->"`
 	Photo      string `gorm:"-:migration;->"`
@@ -37,6 +40,7 @@ func (Comment *Comments) ToDomain() comments.Domain {
 		Updated_at: Comment.Updated_at,
 		Deleted_at: Comment.Deleted_at,
 		Name:       Comment.Name,
+		Photo_url:  Comment.Photo_url,
 		Thread:     Comment.Thread,
 		Q_Post:     Comment.Q_Post,
 		Photo:      Comment.Photo,

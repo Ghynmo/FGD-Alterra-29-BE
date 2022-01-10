@@ -3,6 +3,7 @@ package comments
 import (
 	"fgd-alterra-29/business/comments"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/comments/request"
 	"fgd-alterra-29/controllers/comments/responses"
 	"net/http"
 	"strconv"
@@ -32,7 +33,31 @@ func (handler CommentController) GetPostsByCommentController(c echo.Context) err
 	return controllers.NewSuccessResponse(c, responses.ToListPosts(comments))
 }
 
+func (handler CommentController) GetReplyComments(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	comments, err := handler.CommentUseCase.GetCommentReply(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, responses.ToListPosts(comments))
+}
+
 func (handler CommentController) GetProfileCommentsController(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	comments, err := handler.CommentUseCase.GetCommentProfileController(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, responses.ToListPostProfile(comments))
+}
+
+func (handler CommentController) GetProfileComments(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
 
@@ -76,5 +101,21 @@ func (handler CommentController) ActivatingPostController(c echo.Context) error 
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, "Post Activated")
+	return controllers.NewSuccessResponse(c, "")
+}
+
+func (handler CommentController) CreateCommentController(c echo.Context) error {
+	NewComment := request.CreateComment{}
+	c.Bind(&NewComment)
+
+	domain := NewComment.ToDomain()
+
+	ctx := c.Request().Context()
+
+	comments, err := handler.CommentUseCase.CreateCommentController(ctx, domain)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, comments)
 }

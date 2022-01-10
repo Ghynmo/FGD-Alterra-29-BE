@@ -62,3 +62,46 @@ func (handler ThreadController) DeleteThread(c echo.Context) error {
 	}
 	return controllers.DeleteSuccessResponse(c, thread)
 }
+
+func (handler ThreadController) GetHomepageThreads(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetHomepageThreads(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+}
+
+func (handler ThreadController) GetRecommendationThreads(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetRecommendationThreads(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+}
+
+func (handler ThreadController) GetHotThreads(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetHotThreads(ctx)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+}
+
+func (handler ThreadController) GetSearch(c echo.Context) error {
+	threadname := c.QueryParam("threadname")
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetSearch(ctx, threadname)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+}

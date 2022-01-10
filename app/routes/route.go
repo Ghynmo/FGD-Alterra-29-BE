@@ -2,11 +2,15 @@ package routes
 
 import (
 	"fgd-alterra-29/controllers/categories"
+	commentlikes "fgd-alterra-29/controllers/comment_likes"
 	commentreport "fgd-alterra-29/controllers/comment_report"
 	"fgd-alterra-29/controllers/comments"
 	"fgd-alterra-29/controllers/follows"
 	reportcases "fgd-alterra-29/controllers/report_cases"
+	threadlikes "fgd-alterra-29/controllers/thread_likes"
 	threadreport "fgd-alterra-29/controllers/thread_report"
+	threadsaves "fgd-alterra-29/controllers/thread_saves"
+	threadshares "fgd-alterra-29/controllers/thread_shares"
 	"fgd-alterra-29/controllers/threads"
 	userbadges "fgd-alterra-29/controllers/user_badges"
 	"fgd-alterra-29/controllers/users"
@@ -24,6 +28,10 @@ type ControllerList struct {
 	ReportCaseController    reportcases.ReportCaseController
 	ThreadReportController  threadreport.ThreadReportController
 	CommentReportController commentreport.CommentReportController
+	ThreadLikeController    threadlikes.ThreadLikeController
+	CommentLikeController   commentlikes.CommentLikeController
+	ThreadSaveController    threadsaves.ThreadSaveController
+	ThreadShareController   threadshares.ThreadShareController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
@@ -76,4 +84,19 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	//Report Thread page
 	// e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm)
 	// e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
+
+	e.GET("home/:id", cl.ThreadController.GetHomepageThreads)
+	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads)
+	e.GET("hotthread", cl.ThreadController.GetHotThreads)
+	e.GET("search", cl.ThreadController.GetSearch)
+
+	e.GET("comment/reply/:id", cl.CommentController.GetReplyComments)
+	e.POST("comment", cl.CommentController.CreateCommentController)
+	e.POST("threadlike", cl.ThreadLikeController.CreateLikes)
+	e.DELETE("threadlike", cl.ThreadLikeController.DeleteLikes)
+	e.POST("commentlike", cl.CommentLikeController.CreateLikes)
+	e.DELETE("commentlike", cl.CommentLikeController.DeleteLikes)
+	e.POST("threadsave", cl.ThreadSaveController.SaveThread)
+	e.DELETE("threadsave", cl.ThreadSaveController.Unsaves)
+	e.POST("threadshare", cl.ThreadShareController.ShareThread)
 }

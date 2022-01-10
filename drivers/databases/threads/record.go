@@ -3,7 +3,11 @@ package threads
 import (
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/drivers/databases/comments"
+	threadfollows "fgd-alterra-29/drivers/databases/thread_follows"
+	threadlikes "fgd-alterra-29/drivers/databases/thread_likes"
 	threadreport "fgd-alterra-29/drivers/databases/thread_report"
+	threadsaves "fgd-alterra-29/drivers/databases/thread_saves"
+	threadshares "fgd-alterra-29/drivers/databases/thread_shares"
 	"time"
 )
 
@@ -18,15 +22,21 @@ type Threads struct {
 	Comments      []comments.Comments         `gorm:"foreignKey:Thread_id"`
 	Report        []threadreport.ThreadReport `gorm:"foreignKey:Thread_id"`
 	Created_at    time.Time
+	Likes         []threadlikes.ThreadLikes     `gorm:"foreignKey:Thread_id"`
+	Followers     []threadfollows.ThreadFollows `gorm:"foreignKey:Thread_id"`
+	Saves         []threadsaves.ThreadSaves     `gorm:"foreignKey:Thread_id"`
+	Shares        []threadshares.ThreadShares   `gorm:"foreignKey:Thread_id"`
+	// Created_at    time.Time
 	// Updated_at    time.Time
 	// Deleted_at    time.Time
+	Name          string `gorm:"-:migration;->"`
 	Category      string `gorm:"-:migration;->"`
+	RecentReplier string `gorm:"-:migration;->"`
 	Comment       string `gorm:"-:migration;->"`
 	Q_Comment     int    `gorm:"-:migration;->"`
-	RecentReplier string `gorm:"-:migration;->"`
 	Q_Thread      int    `gorm:"-:migration;->"`
-	Name          string `gorm:"-:migration;->"`
 	Photo         string `gorm:"-:migration;->"`
+	Q_Like        int    `gorm:"-:migration;->"`
 }
 
 func (Thread *Threads) ToDomain() threads.Domain {
@@ -40,15 +50,21 @@ func (Thread *Threads) ToDomain() threads.Domain {
 		Active:        Thread.Active,
 		Comments:      comments.ToListDomain(Thread.Comments),
 		Created_at:    Thread.Created_at,
+		Likes:         threadlikes.ToListDomain(Thread.Likes),
+		Followers:     threadfollows.ToListDomain(Thread.Followers),
+		Saves:         threadsaves.ToListDomain(Thread.Saves),
+		Shares:        threadshares.ToListDomain(Thread.Shares),
+		// Created_at:    Thread.Created_at,
 		// Updated_at:    Thread.Updated_at,
 		// Deleted_at:    Thread.Deleted_at,
+		Name:          Thread.Name,
 		Category:      Thread.Category,
+		RecentReplier: Thread.RecentReplier,
 		Comment:       Thread.Comment,
 		Q_Comment:     Thread.Q_Comment,
-		RecentReplier: Thread.RecentReplier,
 		Q_Thread:      Thread.Q_Thread,
-		Name:          Thread.Name,
 		Photo:         Thread.Photo,
+		Q_Like:        Thread.Q_Like,
 	}
 }
 

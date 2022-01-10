@@ -44,8 +44,26 @@ func (uc *ThreadUseCase) GetThreadQuantity(ctx context.Context) (Domain, error) 
 	return thread, nil
 }
 
+func (uc *ThreadUseCase) GetHomepageThreads(ctx context.Context, id int) ([]Domain, error) {
+	thread, err := uc.Repo.GetHomepageThreads(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}
+
 func (uc *ThreadUseCase) GetThreads(ctx context.Context) ([]Domain, error) {
 	thread, err := uc.Repo.GetThreads(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}
+
+func (uc *ThreadUseCase) GetRecommendationThreads(ctx context.Context, id int) ([]Domain, error) {
+	thread, err := uc.Repo.GetRecommendationThreads(ctx, id)
 	if err != nil {
 		return []Domain{}, err
 	}
@@ -57,6 +75,24 @@ func (uc *ThreadUseCase) DeleteThread(ctx context.Context, id int) (Domain, erro
 	thread, err := uc.Repo.DeleteThread(ctx, id)
 	if err != nil {
 		return Domain{}, err
+	}
+
+	return thread, nil
+}
+
+func (uc *ThreadUseCase) GetHotThreads(ctx context.Context) ([]Domain, error) {
+	thread, err := uc.Repo.GetHotThreads(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}
+
+func (uc *ThreadUseCase) GetSearch(ctx context.Context, threadname string) ([]Domain, error) {
+	thread, err := uc.Repo.GetSearch(ctx, threadname)
+	if err != nil {
+		return []Domain{}, err
 	}
 
 	return thread, nil

@@ -21,9 +21,28 @@ func (uc *CommentUseCase) GetPostsByCommentController(ctx context.Context, comme
 	post, err := uc.Repo.GetPostsByComment(ctx, comment)
 	if err != nil {
 		return []Domain{}, err
+
 	}
 
 	return post, nil
+}
+
+func (uc *CommentUseCase) GetCommentReply(ctx context.Context, id int) ([]Domain, error) {
+	comments, err := uc.Repo.GetCommentReply(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return comments, nil
+}
+
+func (uc *CommentUseCase) GetCommentProfile(ctx context.Context, id int) ([]Domain, error) {
+	comments, err := uc.Repo.GetCommentProfile(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return comments, nil
 }
 
 func (uc *CommentUseCase) GetCommentProfileController(ctx context.Context, id int) ([]Domain, error) {
@@ -31,8 +50,16 @@ func (uc *CommentUseCase) GetCommentProfileController(ctx context.Context, id in
 	if err != nil {
 		return []Domain{}, err
 	}
-
 	return post, nil
+}
+
+func (uc *CommentUseCase) GetCommentByThread(ctx context.Context, id int) ([]Domain, error) {
+	comments, err := uc.Repo.GetCommentByThread(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return comments, nil
 }
 
 func (uc *CommentUseCase) GetPostQuantityController(ctx context.Context) (Domain, error) {
@@ -40,8 +67,16 @@ func (uc *CommentUseCase) GetPostQuantityController(ctx context.Context) (Domain
 	if err != nil {
 		return Domain{}, err
 	}
-
 	return post, nil
+}
+
+func (uc *CommentUseCase) CreateCommentController(ctx context.Context, domain Domain) (Domain, error) {
+	comments, err := uc.Repo.CreateComment(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return comments, nil
 }
 
 func (uc *CommentUseCase) GetPostsController(ctx context.Context) ([]Domain, error) {

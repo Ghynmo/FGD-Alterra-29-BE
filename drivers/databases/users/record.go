@@ -2,10 +2,15 @@ package users
 
 import (
 	"fgd-alterra-29/business/users"
+	commentlikes "fgd-alterra-29/drivers/databases/comment_likes"
 	commentreport "fgd-alterra-29/drivers/databases/comment_report"
 	"fgd-alterra-29/drivers/databases/comments"
 	"fgd-alterra-29/drivers/databases/follows"
+	threadfollows "fgd-alterra-29/drivers/databases/thread_follows"
+	threadlikes "fgd-alterra-29/drivers/databases/thread_likes"
 	threadreport "fgd-alterra-29/drivers/databases/thread_report"
+	threadsaves "fgd-alterra-29/drivers/databases/thread_saves"
+	threadshares "fgd-alterra-29/drivers/databases/thread_shares"
 	"fgd-alterra-29/drivers/databases/threads"
 	userbadges "fgd-alterra-29/drivers/databases/user_badges"
 )
@@ -29,6 +34,11 @@ type Users struct {
 	Comments      []comments.Comments           `gorm:"foreignKey:User_id"`
 	ThreadReport  []threadreport.ThreadReport   `gorm:"foreignKey:Reporter_id"`
 	CommentReport []commentreport.CommentReport `gorm:"foreignKey:Reporter_id"`
+	CommentLikes  []commentlikes.CommentLikes   `gorm:"foreignKey:Liker_id"`
+	ThreadLikes   []threadlikes.ThreadLikes     `gorm:"foreignKey:User_id"`
+	ThreadFollows []threadfollows.ThreadFollows `gorm:"foreignKey:User_id"`
+	ThreadSaves   []threadsaves.ThreadSaves     `gorm:"foreignKey:User_id"`
+	ThreadShares  []threadshares.ThreadShares   `gorm:"foreignKey:User_id"`
 	Q_Following   int                           `gorm:"-:migration;->"`
 	Q_Followers   int                           `gorm:"-:migration;->"`
 	Q_Post        int                           `gorm:"-:migration;->"`
@@ -59,6 +69,11 @@ func (user *Users) ToDomain() users.Domain {
 		Followers:     follows.ToListDomain(user.Followers),
 		Comments:      comments.ToListDomain(user.Comments),
 		ThreadReport:  threadreport.ToListDomain(user.ThreadReport),
+		CommentLikes:  commentlikes.ToListDomain(user.CommentLikes),
+		ThreadLikes:   threadlikes.ToListDomain(user.ThreadLikes),
+		ThreadFollows: threadfollows.ToListDomain(user.ThreadFollows),
+		ThreadSaves:   threadsaves.ToListDomain(user.ThreadSaves),
+		ThreadShares:  threadshares.ToListDomain(user.ThreadShares),
 		Q_Following:   user.Q_Following,
 		Q_Followers:   user.Q_Followers,
 		Q_Post:        user.Q_Post,

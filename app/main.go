@@ -42,8 +42,25 @@ import (
 	_commentreportController "fgd-alterra-29/controllers/comment_report"
 	_commentreportRepository "fgd-alterra-29/drivers/databases/comment_report"
 
+	_threadlikeUseCase "fgd-alterra-29/business/thread_likes"
+	_threadlikeController "fgd-alterra-29/controllers/thread_likes"
+	_threadlikeRepository "fgd-alterra-29/drivers/databases/thread_likes"
+
+	_commentlikeUseCase "fgd-alterra-29/business/comment_likes"
+	_commentlikeController "fgd-alterra-29/controllers/comment_likes"
+	_commentlikeRepository "fgd-alterra-29/drivers/databases/comment_likes"
+
+	_threadsaveUseCase "fgd-alterra-29/business/thread_saves"
+	_threadsaveController "fgd-alterra-29/controllers/thread_saves"
+	_threadsaveRepository "fgd-alterra-29/drivers/databases/thread_saves"
+
+	_threadshareUseCase "fgd-alterra-29/business/thread_shares"
+	_threadshareController "fgd-alterra-29/controllers/thread_shares"
+	_threadshareRepository "fgd-alterra-29/drivers/databases/thread_shares"
+
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
+	_threadfollowRepository "fgd-alterra-29/drivers/databases/thread_follows"
 
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -70,6 +87,11 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_reportcaseRepository.ReportCases{})
 	db.AutoMigrate(&_threadreportRepository.ThreadReport{})
 	db.AutoMigrate(&_commentreportRepository.CommentReport{})
+	db.AutoMigrate(&_threadlikeRepository.ThreadLikes{})
+	db.AutoMigrate(&_threadfollowRepository.ThreadFollows{})
+	db.AutoMigrate(&_commentlikeRepository.CommentLikes{})
+	db.AutoMigrate(&_threadsaveRepository.ThreadSaves{})
+	db.AutoMigrate(&_threadshareRepository.ThreadShares{})
 }
 
 func main() {
@@ -88,6 +110,10 @@ func main() {
 	e := echo.New()
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
+	commentRepository := _commentRepository.NewMysqlCommentRepository(Conn)
+	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
+	commentController := _commentController.NewCommentController(commentUseCase)
+
 	threadRepository := _threadRepository.NewMysqlThreadRepository(Conn)
 	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext)
 	threadController := _threadController.NewThreadController(threadUseCase)
@@ -95,10 +121,6 @@ func main() {
 	userbadgeRepository := _userbadgeRepository.NewMysqlUserBadgeRepository(Conn)
 	userbadgeUseCase := _userbadgeUseCase.NewUserBadgeUseCase(userbadgeRepository, timeoutContext)
 	userbadgeController := _userbadgeController.NewUserBadgeController(userbadgeUseCase)
-
-	commentRepository := _commentRepository.NewMysqlCommentRepository(Conn)
-	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
-	commentController := _commentController.NewCommentController(commentUseCase)
 
 	followRepository := _followRepository.NewMysqlFollowRepository(Conn)
 	followUseCase := _followUseCase.NewFollowUseCase(followRepository, timeoutContext)
@@ -120,6 +142,22 @@ func main() {
 	commentreportUseCase := _commentreportUseCase.NewCommentReportUseCase(commentreportRepository, timeoutContext)
 	commentreportController := _commentreportController.NewCommentReportController(commentreportUseCase)
 
+	threadlikeRepository := _threadlikeRepository.NewMysqlThreadLikeRepository(Conn)
+	threadlikeUseCase := _threadlikeUseCase.NewThreadLikeUseCase(threadlikeRepository, timeoutContext)
+	threadlikeController := _threadlikeController.NewThreadLikeController(threadlikeUseCase)
+
+	commentlikeRepository := _commentlikeRepository.NewMysqlCommentLikeRepository(Conn)
+	commentlikeUseCase := _commentlikeUseCase.NewCommentLikeUseCase(commentlikeRepository, timeoutContext)
+	commentlikeController := _commentlikeController.NewCommentLikeController(commentlikeUseCase)
+
+	threadsaveRepository := _threadsaveRepository.NewMysqlThreadSaveRepository(Conn)
+	threadsaveUseCase := _threadsaveUseCase.NewThreadSaveUseCase(threadsaveRepository, timeoutContext)
+	threadsaveController := _threadsaveController.NewThreadSaveController(threadsaveUseCase)
+
+	threadshareRepository := _threadshareRepository.NewMysqlThreadShareRepository(Conn)
+	threadshareUseCase := _threadshareUseCase.NewThreadShareUseCase(threadshareRepository, timeoutContext)
+	threadshareController := _threadshareController.NewThreadShareController(threadshareUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase)
@@ -134,6 +172,10 @@ func main() {
 		ReportCaseController:    *reportcaseController,
 		ThreadReportController:  *threadreportController,
 		CommentReportController: *commentreportController,
+		ThreadLikeController:    *threadlikeController,
+		CommentLikeController:   *commentlikeController,
+		ThreadSaveController:    *threadsaveController,
+		ThreadShareController:   *threadshareController,
 	}
 
 	routesInit.RouteRegister(*e)

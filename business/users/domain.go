@@ -2,9 +2,14 @@ package users
 
 import (
 	"context"
+	commentlikes "fgd-alterra-29/business/comment_likes"
 	"fgd-alterra-29/business/comments"
 	"fgd-alterra-29/business/follows"
+	threadfollows "fgd-alterra-29/business/thread_follows"
+	threadlikes "fgd-alterra-29/business/thread_likes"
 	threadreport "fgd-alterra-29/business/thread_report"
+	threadsaves "fgd-alterra-29/business/thread_saves"
+	threadshares "fgd-alterra-29/business/thread_shares"
 	"fgd-alterra-29/business/threads"
 	userbadges "fgd-alterra-29/business/user_badges"
 	"time"
@@ -28,6 +33,11 @@ type Domain struct {
 	Followers     []follows.Domain
 	Comments      []comments.Domain
 	ThreadReport  []threadreport.Domain
+	CommentLikes  []commentlikes.Domain
+	ThreadLikes   []threadlikes.Domain
+	ThreadFollows []threadfollows.Domain
+	ThreadSaves   []threadsaves.Domain
+	ThreadShares  []threadshares.Domain
 	Q_Followers   int
 	Q_Following   int
 	Q_Post        int

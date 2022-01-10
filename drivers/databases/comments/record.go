@@ -15,8 +15,8 @@ type Comments struct {
 	Replies    []Comments `gorm:"foreignKey:ReplyOf"`
 	ReplyOf    int
 	Report     []commentreport.CommentReport `gorm:"foreignKey:Comment_id"`
-	Active     bool
-	Likes      []commentlikes.CommentLikes `gorm:"foreignKey:Comment_id"`
+	Active     bool                          `gorm:"default:true"`
+	Likes      []commentlikes.CommentLikes   `gorm:"foreignKey:Comment_id"`
 	Created_at time.Time
 	Updated_at time.Time
 	Deleted_at time.Time

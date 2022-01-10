@@ -6,6 +6,7 @@ type Domain struct {
 	User_id  int
 	Badge_id int
 	Badge    string
+	Icon_url string
 }
 
 type UseCase interface {

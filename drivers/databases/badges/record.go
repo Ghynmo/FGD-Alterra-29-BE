@@ -8,6 +8,7 @@ import (
 type Badges struct {
 	ID          int    `gorm:"primaryKey"`
 	Badge       string `gorm:"not null"`
+	IconUrl     string
 	Description string
 	UserBadges  []userbadges.UserBadges `gorm:"foreignKey:Badge_id"`
 }
@@ -16,6 +17,7 @@ func (Badge *Badges) ToDomain() badges.Domain {
 	return badges.Domain{
 		ID:          Badge.ID,
 		Badge:       Badge.Badge,
+		IconUrl:     Badge.IconUrl,
 		Description: Badge.Description,
 		UserBadges:  userbadges.ToListDomain(Badge.UserBadges),
 	}

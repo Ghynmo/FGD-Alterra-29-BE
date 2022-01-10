@@ -6,8 +6,9 @@ import (
 )
 
 type Categories struct {
-	ID       int               `gorm:"primaryKey"`
-	Category string            `gorm:"not null"`
+	ID       int    `gorm:"primaryKey"`
+	Category string `gorm:"not null"`
+	IconUrl  string
 	Threads  []threads.Threads `gorm:"foreignKey:Category_id"`
 	Q_Title  int               `gorm:"-:migration;->"`
 }
@@ -16,6 +17,7 @@ func (category *Categories) ToDomain() categories.Domain {
 	return categories.Domain{
 		ID:       category.ID,
 		Category: category.Category,
+		IconUrl:  category.IconUrl,
 		Threads:  threads.ToListDomain(category.Threads),
 		Q_Title:  category.Q_Title,
 	}

@@ -3,8 +3,8 @@ package responses
 import "fgd-alterra-29/business/threads"
 
 type ProfileThread struct {
-	Title         string `json:"title"`
-	Comment       string `json:"comment"`
+	Title         string `json:"thread_title"`
+	Comment       string `json:"recent_comment"`
 	RecentReplier string `json:"recent_replier"`
 }
 

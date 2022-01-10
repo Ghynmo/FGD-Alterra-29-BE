@@ -3,6 +3,7 @@ package follows
 import (
 	"fgd-alterra-29/business/follows"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/follows/request"
 	"fgd-alterra-29/controllers/follows/responses"
 	"net/http"
 	"strconv"
@@ -44,4 +45,38 @@ func (handler FollowController) GetFollowing(c echo.Context) error {
 	}
 
 	return controllers.NewSuccessResponse(c, responses.ToListFollowingList(follows))
+}
+
+func (handler FollowController) FollowsController(c echo.Context) error {
+	NewFollow := request.Follow{}
+
+	c.Bind(&NewFollow)
+	domain := NewFollow.ToDomain()
+
+	ctx := c.Request().Context()
+
+	follows, err := handler.FollowUseCase.FollowsController(ctx, domain)
+
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, follows)
+}
+
+func (handler FollowController) UnfollowController(c echo.Context) error {
+	NewFollow := request.Follow{}
+
+	c.Bind(&NewFollow)
+	domain := NewFollow.ToDomain()
+
+	ctx := c.Request().Context()
+
+	follows, err := handler.FollowUseCase.UnfollowController(ctx, domain)
+
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, follows)
 }

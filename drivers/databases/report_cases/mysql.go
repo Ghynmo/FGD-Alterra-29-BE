@@ -20,7 +20,7 @@ func NewMysqlReportCaseRepository(conn *gorm.DB) reportcases.Repository {
 func (DB *MysqlReportCaseRepository) GetReportForm(ctx context.Context) ([]reportcases.Domain, error) {
 	var reportcase []ReportCases
 
-	result := DB.Conn.Table("report_cases").Select("id, category_report").Find(&reportcase)
+	result := DB.Conn.Table("report_cases").Select("id, report_cases.case").Find(&reportcase)
 
 	if result.Error != nil {
 		return []reportcases.Domain{}, result.Error

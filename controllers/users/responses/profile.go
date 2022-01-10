@@ -16,10 +16,10 @@ type Profile struct {
 	Header_url     string                     `json:"header_url"`
 	Photo_url      string                     `json:"photo_url"`
 	Bio            string                     `json:"bio"`
-	Q_Following    int                        `json:"following_quantity"`
-	Q_Followers    int                        `json:"followers_quantity"`
-	Q_Post         int                        `json:"post_quantity"`
-	Q_Thread       int                        `json:"thread_quantity"`
+	Q_Following    int                        `json:"following_total"`
+	Q_Followers    int                        `json:"followers_total"`
+	Q_Post         int                        `json:"post_total"`
+	Q_Thread       int                        `json:"thread_total"`
 	UserBadgesTrue []profile.ProfileBadges    `json:"badge_list"`
 	ActiveCategory []profile.ActiveOnCategory `json:"active_on_category"`
 	ThreadProfile  []profile.ThreadProfile    `json:"thread_on_profile"`

@@ -20,7 +20,8 @@ func NewMysqlUserBadgeRepository(conn *gorm.DB) userbadges.Repository {
 func (DB *MysqlUserBadgeRepository) GetUserBadge(ctx context.Context, id int) ([]userbadges.Domain, error) {
 	var UserBadges []UserBadges
 
-	result := DB.Conn.Table("user_badges").Select("badge").Where("user_badges.user_id = 1").Joins("join badges on user_badges.badge_id = badges.id").
+	result := DB.Conn.Table("user_badges").Select("badge").Where("user_badges.user_id = ?", id).
+		Joins("join badges on user_badges.badge_id = badges.id").
 		Find(&UserBadges)
 
 	if result.Error != nil {

@@ -36,3 +36,23 @@ func (uc FollowUseCase) GetFollowing(ctx context.Context, id int) ([]Domain, err
 
 	return following, nil
 }
+
+func (uc FollowUseCase) FollowsController(ctx context.Context, domain Domain) (Domain, error) {
+	following, err := uc.Repo.Follows(ctx, domain)
+
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return following, nil
+}
+
+func (uc FollowUseCase) UnfollowController(ctx context.Context, domain Domain) (Domain, error) {
+	following, err := uc.Repo.Unfollow(ctx, domain)
+
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return following, nil
+}

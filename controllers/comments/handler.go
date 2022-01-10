@@ -21,6 +21,18 @@ func NewCommentController(threadUseCase comments.UseCase) *CommentController {
 	}
 }
 
+func (handler CommentController) GetReplyComments(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	comments, err := handler.CommentUseCase.GetCommentReply(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, responses.ToListReplyComment(comments))
+}
+
 func (handler CommentController) GetProfileComments(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()

@@ -23,12 +23,14 @@ type Domain struct {
 }
 
 type UseCase interface {
+	GetCommentReply(ctx context.Context, id int) ([]Domain, error)
 	GetCommentProfile(ctx context.Context, id int) ([]Domain, error)
 	GetCommentByThread(ctx context.Context, id int) ([]Domain, error)
 	CreateCommentController(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type Repository interface {
+	GetCommentReply(ctx context.Context, id int) ([]Domain, error)
 	GetCommentProfile(ctx context.Context, id int) ([]Domain, error)
 	GetCommentByThread(ctx context.Context, id int) ([]Domain, error)
 	CreateComment(ctx context.Context, domain Domain) (Domain, error)

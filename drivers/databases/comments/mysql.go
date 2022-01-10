@@ -17,6 +17,20 @@ func NewMysqlCommentRepository(conn *gorm.DB) comments.Repository {
 	}
 }
 
+func (DB *MysqlCommentRepository) GetCommentReply(ctx context.Context, id int) ([]comments.Domain, error) {
+	var Comment []Comments
+
+	result := DB.Conn.Table("comments").Where("reply_of = ?", id).Select("comments.id, name, photo_url, comment").
+		Joins("join users on comments.reply_of = users.id").
+		Find(&Comment)
+
+	if result.Error != nil {
+		return []comments.Domain{}, result.Error
+	}
+
+	return ToListDomain(Comment), nil
+}
+
 func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int) ([]comments.Domain, error) {
 	var Comment []Comments
 

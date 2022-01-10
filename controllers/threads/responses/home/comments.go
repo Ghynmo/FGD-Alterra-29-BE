@@ -3,13 +3,15 @@ package home
 import "fgd-alterra-29/business/comments"
 
 type CommentRecommendation struct {
-	Name      string
-	Photo_url string
-	Comment   string
+	ID        int    `json:"comment_id"`
+	Name      string `json:"name"`
+	Photo_url string `json:"photo_url"`
+	Comment   string `json:"comment"`
 }
 
 func ToCommentRecommendation(Domain comments.Domain) CommentRecommendation {
 	return CommentRecommendation{
+		ID:        Domain.ID,
 		Name:      Domain.Name,
 		Photo_url: Domain.Photo_url,
 		Comment:   Domain.Comment,

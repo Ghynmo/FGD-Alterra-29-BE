@@ -3,9 +3,9 @@ package responses
 import "fgd-alterra-29/business/threads"
 
 type ProfileThread struct {
-	Title         string
-	Comment       string
-	RecentReplier string
+	Title         string `json:"title"`
+	Comment       string `json:"comment"`
+	RecentReplier string `json:"recent_replier"`
 }
 
 func ToProfileThread(Domain threads.Domain) ProfileThread {

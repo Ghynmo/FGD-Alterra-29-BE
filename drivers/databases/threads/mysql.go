@@ -4,6 +4,7 @@ import (
 	"context"
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/drivers/databases/comments"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -43,8 +44,9 @@ func (DB *MysqlThreadRepository) GetHomepageThreads(ctx context.Context, id int)
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
 
-	result := DB.Conn.Table("threads").Select("*, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
+	result := DB.Conn.Table("threads").Select("*, threads.id, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
 		Where("thread_follows.user_id = (?)", id).
+		Joins("join users on threads.user_id = users.id").
 		Joins("join thread_follows on threads.id = thread_follows.thread_id").
 		Preload("Comments", func(db *gorm.DB) *gorm.DB {
 			return db.Table("comments").Select("*").
@@ -59,7 +61,7 @@ func (DB *MysqlThreadRepository) GetHomepageThreads(ctx context.Context, id int)
 	if result.Error != nil {
 		return []threads.Domain{}, result.Error
 	}
-
+	fmt.Println(ToListDomain(Thread))
 	return ToListDomain(Thread), nil
 }
 
@@ -70,10 +72,11 @@ func (DB *MysqlThreadRepository) GetRecommendationThreads(ctx context.Context, i
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
 
-	result := DB.Conn.Table("threads").Select("*, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
+	result := DB.Conn.Table("threads").Select("*, threads.id, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
 		Where("threads.category_id = (?)", DB.GetCategories(id, 0)).
 		Or("threads.category_id = (?)", DB.GetCategories(id, 1)).
 		Or("threads.category_id = (?)", DB.GetCategories(id, 2)).
+		Joins("join users on threads.user_id = users.id").
 		Preload("Comments", func(db *gorm.DB) *gorm.DB {
 			return db.Table("comments").Select("*").
 				Joins("join users on comments.user_id = users.id").Find(&Comment)
@@ -94,8 +97,9 @@ func (DB *MysqlThreadRepository) GetHotThreads(ctx context.Context) ([]threads.D
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
 
-	result := DB.Conn.Table("threads").Select("*, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
+	result := DB.Conn.Table("threads").Select("*, threads.id, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
 		Order("Q_Like desc, Q_Comment desc").
+		Joins("join users on threads.user_id = users.id").
 		Preload("Comments", func(db *gorm.DB) *gorm.DB {
 			return db.Table("comments").Select("*").
 				Joins("join users on comments.user_id = users.id").Find(&Comment)
@@ -126,10 +130,11 @@ func (DB *MysqlThreadRepository) GetSearch(ctx context.Context, threadname strin
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
 
-	result := DB.Conn.Table("threads").Select("*, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
+	result := DB.Conn.Table("threads").Select("*, threads.id, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
 		Where("title LIKE ?", Newthreadname).
+		Joins("join users on threads.user_id = users.id").
 		Preload("Comments", func(db *gorm.DB) *gorm.DB {
-			return db.Table("comments").Select("*").
+			return db.Table("comments").Select("*, comments.id").
 				Joins("join users on comments.user_id = users.id").Find(&Comment)
 		}).
 		Find(&Thread)

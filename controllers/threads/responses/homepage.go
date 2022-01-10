@@ -6,16 +6,18 @@ import (
 )
 
 type RecommendationThreads struct {
-	Name      string
-	Title     string
-	Content   string
-	Q_Like    int
-	Q_Comment int
-	Comments  []home.CommentRecommendation
+	ID        int                          `json:"thread_id"`
+	Name      string                       `json:"thread_maker"`
+	Title     string                       `json:"title"`
+	Content   string                       `json:"content"`
+	Q_Like    int                          `json:"likes_total"`
+	Q_Comment int                          `json:"comments_total"`
+	Comments  []home.CommentRecommendation `json:"comments"`
 }
 
 func ToRecommendationThreads(Domain threads.Domain) RecommendationThreads {
 	return RecommendationThreads{
+		ID:        Domain.ID,
 		Name:      Domain.Name,
 		Title:     Domain.Title,
 		Content:   Domain.Content,

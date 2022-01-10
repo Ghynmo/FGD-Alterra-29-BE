@@ -23,7 +23,7 @@ func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int)
 	ReplierName := DB.Conn.Table("comments as subcomment").Where("subcomment.id = comments.reply_of").Select("name").
 		Joins("join users on subcomment.user_id = users.id")
 
-	result := DB.Conn.Table("comments").Where("comments.user_id = 1").Select("title as Thread, comment, (?) as Name", ReplierName).
+	result := DB.Conn.Table("comments").Where("comments.user_id = ?", id).Select("title as Thread, comment, (?) as Name", ReplierName).
 		Joins("join threads on comments.thread_id = threads.id").Joins("join users on comments.user_id = users.id").
 		Order("comments.created_at desc").Find(&Comment)
 

@@ -95,10 +95,6 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.POST("threadsave", cl.ThreadSaveController.SaveThread)
 	e.DELETE("threadsave", cl.ThreadSaveController.Unsaves)
 	e.POST("threadshare", cl.ThreadShareController.ShareThread)
-	e.GET("posts/:id", cl.CommentController.GetProfileComments)
-	e.GET("threads/:id", cl.ThreadController.GetProfileThreads)
-	e.GET("followers/:id", cl.FollowController.GetFollowers)
-	e.GET("following/:id", cl.FollowController.GetFollowing)
 
 	e.POST("follows", cl.FollowController.FollowsController)
 	e.DELETE("unfollow", cl.FollowController.UnfollowController)

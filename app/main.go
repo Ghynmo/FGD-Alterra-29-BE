@@ -58,7 +58,14 @@ import (
 	_threadshareController "fgd-alterra-29/controllers/thread_shares"
 	_threadshareRepository "fgd-alterra-29/drivers/databases/thread_shares"
 
+	_userpointUseCase "fgd-alterra-29/business/user_points"
+	_userpointController "fgd-alterra-29/controllers/user_points"
+	_userpointRepository "fgd-alterra-29/drivers/databases/user_points"
+
+	_badgeUseCase "fgd-alterra-29/business/badges"
+	_badgeController "fgd-alterra-29/controllers/badges"
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
+
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
 	_roleRepository "fgd-alterra-29/drivers/databases/roles"
 	_threadfollowRepository "fgd-alterra-29/drivers/databases/thread_follows"
@@ -94,6 +101,7 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_commentlikeRepository.CommentLikes{})
 	db.AutoMigrate(&_threadsaveRepository.ThreadSaves{})
 	db.AutoMigrate(&_threadshareRepository.ThreadShares{})
+	db.AutoMigrate(&_userpointRepository.UserPoints{})
 }
 
 func main() {
@@ -116,8 +124,12 @@ func main() {
 	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
 	commentController := _commentController.NewCommentController(commentUseCase)
 
+	userpointRepository := _userpointRepository.NewMysqlUserPointRepository(Conn)
+	userpointUseCase := _userpointUseCase.NewUserPointUseCase(userpointRepository, timeoutContext)
+	userpointController := _userpointController.NewUserPointController(userpointUseCase)
+
 	threadRepository := _threadRepository.NewMysqlThreadRepository(Conn)
-	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext)
+	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext, userpointRepository)
 	threadController := _threadController.NewThreadController(threadUseCase)
 
 	userbadgeRepository := _userbadgeRepository.NewMysqlUserBadgeRepository(Conn)
@@ -160,9 +172,13 @@ func main() {
 	threadshareUseCase := _threadshareUseCase.NewThreadShareUseCase(threadshareRepository, timeoutContext)
 	threadshareController := _threadshareController.NewThreadShareController(threadshareUseCase)
 
+	badgeRepository := _badgeRepository.NewMysqlBadgeRepository(Conn)
+	badgeUseCase := _badgeUseCase.NewBadgeUseCase(badgeRepository, timeoutContext)
+	badgeController := _badgeController.NewBadgeController(badgeUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
-	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase)
+	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase, badgeUseCase)
 
 	routesInit := routes.ControllerList{
 		UserController:          *userController,
@@ -178,6 +194,8 @@ func main() {
 		CommentLikeController:   *commentlikeController,
 		ThreadSaveController:    *threadsaveController,
 		ThreadShareController:   *threadshareController,
+		UserPointController:     *userpointController,
+		BadgeController:         *badgeController,
 	}
 
 	routesInit.RouteRegister(*e)

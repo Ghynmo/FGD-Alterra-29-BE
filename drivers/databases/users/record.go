@@ -13,6 +13,7 @@ import (
 	threadshares "fgd-alterra-29/drivers/databases/thread_shares"
 	"fgd-alterra-29/drivers/databases/threads"
 	userbadges "fgd-alterra-29/drivers/databases/user_badges"
+	userpoints "fgd-alterra-29/drivers/databases/user_points"
 )
 
 type Users struct {
@@ -44,6 +45,7 @@ type Users struct {
 	Q_Post        int                           `gorm:"-:migration;->"`
 	Q_Thread      int                           `gorm:"-:migration;->"`
 	Reputation    string                        `gorm:"-:migration;->"`
+	Points        userpoints.UserPoints         `gorm:"foreignKey:User_id"`
 	// Created_at    time.Time
 	// Updated_at    time.Time
 	// Deleted_at    time.Time

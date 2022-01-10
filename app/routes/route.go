@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fgd-alterra-29/controllers/badges"
 	"fgd-alterra-29/controllers/categories"
 	commentlikes "fgd-alterra-29/controllers/comment_likes"
 	commentreport "fgd-alterra-29/controllers/comment_report"
@@ -13,6 +14,7 @@ import (
 	threadshares "fgd-alterra-29/controllers/thread_shares"
 	"fgd-alterra-29/controllers/threads"
 	userbadges "fgd-alterra-29/controllers/user_badges"
+	userpoints "fgd-alterra-29/controllers/user_points"
 	"fgd-alterra-29/controllers/users"
 
 	"github.com/labstack/echo/v4"
@@ -32,6 +34,8 @@ type ControllerList struct {
 	CommentLikeController   commentlikes.CommentLikeController
 	ThreadSaveController    threadsaves.ThreadSaveController
 	ThreadShareController   threadshares.ThreadShareController
+	UserPointController     userpoints.UserPointController
+	BadgeController         badges.BadgeController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
@@ -106,4 +110,5 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 
 	e.POST("follows", cl.FollowController.FollowsController)
 	e.DELETE("unfollow", cl.FollowController.UnfollowController)
+	e.POST("thread", cl.ThreadController.CreateThread)
 }

@@ -19,13 +19,9 @@ type Domain struct {
 type UseCase interface {
 	GetFollowers(ctx context.Context, id int) ([]Domain, error)
 	GetFollowing(ctx context.Context, id int) ([]Domain, error)
-	FollowsController(ctx context.Context, domain Domain) (Domain, error)
-	UnfollowController(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type Repository interface {
 	GetFollowers(ctx context.Context, id int) ([]Domain, error)
 	GetFollowing(ctx context.Context, id int) ([]Domain, error)
-	Follows(ctx context.Context, domain Domain) (Domain, error)
-	Unfollow(ctx context.Context, domain Domain) (Domain, error)
 }

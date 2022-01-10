@@ -3,6 +3,7 @@ package comments
 import (
 	"context"
 	"fgd-alterra-29/business/comments"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -36,13 +37,13 @@ func (DB *MysqlCommentRepository) GetCommentReply(ctx context.Context, id int) (
 	var Comment []Comments
 
 	result := DB.Conn.Table("comments").Where("reply_of = ?", id).Select("comments.id, name, photo_url, comment").
-		Joins("join users on comments.reply_of = users.id").
+		Joins("join users on comments.user_id = users.id").
 		Find(&Comment)
 
 	if result.Error != nil {
 		return []comments.Domain{}, result.Error
 	}
-
+	fmt.Println(ToListDomain(Comment))
 	return ToListDomain(Comment), nil
 }
 

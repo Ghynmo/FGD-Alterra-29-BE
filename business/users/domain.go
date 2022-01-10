@@ -27,6 +27,7 @@ type Domain struct {
 	Photo_url     string
 	Bio           string
 	Status        string
+	Point         int
 	UserBadges    []userbadges.Domain
 	Threads       []threads.Domain
 	Following     []follows.Domain

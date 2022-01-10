@@ -19,11 +19,11 @@ func NewBadgeController(badgeUseCase badges.UseCase) *BadgeController {
 	}
 }
 
-func (handler BadgeController) GetBadgesByPointController(c echo.Context) error {
+func (handler BadgeController) GetBadgesByUserController(c echo.Context) error {
 	point, _ := strconv.Atoi(c.Param("point"))
 	ctx := c.Request().Context()
 
-	badge, err := handler.BadgeUseCase.GetBadgesByPointController(ctx, point)
+	badge, err := handler.BadgeUseCase.GetBadgesByUserController(ctx, point)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

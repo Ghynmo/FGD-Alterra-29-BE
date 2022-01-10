@@ -17,8 +17,8 @@ func NewBadgeUseCase(repo Repository, timeout time.Duration) UseCase {
 	}
 }
 
-func (uc *BadgeUseCase) GetBadgesByPointController(ctx context.Context, point int) ([]Domain, error) {
-	badge, err := uc.Repo.GetBadgesByPoint(ctx, point)
+func (uc *BadgeUseCase) GetBadgesByUserController(ctx context.Context, id int) ([]Domain, error) {
+	badge, err := uc.Repo.GetBadgesByUser(ctx, id)
 	if err != nil {
 		return []Domain{}, err
 	}

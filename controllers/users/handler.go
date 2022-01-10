@@ -64,13 +64,12 @@ func (handler UserController) GetUsersByName(c echo.Context) error {
 
 func (handler UserController) GetProfileController(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	point, _ := strconv.Atoi(c.QueryParam("point"))
 
 	ctx := c.Request().Context()
 
 	user, err := handler.UserUseCase.GetProfileController(ctx, id)
 	thread, err1 := handler.ThreadUseCase.GetProfileThreads(ctx, id)
-	badges, err2 := handler.BadgeUseCase.GetBadgesByPointController(ctx, point)
+	badges, err2 := handler.BadgeUseCase.GetBadgesByUserController(ctx, id)
 	catthreads, err3 := handler.CategoryUseCase.GetUserActiveInCategory(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)

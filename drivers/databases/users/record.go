@@ -13,7 +13,6 @@ import (
 	threadshares "fgd-alterra-29/drivers/databases/thread_shares"
 	"fgd-alterra-29/drivers/databases/threads"
 	userbadges "fgd-alterra-29/drivers/databases/user_badges"
-	userpoints "fgd-alterra-29/drivers/databases/user_points"
 )
 
 type Users struct {
@@ -28,6 +27,7 @@ type Users struct {
 	Photo_url     string
 	Bio           string
 	Status        string
+	Points        int                           `gorm:"default:0"`
 	UserBadges    []userbadges.UserBadges       `gorm:"foreignKey:User_id"`
 	Threads       []threads.Threads             `gorm:"foreignKey:User_id"`
 	Following     []follows.Follows             `gorm:"foreignKey:User_id"`
@@ -45,7 +45,6 @@ type Users struct {
 	Q_Post        int                           `gorm:"-:migration;->"`
 	Q_Thread      int                           `gorm:"-:migration;->"`
 	Reputation    string                        `gorm:"-:migration;->"`
-	Points        userpoints.UserPoints         `gorm:"foreignKey:User_id"`
 	// Created_at    time.Time
 	// Updated_at    time.Time
 	// Deleted_at    time.Time
@@ -65,6 +64,7 @@ func (user *Users) ToDomain() users.Domain {
 		Photo_url:     user.Photo_url,
 		Bio:           user.Bio,
 		Status:        user.Status,
+		Point:         user.Points,
 		UserBadges:    userbadges.ToListDomain(user.UserBadges),
 		Threads:       threads.ToListDomain(user.Threads),
 		Following:     follows.ToListDomain(user.Following),

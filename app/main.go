@@ -178,7 +178,7 @@ func main() {
 
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
-	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase, badgeUseCase)
+	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, commentreportUseCase, commentUseCase, badgeUseCase)
 
 	routesInit := routes.ControllerList{
 		UserController:          *userController,

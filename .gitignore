@@ -1,0 +1,4 @@
+mysql-docker-vol/
+Secret/
+.env
+.config

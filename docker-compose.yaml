@@ -1,6 +1,23 @@
 version: "3.9"
 
 services:
+
+  mysqlserver:
+    image: mysql:8.0
+    hostname: mysql.docker
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 4306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_DATABASE: fgd-alterra-29
+    volumes:
+      - ./mysql-docker-vol:/var/lib/mysql
+    networks:
+      - fgd-alta
   
   app:
     container_name: fgd-alterra-29
@@ -11,23 +28,6 @@ services:
       - .:/usr/src/app/
     depends_on:
       - mysqlserver 
-    networks:
-      - fgd-alta
-
-  mysqlserver:
-    image: mysql:8.0
-    hostname: mysql.docker
-    command: --default-authentication-plugin=mysql_native_password
-    restart: "no"
-    ports:
-      - 4306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user
-      MYSQL_DATABASE: fgd-alterra-29
-    volumes:
-      - ./mysql:/var/lib/mysql
     networks:
       - fgd-alta
 

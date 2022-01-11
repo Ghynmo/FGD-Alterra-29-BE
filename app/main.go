@@ -2,7 +2,7 @@ package main
 
 import (
 	"fgd-alterra-29/app/routes"
-	_mysqlDriver "fgd-alterra-29/drivers/mysqlconf"
+	_mysqlDriver "fgd-alterra-29/drivers/mysql"
 	"log"
 	"time"
 

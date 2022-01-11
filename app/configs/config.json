@@ -8,10 +8,10 @@
         "timeout": 2
     },
     "database":{
-        "host": "localhost",
+        "host": "mysql.docker",
         "port": "3306",
-        "user": "root",
-        "pass": "",
+        "user": "user",
+        "pass": "user",
         "name": "fgd-alterra-29"
     },
     "jwt":{

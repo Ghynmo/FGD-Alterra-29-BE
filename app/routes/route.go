@@ -18,9 +18,11 @@ import (
 	"fgd-alterra-29/controllers/users"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type ControllerList struct {
+	JwtConfig               middleware.JWTConfig
 	UserController          users.UserController
 	UserBadgeController     userbadges.UserBadgeController
 	ThreadController        threads.ThreadController
@@ -39,6 +41,12 @@ type ControllerList struct {
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
+	e.Use(middleware.Logger())
+	jwtAuth := middleware.JWTWithConfig(cl.JwtConfig)
+
+	e.POST("register", cl.UserController.RegisterController)
+	e.POST("login", cl.UserController.LoginController)
+
 	//Profile Page
 	e.GET("profile/:id", cl.UserController.GetProfileController)
 	e.GET("post/:id", cl.CommentController.GetProfileCommentsController)
@@ -47,7 +55,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("following/:id", cl.FollowController.GetFollowing)
 
 	//Main Page of Admin
-	e.GET("admin/", cl.UserController.GetDashboardController)
+	e.GET("admin/", cl.UserController.GetDashboardController, jwtAuth)
 	//List of Users (Admin Access)
 	e.GET("admin/users", cl.UserController.GetUsersController)
 	e.GET("admin/users/search/:name", cl.UserController.GetUsersByName)

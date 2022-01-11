@@ -21,6 +21,7 @@ type Domain struct {
 	Reputation_id int
 	Name          string
 	Email         string
+	Password      string
 	Phone         string
 	Address       string
 	Header_url    string
@@ -28,6 +29,7 @@ type Domain struct {
 	Bio           string
 	Status        string
 	Point         int
+	Token         string
 	UserBadges    []userbadges.Domain
 	Threads       []threads.Domain
 	Following     []follows.Domain
@@ -50,6 +52,8 @@ type Domain struct {
 }
 
 type UseCase interface {
+	RegisterController(ctx context.Context, domain Domain) (Domain, error)
+	LoginController(ctx context.Context, domain Domain) (Domain, error)
 	GetUsersController(ctx context.Context) ([]Domain, error)
 	GetUsersByNameController(ctx context.Context, name string) ([]Domain, error)
 	GetProfileController(ctx context.Context, id int) (Domain, error)
@@ -61,6 +65,8 @@ type UseCase interface {
 }
 
 type Repository interface {
+	Register(ctx context.Context, domain Domain) (Domain, error)
+	Login(ctx context.Context, domain Domain) (Domain, error)
 	GetUsers(ctx context.Context) ([]Domain, error)
 	GetUsersByName(ctx context.Context, name string) ([]Domain, error)
 	GetProfile(ctx context.Context, id int) (Domain, error)

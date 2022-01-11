@@ -1,6 +1,7 @@
 package main
 
 import (
+	_middlewares "fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/app/routes"
 	_mysqlDriver "fgd-alterra-29/drivers/mysql"
 	"log"
@@ -114,6 +115,11 @@ func main() {
 		DB_Database: viper.GetString(`database.name`),
 	}
 
+	ConfigJWT := _middlewares.ConfigJWT{
+		Secret:    viper.GetString(`jwt.secret`),
+		ExpiresAt: viper.GetInt64(`jwt.expired`),
+	}
+
 	Conn := configDB.InitialDB()
 	DbMigrate(Conn)
 
@@ -177,10 +183,11 @@ func main() {
 	badgeController := _badgeController.NewBadgeController(badgeUseCase)
 
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
-	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext)
+	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext, ConfigJWT)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, commentreportUseCase, commentUseCase, badgeUseCase)
 
 	routesInit := routes.ControllerList{
+		JwtConfig:               ConfigJWT.Init(),
 		UserController:          *userController,
 		UserBadgeController:     *userbadgeController,
 		ThreadController:        *threadController,

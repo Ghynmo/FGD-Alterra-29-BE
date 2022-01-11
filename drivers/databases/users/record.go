@@ -21,6 +21,7 @@ type Users struct {
 	Reputation_id int
 	Name          string `gorm:"not null"`
 	Email         string
+	Password      string `gorm:"not null"`
 	Phone         string
 	Address       string
 	Header_url    string
@@ -51,6 +52,15 @@ type Users struct {
 	Q_User int `gorm:"-:migration;->"`
 }
 
+func FromDomain(domain users.Domain) Users {
+	return Users{
+		ID:       domain.ID,
+		Name:     domain.Name,
+		Email:    domain.Email,
+		Password: domain.Password,
+	}
+}
+
 func (user *Users) ToDomain() users.Domain {
 	return users.Domain{
 		ID:            user.ID,
@@ -58,6 +68,7 @@ func (user *Users) ToDomain() users.Domain {
 		Reputation_id: user.Reputation_id,
 		Name:          user.Name,
 		Email:         user.Email,
+		Password:      user.Password,
 		Phone:         user.Phone,
 		Address:       user.Address,
 		Header_url:    user.Header_url,

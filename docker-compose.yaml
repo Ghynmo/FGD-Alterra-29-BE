@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  
+  app:
+    container_name: fgd-alterra-29
+    build: .
+    ports:
+      - 8080:80
+    volumes: 
+      - .:/usr/src/app/
+    depends_on:
+      - mysqlserver 
+    networks:
+      - fgd-alta
+
+  mysqlserver:
+    image: mysql:8.0
+    hostname: mysql.docker
+    command: --default-authentication-plugin=mysql_native_password
+    restart: "no"
+    ports:
+      - 4306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_DATABASE: fgd-alterra-29
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - fgd-alta
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 9191:8080
+
+  phpmyadmin:
+    image: phpmyadmin
+    depends_on:
+      - mysqlserver
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: mysqlserver
+      MYSQL_ROOT_PASSWORD: user
+    networks:
+      - fgd-alta
+
+volumes:
+  app:
+  mysqlserver:
+  phpmyadmin:
+
+networks:
+  fgd-alta:
+    driver: bridge

@@ -74,12 +74,12 @@ func (DB *MysqlUserRepository) GetUsersByName(ctx context.Context, name string) 
 func (DB *MysqlUserRepository) GetProfile(ctx context.Context, id int) (users.Domain, error) {
 	var User Users
 	Reputation := DB.Conn.Table("reputations").Select("reputation").Where("users.id = ?", id).Joins("join users on reputations.id = users.reputation_id")
-	Q_Follower := DB.Conn.Table("follows").Select("count(follower_id)").Where("user_id = ? AND users.status = active", id).Joins("join users on follows.follower_id = users.id").Group("user_id")
-	Q_Following := DB.Conn.Table("follows").Select("count(user_id)").Where("follower_id = ? AND users.status = active", id).Joins("join users on follows.user_id = users.id").Group("follower_id")
+	Q_Follower := DB.Conn.Table("follows").Select("count(follower_id)").Where("user_id = ? AND users.status = ?", id, "active").Joins("join users on follows.follower_id = users.id").Group("user_id")
+	Q_Following := DB.Conn.Table("follows").Select("count(user_id)").Where("follower_id = ? AND users.status = ?", id, "active").Joins("join users on follows.user_id = users.id").Group("follower_id")
 	Q_Post := DB.Conn.Table("comments").Select("count(comment)").Where("user_id = ? AND comments.active = 1", id).Group("user_id")
 	Q_Thread := DB.Conn.Table("threads").Select("count(title)").Where("user_id = ? AND threads.active = 1", id).Group("user_id")
 
-	result := DB.Conn.Table("users").Where("users.id = ? AND users.status = active", id).
+	result := DB.Conn.Table("users").Where("users.id = ? AND users.status = ?", id, "active").
 		Select("*, (?) as Q_Followers, (?) as Q_Following, (?) as Q_Post, (?) as Q_Thread, (?) as Reputation",
 			Q_Follower, Q_Following, Q_Post, Q_Thread, Reputation).
 		Find(&User)
@@ -106,7 +106,7 @@ func (DB *MysqlUserRepository) GetProfileSetting(ctx context.Context, id int) (u
 	var User Users
 
 	result := DB.Conn.Table("users").Select("id, name, photo_url, email, phone, bio, address").
-		Where("id = (?) AND users.status = active", id).Find(&User)
+		Where("id = (?) AND users.status = ?", id, "active").Find(&User)
 
 	if result.Error != nil {
 		return users.Domain{}, result.Error

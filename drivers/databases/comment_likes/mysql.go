@@ -3,6 +3,7 @@ package commentlikes
 import (
 	"context"
 	commentlikes "fgd-alterra-29/business/comment_likes"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -18,15 +19,20 @@ func NewMysqlCommentLikeRepository(conn *gorm.DB) commentlikes.Repository {
 }
 
 func (DB *MysqlCommentLikeRepository) Like(ctx context.Context, domain commentlikes.Domain) (commentlikes.Domain, error) {
-	var CommentLike CommentLikes
 
-	result := DB.Conn.Model(&CommentLike).Create(&domain)
+	data := CommentLikes{
+		Comment_id: domain.Comment_id,
+		Liker_id:   domain.Liker_id,
+		Liked_at:   time.Now(),
+	}
+
+	result := DB.Conn.Model(&data).Create(&domain)
 
 	if result.Error != nil {
 		return commentlikes.Domain{}, result.Error
 	}
 
-	return CommentLike.ToDomain(), nil
+	return data.ToDomain(), nil
 }
 
 func (DB *MysqlCommentLikeRepository) Unlike(ctx context.Context, domain commentlikes.Domain) (commentlikes.Domain, error) {

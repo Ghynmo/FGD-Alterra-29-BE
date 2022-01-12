@@ -15,6 +15,7 @@ func (TS *ThreadSaves) ToDomain() threadsaves.Domain {
 	return threadsaves.Domain{
 		Thread_id: TS.Thread_id,
 		User_id:   TS.User_id,
+		Saved_at:  TS.Saved_at,
 	}
 }
 

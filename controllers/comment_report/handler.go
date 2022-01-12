@@ -54,7 +54,7 @@ func (handler CommentReportController) CreateReportComment(c echo.Context) error
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, commentreport)
+	return controllers.NoDataSuccessResponse(c, commentreport)
 }
 
 func (handler CommentReportController) AdminGetReports(c echo.Context) error {

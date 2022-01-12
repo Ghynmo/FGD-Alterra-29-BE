@@ -61,7 +61,7 @@ func (handler FollowController) FollowsController(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, follows)
+	return controllers.NoDataSuccessResponse(c, follows)
 }
 
 func (handler FollowController) UnfollowController(c echo.Context) error {
@@ -78,5 +78,5 @@ func (handler FollowController) UnfollowController(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, follows)
+	return controllers.NoDataSuccessResponse(c, follows)
 }

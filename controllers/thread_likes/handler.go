@@ -31,7 +31,7 @@ func (handler ThreadLikeController) CreateLikes(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, threadlikes)
+	return controllers.NoDataSuccessResponse(c, threadlikes)
 }
 
 func (handler ThreadLikeController) DeleteLikes(c echo.Context) error {
@@ -46,5 +46,5 @@ func (handler ThreadLikeController) DeleteLikes(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, threadlikes)
+	return controllers.NoDataSuccessResponse(c, threadlikes)
 }

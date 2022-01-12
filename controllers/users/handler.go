@@ -165,7 +165,7 @@ func (handler UserController) GetUserSettingController(c echo.Context) error {
 }
 
 func (handler UserController) UpdateAdminProfile(c echo.Context) error {
-	id, _ := strconv.Atoi(c.FormValue("id"))
+	id, _ := strconv.Atoi(c.Param("id"))
 	Updateadmin := request.UpdateProfile{}
 	c.Bind(&Updateadmin)
 
@@ -181,7 +181,7 @@ func (handler UserController) UpdateAdminProfile(c echo.Context) error {
 }
 
 func (handler UserController) UpdateUserProfile(c echo.Context) error {
-	id, _ := strconv.Atoi(c.FormValue("id"))
+	id, _ := strconv.Atoi(c.Param("id"))
 	Updateuser := request.UpdateProfile{}
 	c.Bind(&Updateuser)
 

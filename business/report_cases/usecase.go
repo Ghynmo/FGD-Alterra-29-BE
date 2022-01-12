@@ -25,3 +25,12 @@ func (uc *ReportCaseUseCase) GetReportForm(ctx context.Context) ([]Domain, error
 
 	return catreportthread, nil
 }
+
+func (uc *ReportCaseUseCase) CreateCaseController(ctx context.Context, domain Domain) (Domain, error) {
+	catreportthread, err := uc.Repo.CreateCase(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return catreportthread, nil
+}

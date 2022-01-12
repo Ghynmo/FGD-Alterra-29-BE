@@ -8,6 +8,7 @@ import (
 	"fgd-alterra-29/controllers/comments"
 	"fgd-alterra-29/controllers/follows"
 	reportcases "fgd-alterra-29/controllers/report_cases"
+	"fgd-alterra-29/controllers/reputations"
 	threadlikes "fgd-alterra-29/controllers/thread_likes"
 	threadreport "fgd-alterra-29/controllers/thread_report"
 	threadsaves "fgd-alterra-29/controllers/thread_saves"
@@ -38,6 +39,7 @@ type ControllerList struct {
 	ThreadShareController   threadshares.ThreadShareController
 	UserPointController     userpoints.UserPointController
 	BadgeController         badges.BadgeController
+	ReputationController    reputations.ReputationController
 }
 
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
@@ -48,63 +50,68 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.POST("login", cl.UserController.LoginController)
 
 	//Profile Page
-	e.GET("profile/:id", cl.UserController.GetProfileController)
-	e.GET("post/:id", cl.CommentController.GetProfileCommentsController)
-	e.GET("thread/:id", cl.ThreadController.GetProfileThreads)
-	e.GET("followers/:id", cl.FollowController.GetFollowers)
-	e.GET("following/:id", cl.FollowController.GetFollowing)
+	e.GET("profile/:id", cl.UserController.GetProfileController, jwtAuth)
+	e.GET("post/:id", cl.CommentController.GetProfileCommentsController, jwtAuth)
+	e.GET("thread/:id", cl.ThreadController.GetProfileThreads, jwtAuth)
+	e.GET("followers/:id", cl.FollowController.GetFollowers, jwtAuth)
+	e.GET("following/:id", cl.FollowController.GetFollowing, jwtAuth)
 
 	//Main Page of Admin
 	e.GET("admin/", cl.UserController.GetDashboardController, jwtAuth)
 	//List of Users (Admin Access)
-	e.GET("admin/users", cl.UserController.GetUsersController)
-	e.GET("admin/users/search/:name", cl.UserController.GetUsersByName)
-	e.PUT("admin/users/banned/:id", cl.UserController.BannedUser)
-	e.PUT("admin/users/unbanned/:id", cl.UserController.UnbannedUser)
+	e.GET("admin/users", cl.UserController.GetUsersController, jwtAuth)
+	e.GET("admin/users/search/:name", cl.UserController.GetUsersByName, jwtAuth)
+	e.PUT("admin/users/banned/:id", cl.UserController.BannedUser, jwtAuth)
+	e.PUT("admin/users/unbanned/:id", cl.UserController.UnbannedUser, jwtAuth)
 	//List of Threads (Admin Access)
-	e.GET("admin/threads", cl.ThreadController.GetThreadsController)
-	e.GET("admin/threads/search/:title", cl.ThreadController.GetThreadsByTitleController)
-	e.DELETE("admin/threads/thread/:id", cl.ThreadController.DeleteThread)
+	e.GET("admin/threads", cl.ThreadController.GetThreadsController, jwtAuth)
+	e.GET("admin/threads/search/:title", cl.ThreadController.GetThreadsByTitleController, jwtAuth)
+	e.DELETE("admin/threads/thread/:id", cl.ThreadController.DeleteThread, jwtAuth)
 	//List of Posts (Admin Access)
-	e.GET("admin/posts", cl.CommentController.GetPostsController)
-	e.GET("admin/posts/search/:comment", cl.CommentController.GetPostsByCommentController)
-	e.DELETE("admin/posts/post/:id", cl.CommentController.UnactivatingPostController)
+	e.GET("admin/posts", cl.CommentController.GetPostsController, jwtAuth)
+	e.GET("admin/posts/search/:comment", cl.CommentController.GetPostsByCommentController, jwtAuth)
+	e.DELETE("admin/posts/post/:id", cl.CommentController.UnactivatingPostController, jwtAuth)
 	//List of Comment's Reports (Admin Access)
-	e.GET("admin/comment-reports", cl.CommentReportController.AdminGetReports)
-	e.GET("admin/comment-reports/search/:category", cl.CommentReportController.GetReportsByCategoryController)
-	e.DELETE("admin/comment-reports/comment-report/:id", cl.CommentReportController.DeleteCommentReport)
+	e.GET("admin/comment-reports", cl.CommentReportController.AdminGetReports, jwtAuth)
+	e.GET("admin/comment-reports/search/:category", cl.CommentReportController.GetReportsByCategoryController, jwtAuth)
+	e.DELETE("admin/comment-reports/comment-report/:id", cl.CommentReportController.DeleteCommentReport, jwtAuth)
 	//List of Thread's Reports (Admin Access)
-	e.GET("admin/thread-reports", cl.ThreadReportController.AdminGetReports)
-	e.GET("admin/thread-reports/search/:category", cl.ThreadReportController.SearchReportsByCategoryController)
-	e.DELETE("admin/thread-reports/thread-report/:id", cl.ThreadReportController.DeleteThreadReport)
+	e.GET("admin/thread-reports", cl.ThreadReportController.AdminGetReports, jwtAuth)
+	e.GET("admin/thread-reports/search/:category", cl.ThreadReportController.SearchReportsByCategoryController, jwtAuth)
+	e.DELETE("admin/thread-reports/thread-report/:id", cl.ThreadReportController.DeleteThreadReport, jwtAuth)
 	//Edit Profile page
-	e.GET("admin/edit/:id", cl.UserController.GetAdminSettingController)
-	e.GET("user/edit/:id", cl.UserController.GetUserSettingController)
-	e.PUT("admin/edit", cl.UserController.UpdateAdminProfile)
-	e.PUT("user/edit", cl.UserController.UpdateUserProfile)
+	e.GET("admin/edit/:id", cl.UserController.GetAdminSettingController, jwtAuth)
+	e.GET("user/edit/:id", cl.UserController.GetUserSettingController, jwtAuth)
+	e.PUT("admin/edit/:id", cl.UserController.UpdateAdminProfile, jwtAuth)
+	e.PUT("user/edit/:id", cl.UserController.UpdateUserProfile, jwtAuth)
 	//Report Comment page
-	e.GET("admin/report-comment", cl.ReportCaseController.GetReportForm)
-	e.POST("admin/report-comment", cl.CommentReportController.CreateReportComment)
+	e.GET("admin/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
+	e.POST("admin/report-comment", cl.CommentReportController.CreateReportComment, jwtAuth)
 	//Report Thread page
 	// e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm)
 	// e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
 
-	e.GET("home/:id", cl.ThreadController.GetHomepageThreads)
-	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads)
+	e.GET("home/:id", cl.ThreadController.GetHomepageThreads, jwtAuth)
+	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads, jwtAuth)
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
 	e.GET("search", cl.ThreadController.GetSearch)
 
-	e.GET("comment/reply/:id", cl.CommentController.GetReplyComments)
-	e.POST("comment", cl.CommentController.CreateCommentController)
-	e.POST("threadlike", cl.ThreadLikeController.CreateLikes)
-	e.DELETE("threadlike", cl.ThreadLikeController.DeleteLikes)
-	e.POST("commentlike", cl.CommentLikeController.CreateLikes)
-	e.DELETE("commentlike", cl.CommentLikeController.DeleteLikes)
-	e.POST("threadsave", cl.ThreadSaveController.SaveThread)
-	e.DELETE("threadsave", cl.ThreadSaveController.Unsaves)
-	e.POST("threadshare", cl.ThreadShareController.ShareThread)
+	e.GET("comment/reply/:id", cl.CommentController.GetReplyComments, jwtAuth)
+	e.POST("comment", cl.CommentController.CreateCommentController, jwtAuth)
+	e.POST("threadlike", cl.ThreadLikeController.CreateLikes, jwtAuth)
+	e.DELETE("threadlike", cl.ThreadLikeController.DeleteLikes, jwtAuth)
+	e.POST("commentlike", cl.CommentLikeController.CreateLikes, jwtAuth)
+	e.DELETE("commentlike", cl.CommentLikeController.DeleteLikes, jwtAuth)
+	e.POST("threadsave", cl.ThreadSaveController.SaveThread, jwtAuth)
+	e.DELETE("threadsave", cl.ThreadSaveController.Unsaves, jwtAuth)
+	e.POST("threadshare", cl.ThreadShareController.ShareThread, jwtAuth)
 
-	e.POST("follows", cl.FollowController.FollowsController)
-	e.DELETE("unfollow", cl.FollowController.UnfollowController)
-	e.POST("thread", cl.ThreadController.CreateThread)
+	e.POST("follows", cl.FollowController.FollowsController, jwtAuth)
+	e.DELETE("unfollow", cl.FollowController.UnfollowController, jwtAuth)
+	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth)
+
+	//additional
+	e.POST("category", cl.CategoryController.CreateCategoryController)
+	e.POST("reportcase", cl.ReportCaseController.CreateCaseController)
+	e.POST("reputation", cl.ReputationController.CreateReputationController)
 }

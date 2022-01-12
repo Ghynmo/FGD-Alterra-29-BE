@@ -8,7 +8,7 @@ import (
 type Domain struct {
 	Thread_id int
 	User_id   int
-	Liked_at  time.Time
+	Saved_at  time.Time
 }
 
 type UseCase interface {

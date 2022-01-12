@@ -1,10 +1,14 @@
 package threadshares
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type Domain struct {
 	Thread_id int
 	User_id   int
+	Shared_at time.Time
 }
 
 type UseCase interface {

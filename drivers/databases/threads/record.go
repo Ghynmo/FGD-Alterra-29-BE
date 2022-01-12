@@ -12,11 +12,11 @@ import (
 )
 
 type Threads struct {
-	ID            int `gorm:"primaryKey"`
-	User_id       int
-	Category_id   int
-	Title         string
-	Content       string
+	ID            int    `gorm:"primaryKey"`
+	User_id       int    `gorm:"not null"`
+	Category_id   int    `gorm:"not null"`
+	Title         string `gorm:"not null"`
+	Content       string `gorm:"not null"`
 	Thumbnail_url string
 	Active        bool                          `gorm:"default:true"`
 	Report        []threadreport.ThreadReport   `gorm:"foreignKey:Thread_id"`
@@ -24,21 +24,18 @@ type Threads struct {
 	Followers     []threadfollows.ThreadFollows `gorm:"foreignKey:Thread_id"`
 	Saves         []threadsaves.ThreadSaves     `gorm:"foreignKey:Thread_id"`
 	Shares        []threadshares.ThreadShares   `gorm:"foreignKey:Thread_id"`
-	// Created_at    time.Time
-	// Updated_at    time.Time
-	// Deleted_at    time.Time
-	Name          string              `gorm:"-:migration;->"`
-	Comments      []comments.Comments `gorm:"foreignKey:Thread_id"`
 	Created_at    time.Time
 	Updated_at    time.Time
 	Deleted_at    time.Time
-	Category      string `gorm:"-:migration;->"`
-	RecentReplier string `gorm:"-:migration;->"`
-	Comment       string `gorm:"-:migration;->"`
-	Q_Comment     int    `gorm:"-:migration;->"`
-	Q_Thread      int    `gorm:"-:migration;->"`
-	Photo         string `gorm:"-:migration;->"`
-	Q_Like        int    `gorm:"-:migration;->"`
+	Name          string              `gorm:"-:migration;->"`
+	Comments      []comments.Comments `gorm:"foreignKey:Thread_id"`
+	Category      string              `gorm:"-:migration;->"`
+	RecentReplier string              `gorm:"-:migration;->"`
+	Comment       string              `gorm:"-:migration;->"`
+	Q_Comment     int                 `gorm:"-:migration;->"`
+	Q_Thread      int                 `gorm:"-:migration;->"`
+	Photo         string              `gorm:"-:migration;->"`
+	Q_Like        int                 `gorm:"-:migration;->"`
 }
 
 func (Thread *Threads) ToDomain() threads.Domain {

@@ -31,7 +31,7 @@ func (handler ThreadSaveController) SaveThread(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, threadsaves)
+	return controllers.NoDataSuccessResponse(c, threadsaves)
 }
 
 func (handler ThreadSaveController) Unsaves(c echo.Context) error {
@@ -46,5 +46,5 @@ func (handler ThreadSaveController) Unsaves(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, threadsaves)
+	return controllers.NoDataSuccessResponse(c, threadsaves)
 }

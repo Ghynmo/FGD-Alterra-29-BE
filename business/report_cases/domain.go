@@ -16,8 +16,10 @@ type Domain struct {
 
 type UseCase interface {
 	GetReportForm(ctx context.Context) ([]Domain, error)
+	CreateCaseController(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type Repository interface {
 	GetReportForm(ctx context.Context) ([]Domain, error)
+	CreateCase(ctx context.Context, domain Domain) (Domain, error)
 }

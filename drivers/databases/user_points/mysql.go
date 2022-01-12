@@ -3,7 +3,6 @@ package userpoints
 import (
 	"context"
 	userpoint "fgd-alterra-29/business/user_points"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -20,7 +19,6 @@ func NewMysqlUserPointRepository(conn *gorm.DB) userpoint.Repository {
 
 func (DB *MysqlUserPointRepository) AddThreadPoint(ctx context.Context, id int) (userpoint.Domain, error) {
 	var UserPoint UserPoints
-	fmt.Println("uid", id)
 
 	result := DB.Conn.Model(&UserPoint).Where("user_id = ?", id).Update("thread_point", gorm.Expr("thread_point + 10"))
 

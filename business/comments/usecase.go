@@ -53,15 +53,6 @@ func (uc *CommentUseCase) GetCommentProfileController(ctx context.Context, id in
 	return post, nil
 }
 
-func (uc *CommentUseCase) GetCommentByThread(ctx context.Context, id int) ([]Domain, error) {
-	comments, err := uc.Repo.GetCommentByThread(ctx, id)
-	if err != nil {
-		return []Domain{}, err
-	}
-
-	return comments, nil
-}
-
 func (uc *CommentUseCase) GetPostQuantityController(ctx context.Context) (Domain, error) {
 	post, err := uc.Repo.GetPostQuantity(ctx)
 	if err != nil {

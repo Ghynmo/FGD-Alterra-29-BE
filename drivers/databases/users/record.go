@@ -13,21 +13,22 @@ import (
 	threadshares "fgd-alterra-29/drivers/databases/thread_shares"
 	"fgd-alterra-29/drivers/databases/threads"
 	userbadges "fgd-alterra-29/drivers/databases/user_badges"
+	"time"
 )
 
 type Users struct {
-	ID            int `gorm:"primaryKey"`
-	Role_id       int
-	Reputation_id int
+	ID            int    `gorm:"primaryKey"`
+	Role_id       int    `gorm:"default:2"`
+	Reputation_id int    `gorm:"default:1"`
 	Name          string `gorm:"not null"`
-	Email         string
+	Email         string `gorm:"not null"`
 	Password      string `gorm:"not null"`
 	Phone         string
 	Address       string
 	Header_url    string
 	Photo_url     string
 	Bio           string
-	Status        string
+	Status        string                        `gorm:"default:active"`
 	Points        int                           `gorm:"default:0"`
 	UserBadges    []userbadges.UserBadges       `gorm:"foreignKey:User_id"`
 	Threads       []threads.Threads             `gorm:"foreignKey:User_id"`
@@ -45,11 +46,11 @@ type Users struct {
 	Q_Followers   int                           `gorm:"-:migration;->"`
 	Q_Post        int                           `gorm:"-:migration;->"`
 	Q_Thread      int                           `gorm:"-:migration;->"`
+	Q_User        int                           `gorm:"-:migration;->"`
 	Reputation    string                        `gorm:"-:migration;->"`
-	// Created_at    time.Time
-	// Updated_at    time.Time
-	// Deleted_at    time.Time
-	Q_User int `gorm:"-:migration;->"`
+	Created_at    time.Time
+	Updated_at    time.Time
+	Deleted_at    time.Time
 }
 
 func FromDomain(domain users.Domain) Users {
@@ -91,10 +92,11 @@ func (user *Users) ToDomain() users.Domain {
 		Q_Followers:   user.Q_Followers,
 		Q_Post:        user.Q_Post,
 		Q_Thread:      user.Q_Thread,
-		// Created_at:    user.Created_at,
-		// Updated_at:    user.Updated_at,
-		// Deleted_at:    user.Deleted_at,
-		Q_User: user.Q_User,
+		Q_User:        user.Q_User,
+		Reputation:    user.Reputation,
+		Created_at:    user.Created_at,
+		Updated_at:    user.Updated_at,
+		Deleted_at:    user.Deleted_at,
 	}
 }
 

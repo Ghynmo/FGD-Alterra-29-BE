@@ -45,10 +45,11 @@ type Domain struct {
 	Q_Following   int
 	Q_Post        int
 	Q_Thread      int
+	Q_User        int
+	Reputation    string
 	Created_at    time.Time
 	Updated_at    time.Time
 	Deleted_at    time.Time
-	Q_User        int
 }
 
 type UseCase interface {

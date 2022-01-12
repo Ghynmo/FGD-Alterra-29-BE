@@ -3,6 +3,7 @@ package categories
 import (
 	"fgd-alterra-29/business/categories"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/categories/request"
 	"net/http"
 	"strconv"
 
@@ -28,4 +29,19 @@ func (handler CategoryController) GetUserActiveInCategory(c echo.Context) error 
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, thread)
+}
+
+func (handler CategoryController) CreateCategoryController(c echo.Context) error {
+	var NewCategory = request.AddCategory{}
+	c.Bind(&NewCategory)
+
+	domain := NewCategory.ToDomain()
+
+	ctx := c.Request().Context()
+
+	thread, err := handler.CategoryUseCase.CreateCategoriesController(ctx, domain)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NoDataSuccessResponse(c, thread)
 }

@@ -21,6 +21,13 @@ type MetaResponse struct {
 	}
 }
 
+func NoDataSuccessResponse(c echo.Context, data interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Success"
+	return c.JSON(http.StatusOK, response)
+}
+
 func NewSuccessResponse(c echo.Context, data interface{}) error {
 	response := BaseResponse{}
 	response.Meta.Status = http.StatusOK

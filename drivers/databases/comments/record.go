@@ -8,14 +8,14 @@ import (
 )
 
 type Comments struct {
-	ID         int `gorm:"primaryKey"`
-	Thread_id  int
-	User_id    int
-	Comment    string
-	Replies    []Comments `gorm:"foreignKey:ReplyOf"`
+	ID         int    `gorm:"primaryKey"`
+	Thread_id  int    `gorm:"not null"`
+	User_id    int    `gorm:"not null"`
+	Comment    string `gorm:"not null"`
 	ReplyOf    int
-	Report     []commentreport.CommentReport `gorm:"foreignKey:Comment_id"`
 	Active     bool                          `gorm:"default:true"`
+	Replies    []Comments                    `gorm:"foreignKey:ReplyOf"`
+	Report     []commentreport.CommentReport `gorm:"foreignKey:Comment_id"`
 	Likes      []commentlikes.CommentLikes   `gorm:"foreignKey:Comment_id"`
 	Created_at time.Time
 	Updated_at time.Time
@@ -23,8 +23,8 @@ type Comments struct {
 	Name       string `gorm:"-:migration;->"`
 	Photo_url  string `gorm:"-:migration;->"`
 	Thread     string `gorm:"-:migration;->"`
-	Q_Post     int    `gorm:"-:migration;->"`
 	Photo      string `gorm:"-:migration;->"`
+	Q_Post     int    `gorm:"-:migration;->"`
 }
 
 func (Comment *Comments) ToDomain() comments.Domain {

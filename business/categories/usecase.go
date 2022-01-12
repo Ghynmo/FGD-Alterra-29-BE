@@ -25,3 +25,12 @@ func (uc *CategoryUseCase) GetUserActiveInCategory(ctx context.Context, id int) 
 
 	return thread, nil
 }
+
+func (uc *CategoryUseCase) CreateCategoriesController(ctx context.Context, domain Domain) (Domain, error) {
+	thread, err := uc.Repo.CreateCategories(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return thread, nil
+}

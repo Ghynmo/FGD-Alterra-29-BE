@@ -3,6 +3,7 @@ package users
 import (
 	"context"
 	"fgd-alterra-29/business/users"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -18,14 +19,21 @@ func NewMysqlUserRepository(conn *gorm.DB) users.Repository {
 }
 
 func (DB *MysqlUserRepository) Register(ctx context.Context, domain users.Domain) (users.Domain, error) {
-	User := FromDomain(domain)
-	result := DB.Conn.Create(&User)
+
+	data := Users{
+		Name:       domain.Name,
+		Email:      domain.Email,
+		Password:   domain.Password,
+		Created_at: time.Now(),
+	}
+
+	result := DB.Conn.Model(&data).Create(&data)
 
 	if result.Error != nil {
 		return users.Domain{}, result.Error
 	}
 
-	return User.ToDomain(), nil
+	return data.ToDomain(), nil
 }
 
 func (DB *MysqlUserRepository) Login(ctx context.Context, domain users.Domain) (users.Domain, error) {
@@ -66,12 +74,12 @@ func (DB *MysqlUserRepository) GetUsersByName(ctx context.Context, name string) 
 func (DB *MysqlUserRepository) GetProfile(ctx context.Context, id int) (users.Domain, error) {
 	var User Users
 	Reputation := DB.Conn.Table("reputations").Select("reputation").Where("users.id = ?", id).Joins("join users on reputations.id = users.reputation_id")
-	Q_Follower := DB.Conn.Table("follows").Select("count(follower_id)").Where("user_id = ?", id).Group("user_id")
-	Q_Following := DB.Conn.Table("follows").Select("count(user_id)").Where("follower_id = ?", id).Group("follower_id")
-	Q_Post := DB.Conn.Table("comments").Select("count(comment)").Where("user_id = ?", id).Group("user_id")
-	Q_Thread := DB.Conn.Table("threads").Select("count(title)").Where("user_id = ?", id).Group("user_id")
+	Q_Follower := DB.Conn.Table("follows").Select("count(follower_id)").Where("user_id = ? AND users.status = active", id).Joins("join users on follows.follower_id = users.id").Group("user_id")
+	Q_Following := DB.Conn.Table("follows").Select("count(user_id)").Where("follower_id = ? AND users.status = active", id).Joins("join users on follows.user_id = users.id").Group("follower_id")
+	Q_Post := DB.Conn.Table("comments").Select("count(comment)").Where("user_id = ? AND comments.active = 1", id).Group("user_id")
+	Q_Thread := DB.Conn.Table("threads").Select("count(title)").Where("user_id = ? AND threads.active = 1", id).Group("user_id")
 
-	result := DB.Conn.Table("users").Where("users.id = ?", id).
+	result := DB.Conn.Table("users").Where("users.id = ? AND users.status = active", id).
 		Select("*, (?) as Q_Followers, (?) as Q_Following, (?) as Q_Post, (?) as Q_Thread, (?) as Reputation",
 			Q_Follower, Q_Following, Q_Post, Q_Thread, Reputation).
 		Find(&User)
@@ -97,7 +105,8 @@ func (DB *MysqlUserRepository) GetUsersQuantity(ctx context.Context) (users.Doma
 func (DB *MysqlUserRepository) GetProfileSetting(ctx context.Context, id int) (users.Domain, error) {
 	var User Users
 
-	result := DB.Conn.Table("users").Select("id, name, photo_url, email, phone, bio, address").Where("id = (?)", id).Find(&User)
+	result := DB.Conn.Table("users").Select("id, name, photo_url, email, phone, bio, address").
+		Where("id = (?) AND users.status = active", id).Find(&User)
 
 	if result.Error != nil {
 		return users.Domain{}, result.Error
@@ -135,5 +144,12 @@ func (DB *MysqlUserRepository) UpdateProfile(ctx context.Context, domain users.D
 	if result.Error != nil {
 		return users.Domain{}, result.Error
 	}
-	return User.ToDomain(), nil
+
+	result2nd, err2 := DB.GetProfileSetting(ctx, id)
+
+	if err2 != nil {
+		return users.Domain{}, result.Error
+	}
+
+	return result2nd, nil
 }

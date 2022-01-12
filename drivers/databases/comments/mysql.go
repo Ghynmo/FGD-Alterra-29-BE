@@ -3,7 +3,7 @@ package comments
 import (
 	"context"
 	"fgd-alterra-29/business/comments"
-	"fmt"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -23,8 +23,8 @@ func (DB *MysqlCommentRepository) GetPostsByComment(ctx context.Context, comment
 	var NewComment = ("%" + comment + "%")
 
 	result := DB.Conn.Table("comments").Select("comments.id, name, photo_url as Photo, comment, active, comments.created_at").
-		Where("comment LIKE ?", NewComment).Joins("join users on comments.user_id = users.id").
-		Find(&Comment)
+		Where("comment LIKE ? AND comments.active = 1", NewComment).Joins("join users on comments.user_id = users.id").
+		Order("comments.created_at desc").Find(&Comment)
 
 	if result.Error != nil {
 		return []comments.Domain{}, result.Error
@@ -36,14 +36,13 @@ func (DB *MysqlCommentRepository) GetPostsByComment(ctx context.Context, comment
 func (DB *MysqlCommentRepository) GetCommentReply(ctx context.Context, id int) ([]comments.Domain, error) {
 	var Comment []Comments
 
-	result := DB.Conn.Table("comments").Where("reply_of = ?", id).Select("comments.id, name, photo_url, comment").
-		Joins("join users on comments.user_id = users.id").
+	result := DB.Conn.Table("comments").Where("reply_of = ? AND comments.active = 1", id).Select("comments.id, name, photo_url, comment").
+		Joins("join users on comments.user_id = users.id").Order("comments.created_at desc").
 		Find(&Comment)
 
 	if result.Error != nil {
 		return []comments.Domain{}, result.Error
 	}
-	fmt.Println(ToListDomain(Comment))
 	return ToListDomain(Comment), nil
 }
 
@@ -53,7 +52,7 @@ func (DB *MysqlCommentRepository) GetCommentProfile(ctx context.Context, id int)
 	ReplierName := DB.Conn.Table("comments as subcomment").Where("subcomment.id = comments.reply_of").Select("name").
 		Joins("join users on subcomment.user_id = users.id")
 
-	result := DB.Conn.Table("comments").Where("comments.user_id = ?", id).Select("title as Thread, comment, (?) as Name", ReplierName).
+	result := DB.Conn.Table("comments").Where("comments.user_id = ? AND comments.active = 1", id).Select("title as Thread, comment, (?) as Name", ReplierName).
 		Joins("join threads on comments.thread_id = threads.id").Joins("join users on comments.user_id = users.id").
 		Order("comments.created_at desc").Find(&Comment)
 
@@ -81,18 +80,6 @@ func (DB *MysqlCommentRepository) GetPosts(ctx context.Context) ([]comments.Doma
 	result := DB.Conn.Table("comments").Select("comments.id, name, photo_url as Photo, comment, active, comments.created_at").
 		Joins("join users on comments.user_id = users.id").Order("comments.created_at desc").
 		Find(&Comment)
-
-	if result.Error != nil {
-		return []comments.Domain{}, result.Error
-	}
-
-	return ToListDomain(Comment), nil
-}
-
-func (DB *MysqlCommentRepository) GetCommentByThread(ctx context.Context, id int) ([]comments.Domain, error) {
-	var Comment []Comments
-
-	result := DB.Conn.Table("comments").Where("thread_id = 3").Find(&Comment)
 
 	if result.Error != nil {
 		return []comments.Domain{}, result.Error
@@ -129,14 +116,14 @@ func (DB *MysqlCommentRepository) CreateComment(ctx context.Context, domain comm
 	var Comment Comments
 
 	if domain.ReplyOf == 0 {
-		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of) VALUES (?, ?, ?, NULL)",
-			domain.Thread_id, domain.User_id, domain.Comment)
+		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of, created_at) VALUES (?, ?, ?, NULL, ?)",
+			domain.Thread_id, domain.User_id, domain.Comment, time.Now())
 		if result.Error != nil {
 			return comments.Domain{}, result.Error
 		}
 	} else {
-		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of) VALUES (?, ?, ?, ?)",
-			domain.Thread_id, domain.User_id, domain.Comment, domain.ReplyOf)
+		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of, created_at) VALUES (?, ?, ?, ?, ?)",
+			domain.Thread_id, domain.User_id, domain.Comment, domain.ReplyOf, time.Now())
 		if result.Error != nil {
 			return comments.Domain{}, result.Error
 		}

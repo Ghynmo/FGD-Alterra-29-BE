@@ -1,9 +1,15 @@
 package reputations
 
-import "fgd-alterra-29/drivers/databases/users"
+import "fgd-alterra-29/business/reputations"
 
 type Reputations struct {
-	ID         int           `gorm:"primaryKey"`
-	Reputation string        `gorm:"not null"`
-	Users      []users.Users `gorm:"foreignKey:reputation_id"`
+	ID         int    `gorm:"primaryKey"`
+	Reputation string `gorm:"not null"`
+}
+
+func (Reputation *Reputations) ToDomain() reputations.Domain {
+	return reputations.Domain{
+		ID:         Reputation.ID,
+		Reputation: Reputation.Reputation,
+	}
 }

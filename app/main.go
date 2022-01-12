@@ -67,7 +67,10 @@ import (
 	_badgeController "fgd-alterra-29/controllers/badges"
 	_badgeRepository "fgd-alterra-29/drivers/databases/badges"
 
+	_reputationUseCase "fgd-alterra-29/business/reputations"
+	_reputationController "fgd-alterra-29/controllers/reputations"
 	_reputationRepository "fgd-alterra-29/drivers/databases/reputations"
+
 	_roleRepository "fgd-alterra-29/drivers/databases/roles"
 	_threadfollowRepository "fgd-alterra-29/drivers/databases/thread_follows"
 
@@ -182,6 +185,10 @@ func main() {
 	badgeUseCase := _badgeUseCase.NewBadgeUseCase(badgeRepository, timeoutContext)
 	badgeController := _badgeController.NewBadgeController(badgeUseCase)
 
+	reputationRepository := _reputationRepository.NewMysqlReputationRepository(Conn)
+	reputationUseCase := _reputationUseCase.NewReputationUseCase(reputationRepository, timeoutContext)
+	reputationController := _reputationController.NewReputationController(reputationUseCase)
+
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext, ConfigJWT)
 	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, commentreportUseCase, commentUseCase, badgeUseCase)
@@ -203,6 +210,7 @@ func main() {
 		ThreadShareController:   *threadshareController,
 		UserPointController:     *userpointController,
 		BadgeController:         *badgeController,
+		ReputationController:    *reputationController,
 	}
 
 	routesInit.RouteRegister(*e)

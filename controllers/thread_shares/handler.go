@@ -31,5 +31,5 @@ func (handler ThreadShareController) ShareThread(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, threadshares)
+	return controllers.NoDataSuccessResponse(c, threadshares)
 }

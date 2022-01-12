@@ -3,6 +3,7 @@ package commentreport
 import (
 	"context"
 	commentreport "fgd-alterra-29/business/comment_report"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -47,15 +48,22 @@ func (DB *MysqlCommentReportRepository) GetCommentReportStat(ctx context.Context
 }
 
 func (DB *MysqlCommentReportRepository) CreateReportComment(ctx context.Context, domain commentreport.Domain) (commentreport.Domain, error) {
-	var CommentReport CommentReport
 
-	result := DB.Conn.Model(&CommentReport).Create(&domain)
+	data := CommentReport{
+		Reporter_id:   domain.ReportCase_id,
+		Comment_id:    domain.Comment_id,
+		ReportCase_id: domain.ReportCase_id,
+		Message:       domain.Message,
+		Created_at:    time.Now(),
+	}
+
+	result := DB.Conn.Model(&data).Create(&domain)
 
 	if result.Error != nil {
 		return commentreport.Domain{}, result.Error
 	}
 
-	return CommentReport.ToDomain(), nil
+	return data.ToDomain(), nil
 }
 
 func (DB *MysqlCommentReportRepository) AdminGetReports(ctx context.Context) ([]commentreport.Domain, error) {

@@ -3,6 +3,7 @@ package reportcases
 import (
 	reportcases "fgd-alterra-29/business/report_cases"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/report_cases/request"
 	"fgd-alterra-29/controllers/report_cases/responses"
 	"net/http"
 
@@ -27,4 +28,19 @@ func (handler ReportCaseController) GetReportForm(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, responses.ToListReportForm(reportcases))
+}
+
+func (handler ReportCaseController) CreateCaseController(c echo.Context) error {
+	var NewCase = request.AddCase{}
+	c.Bind(&NewCase)
+
+	domain := NewCase.ToDomain()
+
+	ctx := c.Request().Context()
+
+	reportcases, err := handler.ReportCaseUseCase.CreateCaseController(ctx, domain)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NoDataSuccessResponse(c, reportcases)
 }

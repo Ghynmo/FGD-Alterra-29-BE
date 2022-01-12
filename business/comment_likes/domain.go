@@ -1,10 +1,14 @@
 package commentlikes
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type Domain struct {
 	Comment_id int
 	Liker_id   int
+	Liked_at   time.Time
 }
 
 type UseCase interface {

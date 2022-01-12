@@ -31,3 +31,15 @@ func (DB *MysqlCategoryRepository) GetUserActiveInCategory(ctx context.Context, 
 
 	return ToListDomain(Category), nil
 }
+
+func (DB *MysqlCategoryRepository) CreateCategories(ctx context.Context, domain categories.Domain) (categories.Domain, error) {
+	var Category Categories
+
+	result := DB.Conn.Model(&Category).Create(&domain)
+
+	if result.Error != nil {
+		return categories.Domain{}, result.Error
+	}
+
+	return Category.ToDomain(), nil
+}

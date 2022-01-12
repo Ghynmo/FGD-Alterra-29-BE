@@ -117,5 +117,5 @@ func (handler CommentController) CreateCommentController(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, comments)
+	return controllers.NoDataSuccessResponse(c, comments)
 }

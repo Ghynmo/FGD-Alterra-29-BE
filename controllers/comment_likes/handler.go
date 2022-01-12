@@ -32,7 +32,7 @@ func (handler CommentLikeController) CreateLikes(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, commentlikes)
+	return controllers.NoDataSuccessResponse(c, commentlikes)
 }
 
 func (handler CommentLikeController) DeleteLikes(c echo.Context) error {
@@ -48,5 +48,5 @@ func (handler CommentLikeController) DeleteLikes(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, commentlikes)
+	return controllers.NoDataSuccessResponse(c, commentlikes)
 }

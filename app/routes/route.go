@@ -111,7 +111,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth)
 
 	//additional
-	e.POST("category", cl.CategoryController.CreateCategoryController)
-	e.POST("reportcase", cl.ReportCaseController.CreateCaseController)
-	e.POST("reputation", cl.ReputationController.CreateReputationController)
+	e.POST("category", cl.CategoryController.CreateCategoryController, jwtAuth)
+	e.POST("reportcase", cl.ReportCaseController.CreateCaseController, jwtAuth)
+	e.POST("reputation", cl.ReputationController.CreateReputationController, jwtAuth)
 }

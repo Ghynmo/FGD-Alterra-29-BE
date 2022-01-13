@@ -19,7 +19,7 @@ func NewCommentLikeController(threadUseCase commentlikes.UseCase) *CommentLikeCo
 	}
 }
 
-func (handler CommentLikeController) CreateLikes(c echo.Context) error {
+func (handler CommentLikeController) Likes(c echo.Context) error {
 	NewLike := request.Like{}
 	c.Bind(&NewLike)
 
@@ -28,22 +28,6 @@ func (handler CommentLikeController) CreateLikes(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	commentlikes, err := handler.CommentLikeUseCase.LikeController(ctx, domain)
-	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
-	}
-
-	return controllers.NoDataSuccessResponse(c, commentlikes)
-}
-
-func (handler CommentLikeController) DeleteLikes(c echo.Context) error {
-	NewLike := request.Like{}
-	c.Bind(&NewLike)
-
-	domain := NewLike.ToDomain()
-
-	ctx := c.Request().Context()
-
-	commentlikes, err := handler.CommentLikeUseCase.UnlikeController(ctx, domain)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

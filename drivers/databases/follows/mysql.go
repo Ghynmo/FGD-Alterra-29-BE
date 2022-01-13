@@ -48,7 +48,7 @@ func (DB *MysqlFollowRepository) GetFollowing(ctx context.Context, id int) ([]fo
 	return ToListDomain(Follow), nil
 }
 
-func (DB *MysqlFollowRepository) Follows(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+func (DB *MysqlFollowRepository) NewFollow(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
 
 	data := Follows{
 		User_id:     domain.User_id,
@@ -56,7 +56,7 @@ func (DB *MysqlFollowRepository) Follows(ctx context.Context, domain follows.Dom
 		Followed_at: time.Now(),
 	}
 
-	result := DB.Conn.Create(&data)
+	result := DB.Conn.Model(&data).Create(&data)
 
 	if result.Error != nil {
 		return follows.Domain{}, result.Error
@@ -65,14 +65,39 @@ func (DB *MysqlFollowRepository) Follows(ctx context.Context, domain follows.Dom
 	return follows.Domain{}, nil
 }
 
-func (DB *MysqlFollowRepository) Unfollow(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
-	var Follow Follows
-
-	result := DB.Conn.Where("user_id = ? AND follower_id = ?", domain.User_id, domain.Follower_id).Delete(&Follow)
+func (DB *MysqlFollowRepository) Follows(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+	var follow Follows
+	result := DB.Conn.Model(&follow).Where("user_id = ? AND follower_id = ?", domain.User_id, domain.Follower_id).
+		Updates(Follows{State: true, Followed_at: time.Now()})
 
 	if result.Error != nil {
 		return follows.Domain{}, result.Error
 	}
 
-	return follows.Domain{}, nil
+	return follow.ToDomain(), nil
+}
+
+func (DB *MysqlFollowRepository) Unfollow(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+	var follow Follows
+
+	result := DB.Conn.Model(&follow).Where("user_id = ? AND follower_id = ?", domain.User_id, domain.Follower_id).
+		Update("state", false)
+
+	if result.Error != nil {
+		return follows.Domain{}, result.Error
+	}
+
+	return follow.ToDomain(), nil
+}
+
+func (DB *MysqlFollowRepository) GetFollowState(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+	var follow Follows
+
+	result := DB.Conn.Where("user_id = ? AND follower_id = ?", domain.User_id, domain.Follower_id).Find(&follow)
+
+	if result.Error != nil {
+		return follows.Domain{}, result.Error
+	}
+
+	return follow.ToDomain(), nil
 }

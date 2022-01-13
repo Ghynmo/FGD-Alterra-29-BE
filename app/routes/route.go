@@ -101,16 +101,12 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 
 	e.GET("comment/reply/:id", cl.CommentController.GetReplyComments, jwtAuth)
 	e.POST("comment", cl.CommentController.CreateCommentController, jwtAuth)
-	e.POST("threadlike", cl.ThreadLikeController.CreateLikes, jwtAuth)
-	e.DELETE("threadlike", cl.ThreadLikeController.DeleteLikes, jwtAuth)
-	e.POST("commentlike", cl.CommentLikeController.CreateLikes, jwtAuth)
-	e.DELETE("commentlike", cl.CommentLikeController.DeleteLikes, jwtAuth)
-	e.POST("threadsave", cl.ThreadSaveController.SaveThread, jwtAuth)
-	e.DELETE("threadsave", cl.ThreadSaveController.Unsaves, jwtAuth)
+	e.POST("threadlike", cl.ThreadLikeController.Likes)
+	e.POST("commentlike", cl.CommentLikeController.Likes)
+	e.POST("threadsave", cl.ThreadSaveController.SaveThread)
 	e.POST("threadshare", cl.ThreadShareController.ShareThread, jwtAuth)
 
-	e.POST("follows", cl.FollowController.FollowsController, jwtAuth)
-	e.DELETE("unfollow", cl.FollowController.UnfollowController, jwtAuth)
+	e.POST("follows", cl.FollowController.FollowsController)
 	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth)
 
 	//additional

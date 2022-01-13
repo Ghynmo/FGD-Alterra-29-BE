@@ -6,8 +6,9 @@ import (
 )
 
 type Follows struct {
-	User_id       int `gorm:"not null"`
-	Follower_id   int `gorm:"not null"`
+	User_id       int  `gorm:"not null"`
+	Follower_id   int  `gorm:"not null"`
+	State         bool `gorm:"default:true"`
 	Followed_at   time.Time
 	Unfollowed_at time.Time
 	Photo         string `gorm:"-:migration;->"`
@@ -20,6 +21,7 @@ func (Follow *Follows) ToDomain() follows.Domain {
 	return follows.Domain{
 		User_id:       Follow.User_id,
 		Follower_id:   Follow.Follower_id,
+		State:         Follow.State,
 		Followed_at:   Follow.Followed_at,
 		Unfollowed_at: Follow.Unfollowed_at,
 		Photo:         Follow.Photo,

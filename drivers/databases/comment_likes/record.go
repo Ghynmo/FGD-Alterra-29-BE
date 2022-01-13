@@ -9,6 +9,7 @@ type CommentLikes struct {
 	Comment_id int
 	Liker_id   int
 	Liked_at   time.Time
+	State      bool `gorm:"default:true"`
 }
 
 func (Cl *CommentLikes) ToDomain() commentlikes.Domain {
@@ -16,6 +17,7 @@ func (Cl *CommentLikes) ToDomain() commentlikes.Domain {
 		Comment_id: Cl.Comment_id,
 		Liker_id:   Cl.Liker_id,
 		Liked_at:   Cl.Liked_at,
+		State:      Cl.State,
 	}
 }
 

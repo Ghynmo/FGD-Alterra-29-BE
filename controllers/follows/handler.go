@@ -63,20 +63,3 @@ func (handler FollowController) FollowsController(c echo.Context) error {
 
 	return controllers.NoDataSuccessResponse(c, follows)
 }
-
-func (handler FollowController) UnfollowController(c echo.Context) error {
-	NewFollow := request.Follow{}
-
-	c.Bind(&NewFollow)
-	domain := NewFollow.ToDomain()
-
-	ctx := c.Request().Context()
-
-	follows, err := handler.FollowUseCase.UnfollowController(ctx, domain)
-
-	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
-	}
-
-	return controllers.NoDataSuccessResponse(c, follows)
-}

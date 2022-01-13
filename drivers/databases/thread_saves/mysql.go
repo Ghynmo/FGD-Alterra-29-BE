@@ -18,14 +18,13 @@ func NewMysqlThreadSaveRepository(conn *gorm.DB) threadsaves.Repository {
 	}
 }
 
-func (DB *MysqlThreadSaveRepository) SaveThread(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
+func (DB *MysqlThreadSaveRepository) NewSave(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
 	data := ThreadSaves{
 		User_id:   domain.User_id,
 		Thread_id: domain.Thread_id,
 		Saved_at:  time.Now(),
 	}
-
-	result := DB.Conn.Model(&data).Create(&domain)
+	result := DB.Conn.Model(&data).Create(&data)
 
 	if result.Error != nil {
 		return threadsaves.Domain{}, result.Error
@@ -34,14 +33,39 @@ func (DB *MysqlThreadSaveRepository) SaveThread(ctx context.Context, domain thre
 	return data.ToDomain(), nil
 }
 
-func (DB *MysqlThreadSaveRepository) UnsaveThread(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
-	var threadSave ThreadSaves
-
-	result := DB.Conn.Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).Delete(&threadSave)
+func (DB *MysqlThreadSaveRepository) Save(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
+	var TL ThreadSaves
+	result := DB.Conn.Model(&TL).Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).
+		Updates(ThreadSaves{State: true, Saved_at: time.Now()})
 
 	if result.Error != nil {
 		return threadsaves.Domain{}, result.Error
 	}
 
-	return threadsaves.Domain{}, nil
+	return TL.ToDomain(), nil
+}
+
+func (DB *MysqlThreadSaveRepository) Unsave(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
+	var ThreadSave ThreadSaves
+
+	result := DB.Conn.Model(&ThreadSave).Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).
+		Update("state", false)
+
+	if result.Error != nil {
+		return threadsaves.Domain{}, result.Error
+	}
+
+	return ThreadSave.ToDomain(), nil
+}
+
+func (DB *MysqlThreadSaveRepository) GetSaveState(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
+	var TL ThreadSaves
+
+	result := DB.Conn.Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).Find(&TL)
+
+	if result.Error != nil {
+		return threadsaves.Domain{}, result.Error
+	}
+
+	return TL.ToDomain(), nil
 }

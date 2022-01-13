@@ -6,16 +6,17 @@ import (
 )
 
 type ThreadLikes struct {
-	Thread_id  int `gorm:"not null"`
-	User_id    int `gorm:"not null"`
-	Liked_at   time.Time
-	Unliked_at time.Time
+	Thread_id int
+	User_id   int
+	Liked_at  time.Time
+	State     bool `gorm:"default:true"`
 }
 
 func (TL *ThreadLikes) ToDomain() threadlikes.Domain {
 	return threadlikes.Domain{
 		Thread_id: TL.Thread_id,
 		User_id:   TL.User_id,
+		State:     TL.State,
 	}
 }
 

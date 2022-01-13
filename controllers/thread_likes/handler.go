@@ -19,7 +19,7 @@ func NewThreadLikeController(threadUseCase threadlikes.UseCase) *ThreadLikeContr
 	}
 }
 
-func (handler ThreadLikeController) CreateLikes(c echo.Context) error {
+func (handler ThreadLikeController) Likes(c echo.Context) error {
 	NewLike := request.Like{}
 	c.Bind(&NewLike)
 
@@ -28,21 +28,6 @@ func (handler ThreadLikeController) CreateLikes(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	threadlikes, err := handler.ThreadLikeUseCase.LikeController(ctx, domain)
-	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
-	}
-	return controllers.NoDataSuccessResponse(c, threadlikes)
-}
-
-func (handler ThreadLikeController) DeleteLikes(c echo.Context) error {
-	NewUnlike := request.Like{}
-	c.Bind(&NewUnlike)
-
-	domain := NewUnlike.ToDomain()
-
-	ctx := c.Request().Context()
-
-	threadlikes, err := handler.ThreadLikeUseCase.UnlikeController(ctx, domain)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

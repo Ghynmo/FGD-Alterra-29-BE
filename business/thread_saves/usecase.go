@@ -18,19 +18,31 @@ func NewThreadSaveUseCase(repo Repository, timeout time.Duration) UseCase {
 }
 
 func (uc *ThreadSaveUseCase) SaveThreadController(ctx context.Context, domain Domain) (Domain, error) {
-	threadsave, err := uc.Repo.SaveThread(ctx, domain)
-	if err != nil {
-		return Domain{}, err
+	state, _ := uc.Repo.GetSaveState(ctx, domain)
+
+	if state.User_id == 0 {
+		threads, err := uc.Repo.NewSave(ctx, domain)
+		if err != nil {
+			return Domain{}, err
+		}
+		return threads, nil
 	}
 
-	return threadsave, nil
-}
-
-func (uc *ThreadSaveUseCase) UnsaveThreadController(ctx context.Context, domain Domain) (Domain, error) {
-	threadsave, err := uc.Repo.UnsaveThread(ctx, domain)
-	if err != nil {
-		return Domain{}, err
+	if state.User_id != 0 && !state.State {
+		threads, err := uc.Repo.Save(ctx, domain)
+		if err != nil {
+			return Domain{}, err
+		}
+		return threads, nil
 	}
 
-	return threadsave, nil
+	if state.User_id != 0 && state.State {
+		threads, err := uc.Repo.Unsave(ctx, domain)
+		if err != nil {
+			return Domain{}, err
+		}
+		return threads, nil
+	}
+
+	return Domain{}, nil
 }

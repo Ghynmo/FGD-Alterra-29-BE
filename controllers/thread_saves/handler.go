@@ -33,18 +33,3 @@ func (handler ThreadSaveController) SaveThread(c echo.Context) error {
 	}
 	return controllers.NoDataSuccessResponse(c, threadsaves)
 }
-
-func (handler ThreadSaveController) Unsaves(c echo.Context) error {
-	NewUnsave := request.Save{}
-	c.Bind(&NewUnsave)
-
-	domain := NewUnsave.ToDomain()
-
-	ctx := c.Request().Context()
-
-	threadsaves, err := handler.ThreadSaveUseCase.UnsaveThreadController(ctx, domain)
-	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
-	}
-	return controllers.NoDataSuccessResponse(c, threadsaves)
-}

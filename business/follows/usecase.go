@@ -2,6 +2,7 @@ package follows
 
 import (
 	"context"
+	"errors"
 	"time"
 )
 
@@ -17,7 +18,7 @@ func NewFollowUseCase(repo Repository, time time.Duration) UseCase {
 	}
 }
 
-func (uc FollowUseCase) GetFollowers(ctx context.Context, id int) ([]Domain, error) {
+func (uc *FollowUseCase) GetFollowers(ctx context.Context, id int) ([]Domain, error) {
 	followers, err := uc.Repo.GetFollowers(ctx, id)
 
 	if err != nil {
@@ -27,7 +28,7 @@ func (uc FollowUseCase) GetFollowers(ctx context.Context, id int) ([]Domain, err
 	return followers, nil
 }
 
-func (uc FollowUseCase) GetFollowing(ctx context.Context, id int) ([]Domain, error) {
+func (uc *FollowUseCase) GetFollowing(ctx context.Context, id int) ([]Domain, error) {
 	following, err := uc.Repo.GetFollowing(ctx, id)
 
 	if err != nil {
@@ -37,22 +38,37 @@ func (uc FollowUseCase) GetFollowing(ctx context.Context, id int) ([]Domain, err
 	return following, nil
 }
 
-func (uc FollowUseCase) FollowsController(ctx context.Context, domain Domain) (Domain, error) {
-	following, err := uc.Repo.Follows(ctx, domain)
+func (uc *FollowUseCase) FollowsController(ctx context.Context, domain Domain) (Domain, error) {
 
-	if err != nil {
-		return Domain{}, err
+	if domain.User_id == domain.Follower_id {
+		return Domain{}, errors.New("CANNOT FOLLOWS YOURSELF")
 	}
 
-	return following, nil
-}
+	state, _ := uc.Repo.GetFollowState(ctx, domain)
 
-func (uc FollowUseCase) UnfollowController(ctx context.Context, domain Domain) (Domain, error) {
-	following, err := uc.Repo.Unfollow(ctx, domain)
-
-	if err != nil {
-		return Domain{}, err
+	if state.User_id == 0 {
+		follow, err := uc.Repo.NewFollow(ctx, domain)
+		if err != nil {
+			return Domain{}, err
+		}
+		return follow, nil
 	}
 
-	return following, nil
+	if state.User_id != 0 && !state.State {
+		follow, err := uc.Repo.Follows(ctx, domain)
+		if err != nil {
+			return Domain{}, err
+		}
+		return follow, nil
+	}
+
+	if state.User_id != 0 && state.State {
+		follow, err := uc.Repo.Unfollow(ctx, domain)
+		if err != nil {
+			return Domain{}, err
+		}
+		return follow, nil
+	}
+
+	return Domain{}, nil
 }

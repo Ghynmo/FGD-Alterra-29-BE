@@ -85,8 +85,26 @@ func (uc *ThreadUseCase) GetRecommendationThreads(ctx context.Context, id int) (
 	return thread, nil
 }
 
+func (uc *ThreadUseCase) GetThreadByID(ctx context.Context, id int) (Domain, error) {
+	thread, err := uc.Repo.GetThreadByID(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return thread, nil
+}
+
 func (uc *ThreadUseCase) DeleteThread(ctx context.Context, id int) (Domain, error) {
 	thread, err := uc.Repo.DeleteThread(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return thread, nil
+}
+
+func (uc *ThreadUseCase) ActivateThread(ctx context.Context, id int) (Domain, error) {
+	thread, err := uc.Repo.ActivateThread(ctx, id)
 	if err != nil {
 		return Domain{}, err
 	}

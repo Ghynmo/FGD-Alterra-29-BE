@@ -67,10 +67,12 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("admin/threads", cl.ThreadController.GetThreadsController, jwtAuth)
 	e.GET("admin/threads/search/:title", cl.ThreadController.GetThreadsByTitleController, jwtAuth)
 	e.DELETE("admin/threads/thread/:id", cl.ThreadController.DeleteThread, jwtAuth)
+	e.PUT("admin/threads/thread/:id", cl.ThreadController.ActivateThread, jwtAuth)
 	//List of Posts (Admin Access)
 	e.GET("admin/posts", cl.CommentController.GetPostsController, jwtAuth)
 	e.GET("admin/posts/search/:comment", cl.CommentController.GetPostsByCommentController, jwtAuth)
 	e.DELETE("admin/posts/post/:id", cl.CommentController.UnactivatingPostController, jwtAuth)
+	e.PUT("admin/posts/post/:id", cl.CommentController.ActivatingPostController, jwtAuth)
 	//List of Comment's Reports (Admin Access)
 	e.GET("admin/comment-reports", cl.CommentReportController.AdminGetReports, jwtAuth)
 	e.GET("admin/comment-reports/search/:category", cl.CommentReportController.GetReportsByCategoryController, jwtAuth)
@@ -84,12 +86,13 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("user/edit/:id", cl.UserController.GetUserSettingController, jwtAuth)
 	e.PUT("admin/edit/:id", cl.UserController.UpdateAdminProfile, jwtAuth)
 	e.PUT("user/edit/:id", cl.UserController.UpdateUserProfile, jwtAuth)
+
 	//Report Comment page
-	e.GET("admin/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
-	e.POST("admin/report-comment", cl.CommentReportController.CreateReportComment, jwtAuth)
+	// e.GET("admin/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
+	// e.POST("admin/report-comment", cl.CommentReportController.CreateReportComment, jwtAuth)
 	//Report Thread page
-	// e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm)
-	// e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
+	e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm)
+	e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
 
 	e.GET("home/:id", cl.ThreadController.GetHomepageThreads, jwtAuth)
 	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads, jwtAuth)

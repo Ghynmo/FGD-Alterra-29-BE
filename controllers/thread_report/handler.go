@@ -54,7 +54,7 @@ func (handler ThreadReportController) CreateReportThread(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, threadreport)
+	return controllers.NoDataSuccessResponse(c, threadreport)
 }
 
 func (handler ThreadReportController) AdminGetReports(c echo.Context) error {

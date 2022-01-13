@@ -3,8 +3,8 @@ package users
 import (
 	"fgd-alterra-29/business/badges"
 	"fgd-alterra-29/business/categories"
-	commentreport "fgd-alterra-29/business/comment_report"
 	"fgd-alterra-29/business/comments"
+	threadreport "fgd-alterra-29/business/thread_report"
 	"fgd-alterra-29/business/threads"
 	userbadges "fgd-alterra-29/business/user_badges"
 	"fgd-alterra-29/business/users"
@@ -19,24 +19,24 @@ import (
 )
 
 type UserController struct {
-	UserUseCase          users.UseCase
-	ThreadUseCase        threads.UseCase
-	UserBadgeUseCase     userbadges.UseCase
-	CategoryUseCase      categories.UseCase
-	CommentReportUseCase commentreport.UseCase
-	CommentUseCase       comments.UseCase
-	BadgeUseCase         badges.UseCase
+	UserUseCase         users.UseCase
+	ThreadUseCase       threads.UseCase
+	UserBadgeUseCase    userbadges.UseCase
+	CategoryUseCase     categories.UseCase
+	ThreadReportUseCase threadreport.UseCase
+	CommentUseCase      comments.UseCase
+	BadgeUseCase        badges.UseCase
 }
 
-func NewUserController(userUC users.UseCase, threadUC threads.UseCase, userbadgeUC userbadges.UseCase, categoryUC categories.UseCase, commentreportUC commentreport.UseCase, commentUC comments.UseCase, badgeUC badges.UseCase) *UserController {
+func NewUserController(userUC users.UseCase, threadUC threads.UseCase, userbadgeUC userbadges.UseCase, categoryUC categories.UseCase, threadreportUC threadreport.UseCase, commentUC comments.UseCase, badgeUC badges.UseCase) *UserController {
 	return &UserController{
-		UserUseCase:          userUC,
-		ThreadUseCase:        threadUC,
-		UserBadgeUseCase:     userbadgeUC,
-		CategoryUseCase:      categoryUC,
-		CommentReportUseCase: commentreportUC,
-		CommentUseCase:       commentUC,
-		BadgeUseCase:         badgeUC,
+		UserUseCase:         userUC,
+		ThreadUseCase:       threadUC,
+		UserBadgeUseCase:    userbadgeUC,
+		CategoryUseCase:     categoryUC,
+		ThreadReportUseCase: threadreportUC,
+		CommentUseCase:      commentUC,
+		BadgeUseCase:        badgeUC,
 	}
 }
 
@@ -120,7 +120,7 @@ func (handler UserController) GetDashboardController(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	user, err := handler.UserUseCase.GetUsersController(ctx)
-	commentreport, err1 := handler.CommentReportUseCase.GetCommentReportStat(ctx)
+	threadreport, err1 := handler.ThreadReportUseCase.GetThreadReportStat(ctx)
 	threadqty, err2 := handler.ThreadUseCase.GetThreadQuantity(ctx)
 	userqty, err3 := handler.UserUseCase.GetUsersQuantity(ctx)
 	postqty, err4 := handler.CommentUseCase.GetPostQuantityController(ctx)
@@ -139,7 +139,7 @@ func (handler UserController) GetDashboardController(c echo.Context) error {
 	if err4 != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err3)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToDashboard(user, userqty, threadqty, postqty, commentreport))
+	return controllers.NewSuccessResponse(c, responses.ToDashboard(user, userqty, threadqty, postqty, threadreport))
 }
 
 func (handler UserController) GetAdminSettingController(c echo.Context) error {

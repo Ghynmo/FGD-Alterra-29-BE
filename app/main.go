@@ -80,7 +80,7 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile(`app/configs/config.json`)
+	viper.SetConfigFile(`app/configs/config_example.json`)
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
@@ -191,7 +191,7 @@ func main() {
 
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext, ConfigJWT)
-	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, commentreportUseCase, commentUseCase, badgeUseCase)
+	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase, badgeUseCase)
 
 	routesInit := routes.ControllerList{
 		JwtConfig:               ConfigJWT.Init(),

@@ -101,7 +101,7 @@ func (handler CommentController) ActivatingPostController(c echo.Context) error 
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, "")
+	return controllers.NewSuccessResponse(c, "Post Activated")
 }
 
 func (handler CommentController) CreateCommentController(c echo.Context) error {

@@ -3,9 +3,9 @@ package responses
 import "fgd-alterra-29/business/users"
 
 type LoginResponse struct {
-	Name  string
-	Email string
-	Token string
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Token string `json:"token"`
 }
 
 func ToLoginResponse(domain users.Domain) LoginResponse {

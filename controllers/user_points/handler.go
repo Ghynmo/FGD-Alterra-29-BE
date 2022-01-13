@@ -25,7 +25,7 @@ func (handler UserPointController) AddThreadPointController(c echo.Context) erro
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, user)
+	return controllers.NoDataSuccessResponse(c, user)
 }
 
 func (handler UserPointController) AddPostPointController(c echo.Context) error {
@@ -35,5 +35,5 @@ func (handler UserPointController) AddPostPointController(c echo.Context) error 
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, user)
+	return controllers.NoDataSuccessResponse(c, user)
 }

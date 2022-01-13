@@ -153,9 +153,43 @@ func (DB *MysqlThreadRepository) GetHotThreads(ctx context.Context) ([]threads.D
 	return ToListDomain(Thread), nil
 }
 
+func (DB *MysqlThreadRepository) GetThreadByID(ctx context.Context, id int) (threads.Domain, error) {
+	var Thread Threads
+	var Comment comments.Comments
+
+	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
+	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
+
+	result := DB.Conn.Table("threads").Select("*, threads.id, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
+		Where("threads.id = ?", id).
+		Joins("join users on threads.user_id = users.id").
+		Preload("Comments", func(db *gorm.DB) *gorm.DB {
+			return db.Table("comments").Select("*").
+				Joins("join users on comments.user_id = users.id").Find(&Comment)
+		}).
+		Find(&Thread)
+
+	if result.Error != nil {
+		return threads.Domain{}, result.Error
+	}
+
+	return Thread.ToDomain(), nil
+}
+
 func (DB *MysqlThreadRepository) DeleteThread(ctx context.Context, id int) (threads.Domain, error) {
 	var Thread Threads
 	result := DB.Conn.Model(&Thread).Where("threads.id = ?", id).Update("active", "false")
+
+	if result.Error != nil {
+		return threads.Domain{}, result.Error
+	}
+
+	return Thread.ToDomain(), nil
+}
+
+func (DB *MysqlThreadRepository) ActivateThread(ctx context.Context, id int) (threads.Domain, error) {
+	var Thread Threads
+	result := DB.Conn.Model(&Thread).Where("threads.id = ?", id).Update("active", "true")
 
 	if result.Error != nil {
 		return threads.Domain{}, result.Error

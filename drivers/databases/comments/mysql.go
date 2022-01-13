@@ -36,7 +36,7 @@ func (DB *MysqlCommentRepository) GetPostsByComment(ctx context.Context, comment
 func (DB *MysqlCommentRepository) GetCommentReply(ctx context.Context, id int) ([]comments.Domain, error) {
 	var Comment []Comments
 
-	result := DB.Conn.Table("comments").Where("reply_of = ? AND comments.active = 1", id).Select("comments.id, name, photo_url, comment").
+	result := DB.Conn.Table("comments").Where("user_id = ? AND comments.active = 1", id).Select("comments.id, name, photo_url, comment").
 		Joins("join users on comments.user_id = users.id").Order("comments.created_at desc").
 		Find(&Comment)
 
@@ -131,3 +131,20 @@ func (DB *MysqlCommentRepository) CreateComment(ctx context.Context, domain comm
 
 	return Comment.ToDomain(), nil
 }
+
+// func (DB *MysqlCommentRepository) GetCommentParent(ctx context.Context, id int) ([]comments.Domain, error) {
+// 	var Comment []Comments
+// 	var parent_id int
+
+// 	row := DB.Conn.Table("comments").Select("reply_of").Where("comments.id = ?", id).Row()
+// 	row.Scan(&parent_id)
+
+// 	result := DB.Conn.Table("comments").Where("comments.id = ? AND comments.active = 1", id).Select("comments.id, name, photo_url, comment").
+// 		Joins("join users on comments.user_id = users.id").Order("comments.created_at desc").
+// 		Find(&Comment)
+
+// 	if result.Error != nil {
+// 		return []comments.Domain{}, result.Error
+// 	}
+// 	return ToListDomain(Comment), nil
+// }

@@ -1,26 +1,26 @@
 package dashboard
 
-import commentreport "fgd-alterra-29/business/comment_report"
+import threadreport "fgd-alterra-29/business/thread_report"
 
-type CommentReportStat struct {
+type ThreadReportStat struct {
 	ID     int    `json:"report_case_id"`
 	Case   string `json:"case"`
 	Q_Case int    `json:"report_total"`
 }
 
-func ToCommentReportStat(Domain commentreport.Domain) CommentReportStat {
-	return CommentReportStat{
+func ToThreadReportStat(Domain threadreport.Domain) ThreadReportStat {
+	return ThreadReportStat{
 		ID:     Domain.ID,
 		Case:   Domain.Case,
 		Q_Case: Domain.Q_Case,
 	}
 }
 
-func ToListCommentReportStat(u []commentreport.Domain) []CommentReportStat {
-	var Domains []CommentReportStat
+func ToListThreadReportStat(u []threadreport.Domain) []ThreadReportStat {
+	var Domains []ThreadReportStat
 
 	for _, val := range u {
-		Domains = append(Domains, ToCommentReportStat(val))
+		Domains = append(Domains, ToThreadReportStat(val))
 	}
 	return Domains
 }

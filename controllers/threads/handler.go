@@ -64,6 +64,17 @@ func (handler ThreadController) DeleteThread(c echo.Context) error {
 	return controllers.DeleteSuccessResponse(c, thread)
 }
 
+func (handler ThreadController) ActivateThread(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.ActivateThread(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NoDataSuccessResponse(c, thread)
+}
+
 func (handler ThreadController) GetHomepageThreads(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
@@ -119,5 +130,5 @@ func (handler ThreadController) CreateThread(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, thread)
+	return controllers.NoDataSuccessResponse(c, thread)
 }

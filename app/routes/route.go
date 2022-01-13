@@ -87,27 +87,28 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.PUT("admin/edit/:id", cl.UserController.UpdateAdminProfile, jwtAuth)
 	e.PUT("user/edit/:id", cl.UserController.UpdateUserProfile, jwtAuth)
 
+	e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm)
+	e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
 	//Report Comment page
 	// e.GET("admin/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
 	// e.POST("admin/report-comment", cl.CommentReportController.CreateReportComment, jwtAuth)
 	//Report Thread page
-	e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm)
-	e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
 
 	e.GET("home/:id", cl.ThreadController.GetHomepageThreads, jwtAuth)
 	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads, jwtAuth)
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
 	e.GET("search", cl.ThreadController.GetSearch)
 
+	e.GET("commentbythread", cl.CommentController.GetCommentByThreadController)
 	e.GET("comment/reply/:id", cl.CommentController.GetReplyComments, jwtAuth)
 	e.POST("comment", cl.CommentController.CreateCommentController, jwtAuth)
-	e.POST("threadlike", cl.ThreadLikeController.Likes)
+	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth)
+	e.POST("follows", cl.FollowController.FollowsController)
+
 	e.POST("commentlike", cl.CommentLikeController.Likes)
+	e.POST("threadlike", cl.ThreadLikeController.Likes)
 	e.POST("threadsave", cl.ThreadSaveController.SaveThread)
 	e.POST("threadshare", cl.ThreadShareController.ShareThread, jwtAuth)
-
-	e.POST("follows", cl.FollowController.FollowsController)
-	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth)
 
 	//additional
 	e.POST("category", cl.CategoryController.CreateCategoryController, jwtAuth)

@@ -25,6 +25,7 @@ type Comments struct {
 	Thread     string `gorm:"-:migration;->"`
 	Photo      string `gorm:"-:migration;->"`
 	Q_Post     int    `gorm:"-:migration;->"`
+	LikeState  bool   `gorm:"-:migration;->"`
 }
 
 func (Comment *Comments) ToDomain() comments.Domain {
@@ -44,6 +45,7 @@ func (Comment *Comments) ToDomain() comments.Domain {
 		Thread:     Comment.Thread,
 		Q_Post:     Comment.Q_Post,
 		Photo:      Comment.Photo,
+		LikeState:  Comment.LikeState,
 	}
 }
 

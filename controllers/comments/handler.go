@@ -33,6 +33,23 @@ func (handler CommentController) GetPostsByCommentController(c echo.Context) err
 	return controllers.NewSuccessResponse(c, responses.ToListPosts(comments))
 }
 
+func (handler CommentController) GetCommentByThreadController(c echo.Context) error {
+	GetComment := request.GetByThread{}
+	c.Bind(&GetComment)
+
+	thread_id := GetComment.Thread_id
+	my_id := GetComment.MyUser_id
+
+	ctx := c.Request().Context()
+
+	comments, err := handler.CommentUseCase.GetCommentByThreadController(ctx, thread_id, my_id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+
+	return controllers.NewSuccessResponse(c, responses.ToListCommentRecommendation(comments))
+}
+
 func (handler CommentController) GetReplyComments(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()

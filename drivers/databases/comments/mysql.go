@@ -33,6 +33,18 @@ func (DB *MysqlCommentRepository) GetPostsByComment(ctx context.Context, comment
 	return ToListDomain(Comment), nil
 }
 
+func (DB *MysqlCommentRepository) GetCommentByThread(ctx context.Context, thread_id int, my_id int) ([]comments.Domain, error) {
+	var Comment []Comments
+
+	result := DB.Conn.Raw("SELECT comments.id, name, photo_url, comment, state AS LikeState FROM comments LEFT JOIN (SELECT * FROM comment_likes WHERE comment_likes.liker_id = ?) AS B ON comments.id = B.comment_id JOIN users ON comments.user_id = users.id WHERE thread_id = ?",
+		my_id, thread_id).Scan(&Comment)
+
+	if result.Error != nil {
+		return []comments.Domain{}, result.Error
+	}
+	return ToListDomain(Comment), nil
+}
+
 func (DB *MysqlCommentRepository) GetCommentReply(ctx context.Context, id int) ([]comments.Domain, error) {
 	var Comment []Comments
 

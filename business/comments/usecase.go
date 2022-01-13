@@ -27,6 +27,15 @@ func (uc *CommentUseCase) GetPostsByCommentController(ctx context.Context, comme
 	return post, nil
 }
 
+func (uc *CommentUseCase) GetCommentByThreadController(ctx context.Context, thread_id int, my_id int) ([]Domain, error) {
+	comments, err := uc.Repo.GetCommentByThread(ctx, thread_id, my_id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return comments, nil
+}
+
 func (uc *CommentUseCase) GetCommentReply(ctx context.Context, id int) ([]Domain, error) {
 	comments, err := uc.Repo.GetCommentReply(ctx, id)
 	if err != nil {

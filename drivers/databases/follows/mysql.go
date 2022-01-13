@@ -18,13 +18,12 @@ func NewMysqlFollowRepository(conn *gorm.DB) follows.Repository {
 	}
 }
 
-func (DB *MysqlFollowRepository) GetFollowers(ctx context.Context, id int) ([]follows.Domain, error) {
+func (DB *MysqlFollowRepository) GetFollowers(ctx context.Context, target_id int, my_id int) ([]follows.Domain, error) {
 	var Follow []Follows
 
-	result := DB.Conn.Table("follows").Select("follower_id as Follower_id, photo_url as Photo, name as FollowerName, reputation").
-		Where("user_id = (?) AND users.status = ?", id, "active").Joins("join users on follows.follower_id = users.id").
-		Joins("join reputations on users.reputation_id = reputations.id").
-		Order("followed_at desc").Find(&Follow)
+	result := DB.Conn.Raw("SELECT follows.follower_id as Follower_id, photo_url as Photo, name as FollowerName, reputation, nestedfollow.state AS FollowedByMe FROM follows LEFT JOIN (SELECT user_id, follower_id, state FROM follows WHERE follower_id = ?) AS nestedfollow ON follows.follower_id = nestedfollow.user_id JOIN users ON follows.follower_id = users.id JOIN reputations ON users.reputation_id = reputations.id WHERE follows.user_id = ? AND follows.follower_id != ? ORDER BY follows.followed_at DESC",
+		my_id, target_id, my_id).
+		Scan(&Follow)
 
 	if result.Error != nil {
 		return []follows.Domain{}, result.Error
@@ -33,13 +32,12 @@ func (DB *MysqlFollowRepository) GetFollowers(ctx context.Context, id int) ([]fo
 	return ToListDomain(Follow), nil
 }
 
-func (DB *MysqlFollowRepository) GetFollowing(ctx context.Context, id int) ([]follows.Domain, error) {
+func (DB *MysqlFollowRepository) GetFollowing(ctx context.Context, target_id int, my_id int) ([]follows.Domain, error) {
 	var Follow []Follows
 
-	result := DB.Conn.Table("follows").Select("user_id as User_id, photo_url as Photo, name as FollowingName, reputation").
-		Where("follower_id = (?) AND users.status = ?", id, "active").Joins("join users on follows.user_id = users.id").
-		Joins("join reputations on users.reputation_id = reputations.id").
-		Order("followed_at desc").Find(&Follow)
+	result := DB.Conn.Raw("SELECT follows.user_id as User_id, photo_url as Photo, name as FollowingName, reputation, nestedfollow.state AS FollowedByMe FROM follows LEFT JOIN (SELECT user_id, follower_id, state FROM follows WHERE follower_id = ?) AS nestedfollow ON follows.user_id = nestedfollow.user_id JOIN users ON follows.user_id = users.id JOIN reputations ON users.reputation_id = reputations.id WHERE follows.follower_id = ? AND follows.user_id != ? ORDER BY follows.followed_at DESC",
+		my_id, target_id, my_id).
+		Scan(&Follow)
 
 	if result.Error != nil {
 		return []follows.Domain{}, result.Error

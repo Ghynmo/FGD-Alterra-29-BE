@@ -7,6 +7,7 @@ type FollowingList struct {
 	Photo         string `json:"photo"`
 	FollowingName string `json:"name"`
 	Reputation    string `json:"reputation"`
+	FollowedByMe  bool   `json:"followed_by_me"`
 }
 
 func ToFollowingList(Domain follows.Domain) FollowingList {
@@ -15,6 +16,7 @@ func ToFollowingList(Domain follows.Domain) FollowingList {
 		Photo:         Domain.Photo,
 		FollowingName: Domain.FollowingName,
 		Reputation:    Domain.Reputation,
+		FollowedByMe:  Domain.FollowedByMe,
 	}
 }
 

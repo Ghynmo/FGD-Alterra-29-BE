@@ -15,6 +15,7 @@ type Follows struct {
 	FollowerName  string `gorm:"-:migration;->"`
 	FollowingName string `gorm:"-:migration;->"`
 	Reputation    string `gorm:"-:migration;->"`
+	FollowedByMe  bool   `gorm:"-:migration;->"`
 }
 
 func (Follow *Follows) ToDomain() follows.Domain {
@@ -28,6 +29,7 @@ func (Follow *Follows) ToDomain() follows.Domain {
 		FollowerName:  Follow.FollowerName,
 		FollowingName: Follow.FollowingName,
 		Reputation:    Follow.Reputation,
+		FollowedByMe:  Follow.FollowedByMe,
 	}
 }
 

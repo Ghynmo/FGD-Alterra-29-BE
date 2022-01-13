@@ -18,8 +18,8 @@ func NewFollowUseCase(repo Repository, time time.Duration) UseCase {
 	}
 }
 
-func (uc *FollowUseCase) GetFollowers(ctx context.Context, id int) ([]Domain, error) {
-	followers, err := uc.Repo.GetFollowers(ctx, id)
+func (uc *FollowUseCase) GetFollowers(ctx context.Context, target_id int, my_id int) ([]Domain, error) {
+	followers, err := uc.Repo.GetFollowers(ctx, target_id, my_id)
 
 	if err != nil {
 		return []Domain{}, err
@@ -28,8 +28,8 @@ func (uc *FollowUseCase) GetFollowers(ctx context.Context, id int) ([]Domain, er
 	return followers, nil
 }
 
-func (uc *FollowUseCase) GetFollowing(ctx context.Context, id int) ([]Domain, error) {
-	following, err := uc.Repo.GetFollowing(ctx, id)
+func (uc *FollowUseCase) GetFollowing(ctx context.Context, target_id int, my_id int) ([]Domain, error) {
+	following, err := uc.Repo.GetFollowing(ctx, target_id, my_id)
 
 	if err != nil {
 		return []Domain{}, err

@@ -53,8 +53,8 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("profile/:id", cl.UserController.GetProfileController, jwtAuth)
 	e.GET("post/:id", cl.CommentController.GetProfileCommentsController, jwtAuth)
 	e.GET("thread/:id", cl.ThreadController.GetProfileThreads, jwtAuth)
-	e.GET("followers/:id", cl.FollowController.GetFollowers, jwtAuth)
-	e.GET("following/:id", cl.FollowController.GetFollowing, jwtAuth)
+	e.GET("followers", cl.FollowController.GetFollowers)
+	e.GET("following", cl.FollowController.GetFollowing)
 
 	//Main Page of Admin
 	e.GET("admin/", cl.UserController.GetDashboardController, jwtAuth)

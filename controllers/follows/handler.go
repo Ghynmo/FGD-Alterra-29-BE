@@ -6,7 +6,6 @@ import (
 	"fgd-alterra-29/controllers/follows/request"
 	"fgd-alterra-29/controllers/follows/responses"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -22,10 +21,15 @@ func NewFollowController(followUseCase follows.UseCase) *FollowController {
 }
 
 func (handler FollowController) GetFollowers(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	GetFollows := request.GetFollows{}
+	c.Bind(&GetFollows)
+
+	target_id := GetFollows.Target_id
+	my_id := GetFollows.My_id
+
 	ctx := c.Request().Context()
 
-	follows, err := handler.FollowUseCase.GetFollowers(ctx, id)
+	follows, err := handler.FollowUseCase.GetFollowers(ctx, target_id, my_id)
 
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
@@ -35,10 +39,15 @@ func (handler FollowController) GetFollowers(c echo.Context) error {
 }
 
 func (handler FollowController) GetFollowing(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	GetFollows := request.GetFollows{}
+	c.Bind(&GetFollows)
+
+	target_id := GetFollows.Target_id
+	my_id := GetFollows.My_id
+
 	ctx := c.Request().Context()
 
-	follows, err := handler.FollowUseCase.GetFollowing(ctx, id)
+	follows, err := handler.FollowUseCase.GetFollowing(ctx, target_id, my_id)
 
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)

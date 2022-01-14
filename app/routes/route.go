@@ -1,6 +1,7 @@
 package routes
 
 import (
+	apinews "fgd-alterra-29/controllers/api_news"
 	"fgd-alterra-29/controllers/badges"
 	"fgd-alterra-29/controllers/categories"
 	commentlikes "fgd-alterra-29/controllers/comment_likes"
@@ -24,6 +25,7 @@ import (
 
 type ControllerList struct {
 	JwtConfig               middleware.JWTConfig
+	APINewsController       apinews.APINewsController
 	UserController          users.UserController
 	UserBadgeController     userbadges.UserBadgeController
 	ThreadController        threads.ThreadController
@@ -87,8 +89,8 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.PUT("admin/edit/:id", cl.UserController.UpdateAdminProfile, jwtAuth)
 	e.PUT("user/edit/:id", cl.UserController.UpdateUserProfile, jwtAuth)
 
-	e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm)
-	e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread)
+	e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm, jwtAuth)
+	e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread, jwtAuth)
 	//Report Comment page
 	// e.GET("admin/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
 	// e.POST("admin/report-comment", cl.CommentReportController.CreateReportComment, jwtAuth)
@@ -98,16 +100,17 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads, jwtAuth)
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
 	e.GET("search", cl.ThreadController.GetSearch)
+	e.GET("sidenews", cl.APINewsController.GetAPINewsController)
 
 	e.GET("commentbythread", cl.CommentController.GetCommentByThreadController)
 	e.GET("comment/reply/:id", cl.CommentController.GetReplyComments, jwtAuth)
 	e.POST("comment", cl.CommentController.CreateCommentController, jwtAuth)
-	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth)
-	e.POST("follows", cl.FollowController.FollowsController)
+	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth, jwtAuth)
+	e.POST("follows", cl.FollowController.FollowsController, jwtAuth)
 
-	e.POST("commentlike", cl.CommentLikeController.Likes)
-	e.POST("threadlike", cl.ThreadLikeController.Likes)
-	e.POST("threadsave", cl.ThreadSaveController.SaveThread)
+	e.POST("commentlike", cl.CommentLikeController.Likes, jwtAuth)
+	e.POST("threadlike", cl.ThreadLikeController.Likes, jwtAuth)
+	e.POST("threadsave", cl.ThreadSaveController.SaveThread, jwtAuth)
 	e.POST("threadshare", cl.ThreadShareController.ShareThread, jwtAuth)
 
 	//additional

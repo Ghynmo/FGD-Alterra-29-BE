@@ -5,7 +5,12 @@ import (
 	"fgd-alterra-29/app/routes"
 	_mysqlDriver "fgd-alterra-29/drivers/mysql"
 	"log"
+	"net/http"
 	"time"
+
+	_apinewUseCase "fgd-alterra-29/business/api_news"
+	_apinewController "fgd-alterra-29/controllers/api_news"
+	_apinewRepository "fgd-alterra-29/drivers/thirdparty/news_api"
 
 	_userUseCase "fgd-alterra-29/business/users"
 	_userController "fgd-alterra-29/controllers/users"
@@ -129,6 +134,10 @@ func main() {
 	e := echo.New()
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
+	apinewRepository := _apinewRepository.NewAPINewsRepository(http.Client{})
+	apinewUseCase := _apinewUseCase.NewAPINewsUseCase(apinewRepository, timeoutContext)
+	apinewController := _apinewController.NewAPINewsController(apinewUseCase)
+
 	commentRepository := _commentRepository.NewMysqlCommentRepository(Conn)
 	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
 	commentController := _commentController.NewCommentController(commentUseCase)
@@ -211,6 +220,7 @@ func main() {
 		UserPointController:     *userpointController,
 		BadgeController:         *badgeController,
 		ReputationController:    *reputationController,
+		APINewsController:       *apinewController,
 	}
 
 	routesInit.RouteRegister(*e)

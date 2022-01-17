@@ -46,4 +46,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-require golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
+require (
+	github.com/rs/cors v1.8.2 // indirect
+	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
+)

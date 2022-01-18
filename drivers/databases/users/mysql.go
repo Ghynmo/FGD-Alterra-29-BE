@@ -114,6 +114,24 @@ func (DB *MysqlUserRepository) GetProfileSetting(ctx context.Context, id int) (u
 	return User.ToDomain(), nil
 }
 
+func (DB *MysqlUserRepository) UpdateProfile(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
+	var User Users
+
+	result := DB.Conn.Model(&User).Where("id = (?)", id).Updates(domain)
+
+	if result.Error != nil {
+		return users.Domain{}, result.Error
+	}
+
+	result2nd, err2 := DB.GetProfileSetting(ctx, id)
+
+	if err2 != nil {
+		return users.Domain{}, result.Error
+	}
+
+	return result2nd, nil
+}
+
 func (DB *MysqlUserRepository) BannedUser(ctx context.Context, id int) (users.Domain, error) {
 	var User Users
 
@@ -136,20 +154,14 @@ func (DB *MysqlUserRepository) UnbannedUser(ctx context.Context, id int) (users.
 	return User.ToDomain(), nil
 }
 
-func (DB *MysqlUserRepository) UpdateProfile(ctx context.Context, domain users.Domain, id int) (users.Domain, error) {
+func (DB *MysqlUserRepository) GetBannedState(ctx context.Context, id int) (users.Domain, error) {
 	var User Users
 
-	result := DB.Conn.Model(&User).Where("id = (?)", id).Updates(domain)
+	result := DB.Conn.Select("status").Where("user_id = ?", id).Find(&User)
 
 	if result.Error != nil {
 		return users.Domain{}, result.Error
 	}
 
-	result2nd, err2 := DB.GetProfileSetting(ctx, id)
-
-	if err2 != nil {
-		return users.Domain{}, result.Error
-	}
-
-	return result2nd, nil
+	return User.ToDomain(), nil
 }

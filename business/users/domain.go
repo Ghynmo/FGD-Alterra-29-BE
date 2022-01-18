@@ -61,8 +61,7 @@ type UseCase interface {
 	GetUsersQuantity(ctx context.Context) (Domain, error)
 	GetProfileSetting(ctx context.Context, id int) (Domain, error)
 	UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error)
-	BannedUser(ctx context.Context, id int) (Domain, error)
-	UnbannedUser(ctx context.Context, id int) (Domain, error)
+	BannedUserController(ctx context.Context, id int) (Domain, error)
 }
 
 type Repository interface {
@@ -76,4 +75,5 @@ type Repository interface {
 	UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error)
 	BannedUser(ctx context.Context, id int) (Domain, error)
 	UnbannedUser(ctx context.Context, id int) (Domain, error)
+	GetBannedState(ctx context.Context, id int) (Domain, error)
 }

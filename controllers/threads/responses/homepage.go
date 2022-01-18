@@ -2,17 +2,16 @@ package responses
 
 import (
 	"fgd-alterra-29/business/threads"
-	"fgd-alterra-29/controllers/threads/responses/home"
 )
 
 type RecommendationThreads struct {
-	ID        int                          `json:"thread_id"`
-	Name      string                       `json:"thread_maker"`
-	Title     string                       `json:"title"`
-	Content   string                       `json:"content"`
-	Q_Like    int                          `json:"likes_total"`
-	Q_Comment int                          `json:"comments_total"`
-	Comments  []home.CommentRecommendation `json:"comments"`
+	ID        int    `json:"thread_id"`
+	Name      string `json:"thread_maker"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	Q_Like    int    `json:"likes_total"`
+	Q_Comment int    `json:"comments_total"`
+	// Comments  []home.CommentRecommendation `json:"comments"`
 }
 
 func ToRecommendationThreads(Domain threads.Domain) RecommendationThreads {
@@ -23,7 +22,7 @@ func ToRecommendationThreads(Domain threads.Domain) RecommendationThreads {
 		Content:   Domain.Content,
 		Q_Like:    Domain.Q_Like,
 		Q_Comment: Domain.Q_Comment,
-		Comments:  home.ToListCommentRecommendation(Domain.Comments),
+		// Comments:  home.ToListCommentRecommendation(Domain.Comments),
 	}
 }
 

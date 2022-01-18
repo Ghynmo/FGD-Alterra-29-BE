@@ -200,22 +200,10 @@ func (handler UserController) BannedUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
 
-	user, err := handler.UserUseCase.BannedUser(ctx, id)
+	user, err := handler.UserUseCase.BannedUserController(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
 	return controllers.BannedSuccessResponse(c, user)
-}
-
-func (handler UserController) UnbannedUser(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-	ctx := c.Request().Context()
-
-	user, err := handler.UserUseCase.UnbannedUser(ctx, id)
-	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
-	}
-
-	return controllers.UnbannedSuccessResponse(c, user)
 }

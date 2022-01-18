@@ -3,7 +3,6 @@ package threads
 import (
 	"context"
 	"fgd-alterra-29/business/threads"
-	"fgd-alterra-29/drivers/databases/comments"
 	"time"
 
 	"gorm.io/gorm"
@@ -78,7 +77,7 @@ func (DB *MysqlThreadRepository) GetThreads(ctx context.Context) ([]threads.Doma
 
 func (DB *MysqlThreadRepository) GetHomepageThreads(ctx context.Context, id int) ([]threads.Domain, error) {
 	var Thread []Threads
-	var Comment comments.Comments
+	// var Comment comments.Comments
 
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
@@ -87,13 +86,9 @@ func (DB *MysqlThreadRepository) GetHomepageThreads(ctx context.Context, id int)
 		Where("thread_follows.user_id = (?) AND threads.active = 1", id).Order("threads.created_at desc").
 		Joins("join users on threads.user_id = users.id").
 		Joins("join thread_follows on threads.id = thread_follows.thread_id").
-		Preload("Comments", func(db *gorm.DB) *gorm.DB {
-			return db.Table("comments").Select("*").
-				Joins("join users on comments.user_id = users.id").Find(&Comment)
-		}).
-		// NESTED Comment but so hard to implement with GORM
 		// Preload("Comments", func(db *gorm.DB) *gorm.DB {
-		// 	return db.Table("comments").Select("*").Preload("Replies").Find(&Comment)
+		// 	return db.Table("comments").Select("*").
+		// 		Joins("join users on comments.user_id = users.id").Find(&Comment)
 		// }).
 		Find(&Thread)
 
@@ -105,7 +100,7 @@ func (DB *MysqlThreadRepository) GetHomepageThreads(ctx context.Context, id int)
 
 func (DB *MysqlThreadRepository) GetRecommendationThreads(ctx context.Context, id int) ([]threads.Domain, error) {
 	var Thread []Threads
-	var Comment comments.Comments
+	// var Comment comments.Comments
 
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
@@ -116,10 +111,10 @@ func (DB *MysqlThreadRepository) GetRecommendationThreads(ctx context.Context, i
 		Or("threads.category_id = (?)", DB.GetCategories(id, 2)).
 		Joins("join users on threads.user_id = users.id").
 		Order("threads.created_at desc").
-		Preload("Comments", func(db *gorm.DB) *gorm.DB {
-			return db.Table("comments").Select("*").
-				Joins("join users on comments.user_id = users.id").Find(&Comment)
-		}).
+		// Preload("Comments", func(db *gorm.DB) *gorm.DB {
+		// 	return db.Table("comments").Select("*").
+		// 		Joins("join users on comments.user_id = users.id").Find(&Comment)
+		// }).
 		Find(&Thread)
 
 	if result.Error != nil {
@@ -131,7 +126,7 @@ func (DB *MysqlThreadRepository) GetRecommendationThreads(ctx context.Context, i
 
 func (DB *MysqlThreadRepository) GetHotThreads(ctx context.Context) ([]threads.Domain, error) {
 	var Thread []Threads
-	var Comment comments.Comments
+	// var Comment comments.Comments
 
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
@@ -140,10 +135,10 @@ func (DB *MysqlThreadRepository) GetHotThreads(ctx context.Context) ([]threads.D
 		Where("threads.active = 1").Order("Q_Like desc, Q_Comment desc").
 		Joins("join users on threads.user_id = users.id").
 		Order("threads.created_at desc").
-		Preload("Comments", func(db *gorm.DB) *gorm.DB {
-			return db.Table("comments").Select("*").
-				Joins("join users on comments.user_id = users.id").Find(&Comment)
-		}).
+		// Preload("Comments", func(db *gorm.DB) *gorm.DB {
+		// 	return db.Table("comments").Select("*").
+		// 		Joins("join users on comments.user_id = users.id").Find(&Comment)
+		// }).
 		Find(&Thread)
 
 	if result.Error != nil {
@@ -155,7 +150,7 @@ func (DB *MysqlThreadRepository) GetHotThreads(ctx context.Context) ([]threads.D
 
 func (DB *MysqlThreadRepository) GetThreadByID(ctx context.Context, id int) (threads.Domain, error) {
 	var Thread Threads
-	var Comment comments.Comments
+	// var Comment comments.Comments
 
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
 	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
@@ -163,10 +158,10 @@ func (DB *MysqlThreadRepository) GetThreadByID(ctx context.Context, id int) (thr
 	result := DB.Conn.Table("threads").Select("*, threads.id, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
 		Where("threads.id = ?", id).
 		Joins("join users on threads.user_id = users.id").
-		Preload("Comments", func(db *gorm.DB) *gorm.DB {
-			return db.Table("comments").Select("*").
-				Joins("join users on comments.user_id = users.id").Find(&Comment)
-		}).
+		// Preload("Comments", func(db *gorm.DB) *gorm.DB {
+		// 	return db.Table("comments").Select("*").
+		// 		Joins("join users on comments.user_id = users.id").Find(&Comment)
+		// }).
 		Find(&Thread)
 
 	if result.Error != nil {
@@ -209,7 +204,7 @@ func (DB *MysqlThreadRepository) GetCategories(id int, index int) *gorm.DB {
 
 func (DB *MysqlThreadRepository) GetSearch(ctx context.Context, threadname string) ([]threads.Domain, error) {
 	var Thread []Threads
-	var Comment comments.Comments
+	// var Comment comments.Comments
 	var Newthreadname = ("%" + threadname + "%")
 
 	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
@@ -219,10 +214,10 @@ func (DB *MysqlThreadRepository) GetSearch(ctx context.Context, threadname strin
 		Where("title LIKE ? AND threads.active = 1", Newthreadname).
 		Joins("join users on threads.user_id = users.id").
 		Order("threads.created_at desc").
-		Preload("Comments", func(db *gorm.DB) *gorm.DB {
-			return db.Table("comments").Select("*, comments.id").
-				Joins("join users on comments.user_id = users.id").Find(&Comment)
-		}).
+		// Preload("Comments", func(db *gorm.DB) *gorm.DB {
+		// 	return db.Table("comments").Select("*, comments.id").
+		// 		Joins("join users on comments.user_id = users.id").Find(&Comment)
+		// }).
 		Find(&Thread)
 
 	if result.Error != nil {

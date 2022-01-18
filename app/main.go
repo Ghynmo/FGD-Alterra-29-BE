@@ -80,12 +80,13 @@ import (
 	_threadfollowRepository "fgd-alterra-29/drivers/databases/thread_follows"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rs/cors"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
 func init() {
-	viper.SetConfigFile(`app/configs/config.json`)
+	viper.SetConfigFile(`app/configs/config_example.json`)
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
@@ -132,6 +133,15 @@ func main() {
 	DbMigrate(Conn)
 
 	e := echo.New()
+
+	corsMiddleware := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"OPTIONS", "GET", "POST", "PUT"},
+		AllowedHeaders: []string{"*"},
+		Debug:          true,
+	})
+	e.Use(echo.WrapMiddleware(corsMiddleware.Handler))
+
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	apinewRepository := _apinewRepository.NewAPINewsRepository(http.Client{})

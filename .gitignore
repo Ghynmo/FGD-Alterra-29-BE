@@ -1,3 +1,4 @@
 mysql-docker-vol/
 ignore/
+app/configs/config.json
 .env

@@ -72,10 +72,10 @@ func (DB *MysqlThreadReportRepository) AdminGetReports(ctx context.Context) ([]t
 	return ToListDomain(ThreadReport), nil
 }
 
-func (DB *MysqlThreadReportRepository) DeleteThreadReport(ctx context.Context, id int) (threadreport.Domain, error) {
+func (DB *MysqlThreadReportRepository) SolvedThreadReport(ctx context.Context, id int) (threadreport.Domain, error) {
 	var ThreadReport ThreadReport
-	result := DB.Conn.Delete(&ThreadReport, id)
-
+	result := DB.Conn.Model(&ThreadReport).Where("thread_reports.id = ?", id).
+		Update("state", "solved")
 	if result.Error != nil {
 		return threadreport.Domain{}, result.Error
 	}

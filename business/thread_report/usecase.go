@@ -53,8 +53,8 @@ func (uc *ThreadReportUseCase) AdminGetReports(ctx context.Context) ([]Domain, e
 	return report, nil
 }
 
-func (uc *ThreadReportUseCase) DeleteThreadReport(ctx context.Context, id int) (Domain, error) {
-	report, err := uc.Repo.DeleteThreadReport(ctx, id)
+func (uc *ThreadReportUseCase) SolvedThreadReport(ctx context.Context, id int) (Domain, error) {
+	report, err := uc.Repo.SolvedThreadReport(ctx, id)
 	if err != nil {
 		return Domain{}, err
 	}

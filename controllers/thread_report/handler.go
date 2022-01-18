@@ -29,7 +29,7 @@ func (handler ThreadReportController) SearchReportsByCategoryController(c echo.C
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, threadreport)
+	return controllers.NewSuccessResponse(c, responses.ToListReports(threadreport))
 }
 
 func (handler ThreadReportController) GetThreadReportStat(c echo.Context) error {
@@ -67,11 +67,11 @@ func (handler ThreadReportController) AdminGetReports(c echo.Context) error {
 	return controllers.NewSuccessResponse(c, responses.ToListReports(threadreport))
 }
 
-func (handler ThreadReportController) DeleteThreadReport(c echo.Context) error {
+func (handler ThreadReportController) SolvedThreadReport(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
 
-	_, err := handler.ThreadReportUseCase.DeleteThreadReport(ctx, id)
+	_, err := handler.ThreadReportUseCase.SolvedThreadReport(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

@@ -9,6 +9,7 @@ type ThreadReport struct {
 	Thread  string `json:"title_thread"`
 	Message string `json:"message"`
 	Case    string `json:"report_case"`
+	State   string `json:"state"`
 }
 
 func ToReports(Domain threadreport.Domain) ThreadReport {
@@ -17,6 +18,7 @@ func ToReports(Domain threadreport.Domain) ThreadReport {
 		Thread:  Domain.Thread,
 		Message: Domain.Message,
 		Case:    Domain.Case,
+		State:   Domain.State,
 	}
 }
 

@@ -47,6 +47,8 @@ require (
 )
 
 require (
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/cors v1.8.2 // indirect
+	github.com/zew/util v1.0.5 // indirect
 	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 )

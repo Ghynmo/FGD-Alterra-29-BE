@@ -7,7 +7,7 @@ RUN go build -o main
 
 FROM alpine:3.14
 WORKDIR /app/app/configs
-COPY --from=builder /app/app/configs/config.json .
+COPY --from=builder /app/app/configs/.env .
 WORKDIR /app
 COPY --from=builder /app/app/main .
 EXPOSE 8080

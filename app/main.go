@@ -86,7 +86,7 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile(`app/configs/.env`)
+	viper.SetConfigFile(`app/configs/config.json`)
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
@@ -117,16 +117,16 @@ func DbMigrate(db *gorm.DB) {
 func main() {
 
 	configDB := _mysqlDriver.ConfigDB{
-		DB_Username: viper.GetString(`DB_USER`),
-		DB_Password: viper.GetString(`DB_PASS`),
-		DB_Host:     viper.GetString(`DB_HOST`),
-		DB_Port:     viper.GetString(`DB_PORT`),
-		DB_Database: viper.GetString(`DB_NAME`),
+		DB_Username: viper.GetString(`database.user`),
+		DB_Password: viper.GetString(`database.pass`),
+		DB_Host:     viper.GetString(`database.host`),
+		DB_Port:     viper.GetString(`database.port`),
+		DB_Database: viper.GetString(`database.name`),
 	}
 
 	ConfigJWT := _middlewares.ConfigJWT{
-		Secret:    viper.GetString(`JWT_SECRET`),
-		ExpiresAt: viper.GetInt64(`JWT_EXPIRED`),
+		Secret:    viper.GetString(`jwt.secret`),
+		ExpiresAt: viper.GetInt64(`jwt.expired`),
 	}
 
 	Conn := configDB.InitialDB()
@@ -143,7 +143,7 @@ func main() {
 	})
 	e.Use(echo.WrapMiddleware(corsMiddleware.Handler))
 
-	timeoutContext := time.Duration(viper.GetInt("CTX_TIMEOUT")) * time.Second
+	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	apinewRepository := _apinewRepository.NewAPINewsRepository(http.Client{})
 	apinewUseCase := _apinewUseCase.NewAPINewsUseCase(apinewRepository, timeoutContext)
@@ -236,5 +236,5 @@ func main() {
 
 	routesInit.RouteRegister(*e)
 
-	log.Fatal(e.Start((viper.GetString("SERVER_ADDRESS"))))
+	log.Fatal(e.Start((viper.GetString("server.address"))))
 }

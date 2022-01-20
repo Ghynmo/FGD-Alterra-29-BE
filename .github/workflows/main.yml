@@ -74,9 +74,5 @@ jobs:
             IdentityFile ~/.ssh/fgd-alta-29.pem
             StrictHostKeyChecking=no
           END
-      - name: Connect EC2 & Remove all container
-        run: docker rm -f $(docker ps -a -q)
-      - name: Pull registry & started
-        run: docker pull ghynmo/fgd_alterra_29:1.0.0
-      - name: started
-        run: docker run -d -p 8080:8080 --name fgd_alterra_29 ghynmo/fgd_alterra_29:1.0.0
+      - name: Connect EC2 & Remove all container & Pull registry & started
+        run: ssh development 'docker rm -vf $(docker ps -a -q) && docker pull ghynmo/fgd_alterra_29:1.0.0 && docker run -d -p 8080:8080 --name fgd_alterra_29 ghynmo/fgd_alterra_29:1.0.0'

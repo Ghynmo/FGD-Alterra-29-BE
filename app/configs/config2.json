@@ -8,11 +8,11 @@
         "timeout": 2
     },
     "database":{
-        "host": "localhost",
+        "host": "$(DB_HOST)",
         "port": "3306",
-        "user": "root",
-        "pass": "",
-        "name": "fgd-alterra-29"
+        "user": "$(DB_USER)",
+        "pass": "$(DB_PASS)",
+        "name": "$(DB_NAME)"
     },
     "jwt":{
         "secret":"FgdAlterra@29",

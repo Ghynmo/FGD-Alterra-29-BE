@@ -86,7 +86,7 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile(`app/configs/config_example.json`)
+	viper.SetConfigFile(`app/configs/config.json`)
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
@@ -135,10 +135,11 @@ func main() {
 	e := echo.New()
 
 	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"OPTIONS", "GET", "POST", "PUT"},
-		AllowedHeaders: []string{"*"},
-		Debug:          true,
+		AllowedOrigins:   []string{"http://localhost:3000", "https://dkku.online", "36.90.90.84"},
+		AllowedMethods:   []string{"OPTIONS", "GET", "POST", "PUT"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+		Debug:            true,
 	})
 	e.Use(echo.WrapMiddleware(corsMiddleware.Handler))
 

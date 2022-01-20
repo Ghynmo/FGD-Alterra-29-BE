@@ -25,3 +25,21 @@ func (uc *BadgeUseCase) GetBadgesByUserController(ctx context.Context, id int) (
 
 	return badge, nil
 }
+
+func (uc *BadgeUseCase) CreateBadgeController(ctx context.Context, domain Domain) (Domain, error) {
+	badge, err := uc.Repo.CreateBadge(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return badge, nil
+}
+
+func (uc *BadgeUseCase) BadgeStatusController(ctx context.Context, domain Domain) (Domain, error) {
+	badge, err := uc.Repo.CreateBadge(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return badge, nil
+}

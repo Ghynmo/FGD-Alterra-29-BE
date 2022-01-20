@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/helpers"
+	"fmt"
 	"time"
 )
 
@@ -33,24 +34,56 @@ func (uc *UserUseCase) RegisterController(ctx context.Context, domain Domain) (D
 		return Domain{}, errors.New("PASSWORD MUST BE FILLED")
 	}
 
-	var errHash error
-	domain.Password, errHash = helpers.Hash(domain.Password)
-	if errHash != nil {
-		return Domain{}, errHash
+	checkName, errCheckName := uc.Repo.CheckUsername(ctx, domain.Name)
+	if errCheckName != nil {
+		return Domain{}, errCheckName
 	}
 
-	user, err := uc.Repo.Register(ctx, domain)
-	if err != nil {
-		return Domain{}, err
+	checkMail, errCheckMail := uc.Repo.CheckEmail(ctx, domain.Email)
+	if errCheckMail != nil {
+		return Domain{}, errCheckMail
 	}
 
-	var errT error
-	user.Token, errT = uc.ConfigJwt.GenerateToken(user.ID)
-	if errT != nil {
-		return Domain{}, err
+	if !checkName && !checkMail {
+
+		var errHash error
+		domain.Password, errHash = helpers.Hash(domain.Password)
+		if errHash != nil {
+			return Domain{}, errHash
+		}
+
+		user, err := uc.Repo.Register(ctx, domain)
+		if err != nil {
+			return Domain{}, err
+		}
+
+		var IsAdmin bool
+		fmt.Println(user.Role_id)
+
+		RolesID := user.Role_id
+		if RolesID == 1 {
+			IsAdmin = true
+		} else {
+			IsAdmin = false
+		}
+
+		var errT error
+		user.Token, errT = uc.ConfigJwt.GenerateToken(user.ID, IsAdmin)
+		if errT != nil {
+			return Domain{}, err
+		}
+
+		return user, nil
+	}
+	if checkName && !checkMail {
+		return Domain{}, errors.New("USERNAME IS ALREADY USED")
+	}
+	if !checkName && checkMail {
+		return Domain{}, errors.New("EMAIL IS ALREADY USED")
+	} else {
+		return Domain{}, errors.New("USERNAME & EMAIL IS ALREADY USED")
 	}
 
-	return user, nil
 }
 
 func (uc *UserUseCase) LoginController(ctx context.Context, domain Domain) (Domain, error) {
@@ -70,8 +103,18 @@ func (uc *UserUseCase) LoginController(ctx context.Context, domain Domain) (Doma
 		return Domain{}, errors.New("WRONG PASSWORD")
 	}
 
+	var IsAdmin bool
+	fmt.Println(user.Role_id)
+
+	RolesID := user.Role_id
+	if RolesID == 1 {
+		IsAdmin = true
+	} else {
+		IsAdmin = false
+	}
+
 	var errT error
-	user.Token, errT = uc.ConfigJwt.GenerateToken(user.ID)
+	user.Token, errT = uc.ConfigJwt.GenerateToken(user.ID, IsAdmin)
 	if errT != nil {
 		return Domain{}, err
 	}

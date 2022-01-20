@@ -32,3 +32,38 @@ func (DB *MysqlBadgeRepository) GetBadgesByUser(ctx context.Context, id int) ([]
 	}
 	return ToListDomain(Badge), nil
 }
+
+func (DB *MysqlBadgeRepository) CreateBadge(ctx context.Context, domain badges.Domain) (badges.Domain, error) {
+	var Badge Badges
+
+	result := DB.Conn.Model(&Badge).Create(&domain)
+
+	if result.Error != nil {
+		return badges.Domain{}, result.Error
+	}
+	return Badge.ToDomain(), nil
+}
+
+func (DB *MysqlBadgeRepository) ActivateBadge(ctx context.Context, domain badges.Domain) (badges.Domain, error) {
+	var Badge Badges
+
+	result := DB.Conn.Table("badges").Where("badges.requirement_point < ?").
+		Find(&Badge)
+
+	if result.Error != nil {
+		return badges.Domain{}, result.Error
+	}
+	return Badge.ToDomain(), nil
+}
+
+func (DB *MysqlBadgeRepository) UnactivateBadge(ctx context.Context, domain badges.Domain) (badges.Domain, error) {
+	var Badge Badges
+
+	result := DB.Conn.Table("badges").Where("badges.requirement_point < ?").
+		Find(&Badge)
+
+	if result.Error != nil {
+		return badges.Domain{}, result.Error
+	}
+	return Badge.ToDomain(), nil
+}

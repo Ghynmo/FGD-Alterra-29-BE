@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -10,6 +11,7 @@ import (
 
 type JWTClaims struct {
 	UserID int
+	Admin  bool
 	jwt.RegisteredClaims
 }
 
@@ -25,16 +27,22 @@ func (JwtConf *ConfigJWT) Init() middleware.JWTConfig {
 	}
 }
 
-func (JwtConf *ConfigJWT) GenerateToken(id int) (string, error) {
+func (JwtConf *ConfigJWT) GenerateToken(id int, admin bool) (string, error) {
+	var IsAdmin = false
+	if admin {
+		IsAdmin = true
+	} else {
+		IsAdmin = false
+	}
+
 	claims := JWTClaims{
 		id,
+		IsAdmin,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(viper.GetInt64(`jwt.expired`)))),
 		},
 	}
-
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
 	jwtToken, err := token.SignedString([]byte(viper.GetString(`jwt.secret`)))
 
 	if err != nil {
@@ -42,4 +50,24 @@ func (JwtConf *ConfigJWT) GenerateToken(id int) (string, error) {
 	}
 
 	return jwtToken, nil
+}
+
+func ExtractClaims(tokenStr string) (jwt.MapClaims, bool) {
+	hmacSecret := []byte(viper.GetString(`jwt.secret`))
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+		// check token signing method etc
+		return hmacSecret, nil
+	})
+
+	if err != nil {
+		return nil, false
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+
+		return claims, true
+	} else {
+		fmt.Println("Invalid JWT Token")
+		return nil, false
+	}
 }

@@ -66,6 +66,8 @@ type UseCase interface {
 
 type Repository interface {
 	Register(ctx context.Context, domain Domain) (Domain, error)
+	CheckUsername(ctx context.Context, username string) (bool, error)
+	CheckEmail(ctx context.Context, username string) (bool, error)
 	Login(ctx context.Context, domain Domain) (Domain, error)
 	GetUsers(ctx context.Context) ([]Domain, error)
 	GetUsersByName(ctx context.Context, name string) ([]Domain, error)

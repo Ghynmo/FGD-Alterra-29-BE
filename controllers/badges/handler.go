@@ -3,6 +3,7 @@ package badges
 import (
 	"fgd-alterra-29/business/badges"
 	"fgd-alterra-29/controllers"
+	"fgd-alterra-29/controllers/badges/request"
 	"net/http"
 	"strconv"
 
@@ -28,4 +29,19 @@ func (handler BadgeController) GetBadgesByUserController(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	return controllers.NewSuccessResponse(c, badge)
+}
+
+func (handler BadgeController) CreateBadgeController(c echo.Context) error {
+	var NewBadge = request.CreateBadge{}
+	c.Bind(&NewBadge)
+
+	domain := NewBadge.ToDomain()
+
+	ctx := c.Request().Context()
+
+	thread, err := handler.BadgeUseCase.CreateBadgeController(ctx, domain)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NoDataSuccessResponse(c, thread)
 }

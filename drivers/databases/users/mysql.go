@@ -165,3 +165,37 @@ func (DB *MysqlUserRepository) GetBannedState(ctx context.Context, id int) (user
 
 	return User.ToDomain(), nil
 }
+
+func (DB *MysqlUserRepository) CheckUsername(ctx context.Context, username string) (bool, error) {
+	var Uname string
+
+	result := DB.Conn.Table("users").Where("name = ?", username).Select("name").Row()
+	result.Scan(&Uname)
+
+	if result.Err() != nil {
+		return false, result.Err()
+	}
+
+	if Uname == username {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func (DB *MysqlUserRepository) CheckEmail(ctx context.Context, email string) (bool, error) {
+	var Email string
+
+	result := DB.Conn.Table("users").Where("email = ?", email).Select("email").Row()
+	result.Scan(&Email)
+
+	if result.Err() != nil {
+		return false, result.Err()
+	}
+
+	if Email == email {
+		return true, nil
+	}
+
+	return false, nil
+}

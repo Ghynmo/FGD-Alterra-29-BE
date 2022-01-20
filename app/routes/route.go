@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	apinews "fgd-alterra-29/controllers/api_news"
 	"fgd-alterra-29/controllers/badges"
 	"fgd-alterra-29/controllers/categories"
@@ -18,6 +19,9 @@ import (
 	userbadges "fgd-alterra-29/controllers/user_badges"
 	userpoints "fgd-alterra-29/controllers/user_points"
 	"fgd-alterra-29/controllers/users"
+	"fmt"
+	"reflect"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -47,6 +51,61 @@ type ControllerList struct {
 func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.Use(middleware.Logger())
 	jwtAuth := middleware.JWTWithConfig(cl.JwtConfig)
+	admin := e.Group("admin")
+	admin.Use(middleware.KeyAuth(func(key string, c echo.Context) (bool, error) {
+		reqToken := c.Request().Header.Get("Authorization")
+		splitToken := strings.Split(reqToken, "Bearer ")
+		reqToken = splitToken[1]
+
+		claims, _ := middlewares.ExtractClaims(reqToken)
+		val := reflect.ValueOf(claims["Admin"])
+		data := val.Bool()
+
+		fmt.Println(data)
+		return data, nil
+	}))
+
+	//Main Page of Admin
+	admin.GET("", cl.UserController.GetDashboardController, jwtAuth)
+
+	//List of Users (Admin Access)
+	admin.GET("/users", cl.UserController.GetUsersController, jwtAuth)
+	admin.GET("/users/search/:name", cl.UserController.GetUsersByName, jwtAuth)
+	admin.PUT("/users/banned/:id", cl.UserController.BannedUser, jwtAuth)
+
+	//List of Threads (Admin Access)
+	admin.GET("/threads", cl.ThreadController.GetThreadsController, jwtAuth)
+	admin.GET("/threads/search/:title", cl.ThreadController.GetThreadsByTitleController, jwtAuth)
+	admin.PUT("/threads/thread/:id", cl.ThreadController.DeleteThread, jwtAuth)
+	admin.PUT("/threads/thread/:id", cl.ThreadController.ActivateThread, jwtAuth)
+
+	//List of Posts (Admin Access)
+	admin.GET("/posts", cl.CommentController.GetPostsController, jwtAuth)
+	admin.GET("/posts/search/:comment", cl.CommentController.GetPostsByCommentController, jwtAuth)
+	admin.PUT("/posts/post/:id", cl.CommentController.UnactivatingPostController, jwtAuth)
+	admin.PUT("/posts/post/:id", cl.CommentController.ActivatingPostController, jwtAuth)
+
+	//List of Comment's Reports (Admin Access)
+	// admin.GET("/comment-reports", cl.CommentReportController.AdminGetReports, jwtAuth)
+	// admin.GET("/comment-reports/search/:category", cl.CommentReportController.GetReportsByCategoryController, jwtAuth)
+	// admin.DELETE("/comment-reports/comment-report/:id", cl.CommentReportController.DeleteCommentReport, jwtAuth)
+
+	//List of Thread's Reports (Admin Access)
+	admin.GET("/thread-reports", cl.ThreadReportController.AdminGetReports, jwtAuth)
+	admin.GET("/thread-reports/search/:category", cl.ThreadReportController.SearchReportsByCategoryController, jwtAuth)
+	admin.PUT("/thread-reports/thread-report/:id", cl.ThreadReportController.SolvedThreadReport, jwtAuth)
+
+	//Edit Profile page
+	admin.GET("/edit/:id", cl.UserController.GetAdminSettingController, jwtAuth)
+	admin.PUT("/edit/:id", cl.UserController.UpdateAdminProfile, jwtAuth)
+
+	//Report Thread page
+	admin.GET("/report-thread", cl.ReportCaseController.GetReportForm, jwtAuth)
+	admin.POST("/report-thread", cl.ThreadReportController.CreateReportThread, jwtAuth)
+
+	//Report Comment page
+	// admin.GET("/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
+	// admin.POST("/report-comment", cl.CommentReportController.CreateReportComment, jwtAuth)
 
 	e.POST("register", cl.UserController.RegisterController)
 	e.POST("login", cl.UserController.LoginController)
@@ -57,43 +116,8 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("thread/:id", cl.ThreadController.GetProfileThreads, jwtAuth)
 	e.GET("followers", cl.FollowController.GetFollowers)
 	e.GET("following", cl.FollowController.GetFollowing)
-
-	//Main Page of Admin
-	e.GET("admin/", cl.UserController.GetDashboardController, jwtAuth)
-	//List of Users (Admin Access)
-	e.GET("admin/users", cl.UserController.GetUsersController, jwtAuth)
-	e.GET("admin/users/search/:name", cl.UserController.GetUsersByName, jwtAuth)
-	e.PUT("admin/users/banned/:id", cl.UserController.BannedUser, jwtAuth)
-	//List of Threads (Admin Access)
-	e.GET("admin/threads", cl.ThreadController.GetThreadsController, jwtAuth)
-	e.GET("admin/threads/search/:title", cl.ThreadController.GetThreadsByTitleController, jwtAuth)
-	e.PUT("admin/threads/thread/:id", cl.ThreadController.DeleteThread, jwtAuth)
-	e.PUT("admin/threads/thread/:id", cl.ThreadController.ActivateThread, jwtAuth)
-	//List of Posts (Admin Access)
-	e.GET("admin/posts", cl.CommentController.GetPostsController, jwtAuth)
-	e.GET("admin/posts/search/:comment", cl.CommentController.GetPostsByCommentController, jwtAuth)
-	e.PUT("admin/posts/post/:id", cl.CommentController.UnactivatingPostController, jwtAuth)
-	e.PUT("admin/posts/post/:id", cl.CommentController.ActivatingPostController, jwtAuth)
-	//List of Comment's Reports (Admin Access)
-	// e.GET("admin/comment-reports", cl.CommentReportController.AdminGetReports, jwtAuth)
-	// e.GET("admin/comment-reports/search/:category", cl.CommentReportController.GetReportsByCategoryController, jwtAuth)
-	// e.DELETE("admin/comment-reports/comment-report/:id", cl.CommentReportController.DeleteCommentReport, jwtAuth)
-	//List of Thread's Reports (Admin Access)
-	e.GET("admin/thread-reports", cl.ThreadReportController.AdminGetReports, jwtAuth)
-	e.GET("admin/thread-reports/search/:category", cl.ThreadReportController.SearchReportsByCategoryController, jwtAuth)
-	e.PUT("admin/thread-reports/thread-report/:id", cl.ThreadReportController.SolvedThreadReport, jwtAuth)
-	//Edit Profile page
-	e.GET("admin/edit/:id", cl.UserController.GetAdminSettingController, jwtAuth)
 	e.GET("user/edit/:id", cl.UserController.GetUserSettingController, jwtAuth)
-	e.PUT("admin/edit/:id", cl.UserController.UpdateAdminProfile, jwtAuth)
 	e.PUT("user/edit/:id", cl.UserController.UpdateUserProfile, jwtAuth)
-
-	e.GET("admin/report-thread", cl.ReportCaseController.GetReportForm, jwtAuth)
-	e.POST("admin/report-thread", cl.ThreadReportController.CreateReportThread, jwtAuth)
-	//Report Comment page
-	// e.GET("admin/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
-	// e.POST("admin/report-comment", cl.CommentReportController.CreateReportComment, jwtAuth)
-	//Report Thread page
 
 	e.GET("home/:id", cl.ThreadController.GetHomepageThreads, jwtAuth)
 	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads, jwtAuth)
@@ -113,7 +137,10 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.POST("threadshare", cl.ThreadShareController.ShareThread, jwtAuth)
 
 	//additional
-	e.POST("category", cl.CategoryController.CreateCategoryController, jwtAuth)
-	e.POST("reportcase", cl.ReportCaseController.CreateCaseController, jwtAuth)
-	e.POST("reputation", cl.ReputationController.CreateReputationController, jwtAuth)
+	admin.POST("/category", cl.CategoryController.CreateCategoryController, jwtAuth)
+	admin.POST("/reportcase", cl.ReportCaseController.CreateCaseController, jwtAuth)
+	admin.POST("/reputation", cl.ReputationController.CreateReputationController, jwtAuth)
+	admin.POST("/badge", cl.BadgeController.CreateBadgeController, jwtAuth)
+
+	// admin.PUT("/activate", cl.BadgeController.CreateBadgeController, jwtAuth)
 }

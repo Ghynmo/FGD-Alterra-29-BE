@@ -54,6 +54,7 @@ jobs:
   deploy:
     name: Push to EC2 Instance
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Checkout the code
@@ -67,6 +68,8 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_NAME }}
           TARGET: "/home/ec2-user/SampleExpressApp"
+      - name: Connect EC2 & Remove all container & Pull registry & started
+        run: ssh -i "docker rm -f $(docker ps -a -q) && docker pull ghynmo/fgd_alterra_29:1.0.0 && docker run -d -p 8080:8080 --name fgd_alterra_29 ghynmo/fgd_alterra_29:1.0.0"
   # deploy-to-ec2:
   #     runs-on: ubuntu-latest
   #     needs: build
@@ -90,5 +93,5 @@ jobs:
   #             StrictHostKeyChecking=no
   #           END
 
-      - name: Connect EC2 & Remove all container & Pull registry & started
-        run: ssh -i "docker rm -f $(docker ps -a -q) && docker pull ghynmo/fgd_alterra_29:1.0.0 && docker run -d -p 8080:8080 --name fgd_alterra_29 ghynmo/fgd_alterra_29:1.0.0"
+      # - name: Connect EC2 & Remove all container & Pull registry & started
+      #   run: ssh -i "docker rm -f $(docker ps -a -q) && docker pull ghynmo/fgd_alterra_29:1.0.0 && docker run -d -p 8080:8080 --name fgd_alterra_29 ghynmo/fgd_alterra_29:1.0.0"

@@ -90,9 +90,6 @@ jobs:
       - name: Curent Directory
         run: 
           ls
-      - name: Read Env
-        run:
-          cat app.env  
     
 
   # This workflow contains a single job called "build"

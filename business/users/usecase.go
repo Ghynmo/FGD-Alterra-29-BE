@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/helpers"
-	"fmt"
 	"time"
 )
 
@@ -58,7 +57,6 @@ func (uc *UserUseCase) RegisterController(ctx context.Context, domain Domain) (D
 		}
 
 		var IsAdmin bool
-		fmt.Println(user.Role_id)
 
 		RolesID := user.Role_id
 		if RolesID == 1 {
@@ -104,7 +102,6 @@ func (uc *UserUseCase) LoginController(ctx context.Context, domain Domain) (Doma
 	}
 
 	var IsAdmin bool
-	fmt.Println(user.Role_id)
 
 	RolesID := user.Role_id
 	if RolesID == 1 {

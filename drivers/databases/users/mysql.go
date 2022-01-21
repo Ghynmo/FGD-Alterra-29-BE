@@ -157,7 +157,7 @@ func (DB *MysqlUserRepository) UnbannedUser(ctx context.Context, id int) (users.
 func (DB *MysqlUserRepository) GetBannedState(ctx context.Context, id int) (users.Domain, error) {
 	var User Users
 
-	result := DB.Conn.Select("status").Where("user_id = ?", id).Find(&User)
+	result := DB.Conn.Select("status").Where("users.id = ?", id).Find(&User)
 
 	if result.Error != nil {
 		return users.Domain{}, result.Error

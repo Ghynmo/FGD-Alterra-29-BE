@@ -99,13 +99,16 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	admin.GET("/edit/:id", cl.UserController.GetAdminSettingController, jwtAuth)
 	admin.PUT("/edit/:id", cl.UserController.UpdateAdminProfile, jwtAuth)
 
-	//Report Thread page
-	admin.GET("/report-thread", cl.ReportCaseController.GetReportForm, jwtAuth)
-	admin.POST("/report-thread", cl.ThreadReportController.CreateReportThread, jwtAuth)
-
 	//Report Comment page
 	// admin.GET("/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
 	// admin.POST("/report-comment", cl.CommentReportController.CreateReportComment, jwtAuth)
+
+	//additional
+	admin.POST("/category", cl.CategoryController.CreateCategoryController, jwtAuth)
+	admin.POST("/reportcase", cl.ReportCaseController.CreateCaseController, jwtAuth)
+	admin.POST("/reputation", cl.ReputationController.CreateReputationController, jwtAuth)
+	admin.POST("/badge", cl.BadgeController.CreateBadgeController, jwtAuth)
+	// admin.PUT("/activate", cl.BadgeController.CreateBadgeController, jwtAuth)
 
 	e.POST("register", cl.UserController.RegisterController)
 	e.POST("login", cl.UserController.LoginController)
@@ -119,6 +122,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("user/edit/:id", cl.UserController.GetUserSettingController, jwtAuth)
 	e.PUT("user/edit/:id", cl.UserController.UpdateUserProfile, jwtAuth)
 
+	e.GET("", cl.ThreadController.GetHotThreads)
 	e.GET("home/:id", cl.ThreadController.GetHomepageThreads, jwtAuth)
 	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads, jwtAuth)
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
@@ -136,11 +140,8 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.POST("threadsave", cl.ThreadSaveController.SaveThread, jwtAuth)
 	e.POST("threadshare", cl.ThreadShareController.ShareThread, jwtAuth)
 
-	//additional
-	admin.POST("/category", cl.CategoryController.CreateCategoryController, jwtAuth)
-	admin.POST("/reportcase", cl.ReportCaseController.CreateCaseController, jwtAuth)
-	admin.POST("/reputation", cl.ReputationController.CreateReputationController, jwtAuth)
-	admin.POST("/badge", cl.BadgeController.CreateBadgeController, jwtAuth)
+	//Report Thread page
+	e.GET("report-thread", cl.ReportCaseController.GetReportForm, jwtAuth)
+	e.POST("report-thread", cl.ThreadReportController.CreateReportThread, jwtAuth)
 
-	// admin.PUT("/activate", cl.BadgeController.CreateBadgeController, jwtAuth)
 }

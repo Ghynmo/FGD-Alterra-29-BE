@@ -3,8 +3,6 @@ RUN mkdir /app
 ADD . /app
 WORKDIR /app/app
 RUN ls
-WORKDIR /app
-RUN ls
 RUN go mod tidy -compat=1.17
 RUN go build -o main
 

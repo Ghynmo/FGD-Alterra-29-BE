@@ -86,14 +86,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// func init() {
-// 	viper.SetConfigFile(`config.json`)
-// 	err := viper.ReadInConfig()
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// }
-
 func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_userRepository.Users{})
 	db.AutoMigrate(&_roleRepository.Roles{})
@@ -122,14 +114,6 @@ func main() {
 		log.Fatal("cannot load config:", err)
 	}
 
-	// configDB := _mysqlDriver.ConfigDB{
-	// 	DB_Username: viper.GetString(`database.user`),
-	// 	DB_Password: viper.GetString(`database.pass`),
-	// 	DB_Host:     viper.GetString(`database.host`),
-	// 	DB_Port:     viper.GetString(`database.port`),
-	// 	DB_Database: viper.GetString(`database.name`),
-	// }
-
 	configDB := _mysqlDriver.ConfigDB{
 		DB_Username: config.DBUser,
 		DB_Password: config.DBPass,
@@ -138,10 +122,6 @@ func main() {
 		DB_Database: config.DBName,
 	}
 
-	// ConfigJWT := _middlewares.ConfigJWT{
-	// 	Secret:    viper.GetString(`jwt.secret`),
-	// 	ExpiresAt: viper.GetInt64(`jwt.expired`),
-	// }
 	NewExpiredJWT, _ := strconv.Atoi(config.JWTExpired)
 	ConfigJWT := _middlewares.ConfigJWT{
 		Secret:    config.JWTSecret,
@@ -162,7 +142,6 @@ func main() {
 	})
 	e.Use(echo.WrapMiddleware(corsMiddleware.Handler))
 
-	// timeoutContext := time.Duration(viper.GetInt(`jwt.expired`)) * time.Second
 	NewCtxTimeout, _ := strconv.Atoi(config.CTXTimeout)
 	timeoutContext := time.Duration(NewCtxTimeout) * time.Second
 
@@ -257,6 +236,5 @@ func main() {
 
 	routesInit.RouteRegister(*e)
 
-	// log.Fatal(e.Start((viper.GetString(`server.address`))))
 	log.Fatal(e.Start((config.ServerAddress)))
 }

@@ -64,48 +64,13 @@ jobs:
           echo JWT_EXPIRED="72" >> app.env
           
           cat app.env
-      - name: Curent Directory
+      - name: See the Current Directory
         run: 
           ls
       - name: Read Env
         run:
           cat app.env
 
-  # create-json-andbuild:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: create-json
-  #       id: create-json
-  #       uses: jsdaniell/create-json@1.1.2
-  #       with:
-  #         name: "config.json"
-  #         json: '{
-  #           "debug": true,
-  #             "server": {
-  #                 "address": ":8080"
-  #             },
-  #             "context": {
-  #                 "timeout": 2
-  #             },
-  #             "database":{
-  #                 "host": ${{ secrets.DB_HOST }},
-  #                 "port": "3306",
-  #                 "user": ${{ secrets.DB_USER }},
-  #                 "pass": ${{ secrets.DB_PASS }},
-  #                 "name": ${{ secrets.DB_NAME }}"
-  #             },
-  #             "jwt":{
-  #                 "secret":${{ secrets.JWT_SECRET }},
-  #                 "expired": 72
-  #             },
-  #             "news_api":{
-  #                 "key":"8be9f10a83634066b8fcaa84908a8802"
-  #             }
-  #           }'
-  #     - name: Curent Directory
-  #       run: 
-  #         ls
       # Runs a single command using the runners shell
       - name: Build docker
         run: docker build -t ghynmo/fgd_alterra_29:1.0.0 .

@@ -27,33 +27,74 @@ jobs:
   #         go-version: 1.17
   #     - name: Running unit test
   #       run: go test ./... -cover
-  create-dotenv:
+  # create-dotenv:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Create env file
+  #       run: 
+  #         touch app.env
+  #     - name: Add env var
+  #       run:
+  #         echo DB_HOST=${{ secrets.DB_HOST }} >> app.env
+  #         echo DB_USER=${{ secrets.DB_USER }} >> app.env
+  #         echo DB_PASS=${{ secrets.DB_PASS }} >> app.env
+  #         echo DB_NAME=${{ secrets.DB_NAME }} >> app.env
+  #         echo DB_PORT="3306" >> app.env
+
+  #         echo CTXTIMEOUT=2 >> app.env
+  #         echo SERVER_ADDRESS=":8080" >> app.env
+  #         echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> app.env
+  #         echo JWT_EXPIRED=72 >> app.env
+          
+  #         cat app.env
+  #     - name: Curent Directory
+  #       run: 
+  #         ls
+  #     - name: Read Env
+  #       run:
+  #         cat app.env
+
+  create-json:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Create env file
-        run: 
-          touch app.env
-      - name: Add env var
-        run:
-          echo DB_HOST=${{ secrets.DB_HOST }} >> app.env
-          echo DB_USER=${{ secrets.DB_USER }} >> app.env
-          echo DB_PASS=${{ secrets.DB_PASS }} >> app.env
-          echo DB_NAME=${{ secrets.DB_NAME }} >> app.env
-          echo DB_PORT="3306" >> app.env
-
-          echo CTXTIMEOUT=2 >> app.env
-          echo SERVER_ADDRESS=":8080" >> app.env
-          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> app.env
-          echo JWT_EXPIRED=72 >> app.env
-          
-          cat app.env
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "config.json"
+          json: '{
+            "debug": true,
+              "server": {
+                  "address": ":8080"
+              },
+              "context": {
+                  "timeout": 2
+              },
+              "database":{
+                  "host": ${{ secrets.DB_HOST }},
+                  "port": "3306",
+                  "user": ${{ secrets.DB_USER }},
+                  "pass": ${{ secrets.DB_PASS }},
+                  "name": ${{ secrets.DB_NAME }}"
+              },
+              "jwt":{
+                  "secret":${{ secrets.JWT_SECRET }},
+                  "expired": 72
+              },
+              "news_api":{
+                  "key":"8be9f10a83634066b8fcaa84908a8802"
+              }
+            }'
       - name: Curent Directory
         run: 
           ls
       - name: Read Env
         run:
-          cat app.env
+          cat app.env  
+    
+
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on

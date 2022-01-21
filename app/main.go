@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fgd-alterra-29/app/configs"
 	_middlewares "fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/app/routes"
 	_mysqlDriver "fgd-alterra-29/drivers/mysql"
@@ -82,16 +81,17 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/rs/cors"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
-// func init() {
-// 	viper.SetConfigFile(`app/configs/config.json`)
-// 	err := viper.ReadInConfig()
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// }
+func init() {
+	viper.SetConfigFile(`app/config.json`)
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(err)
+	}
+}
 
 func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_userRepository.Users{})
@@ -116,36 +116,36 @@ func DbMigrate(db *gorm.DB) {
 
 func main() {
 
-	config, err := configs.LoadConfig("./") //My .env file stored
-	if err != nil {
-		log.Fatal("cannot load config:", err)
-	}
-
-	// configDB := _mysqlDriver.ConfigDB{
-	// 	DB_Username: viper.GetString(`database.user`),
-	// 	DB_Password: viper.GetString(`database.pass`),
-	// 	DB_Host:     viper.GetString(`database.host`),
-	// 	DB_Port:     viper.GetString(`database.port`),
-	// 	DB_Database: viper.GetString(`database.name`),
+	// config, err := configs.LoadConfig("./") //My .env file stored
+	// if err != nil {
+	// 	log.Fatal("cannot load config:", err)
 	// }
 
 	configDB := _mysqlDriver.ConfigDB{
-		DB_Username: config.DBUser,
-		DB_Password: config.DBPass,
-		DB_Host:     config.DBHost,
-		DB_Port:     config.DBPort,
-		DB_Database: config.DBName,
+		DB_Username: viper.GetString(`database.user`),
+		DB_Password: viper.GetString(`database.pass`),
+		DB_Host:     viper.GetString(`database.host`),
+		DB_Port:     viper.GetString(`database.port`),
+		DB_Database: viper.GetString(`database.name`),
 	}
 
-	// ConfigJWT := _middlewares.ConfigJWT{
-	// 	Secret:    viper.GetString(`jwt.secret`),
-	// 	ExpiresAt: viper.GetInt64(`jwt.expired`),
+	// configDB := _mysqlDriver.ConfigDB{
+	// 	DB_Username: config.DBUser,
+	// 	DB_Password: config.DBPass,
+	// 	DB_Host:     config.DBHost,
+	// 	DB_Port:     config.DBPort,
+	// 	DB_Database: config.DBName,
 	// }
 
 	ConfigJWT := _middlewares.ConfigJWT{
-		Secret:    config.JWTSecret,
-		ExpiresAt: int64(config.JWTExpired),
+		Secret:    viper.GetString(`jwt.secret`),
+		ExpiresAt: viper.GetInt64(`jwt.expired`),
 	}
+
+	// ConfigJWT := _middlewares.ConfigJWT{
+	// 	Secret:    config.JWTSecret,
+	// 	ExpiresAt: int64(config.JWTExpired),
+	// }
 
 	Conn := configDB.InitialDB()
 	DbMigrate(Conn)
@@ -161,7 +161,7 @@ func main() {
 	})
 	e.Use(echo.WrapMiddleware(corsMiddleware.Handler))
 
-	timeoutContext := time.Duration(config.CTXTimeout) * time.Second
+	timeoutContext := time.Duration(viper.GetInt(`jwt.expired`)) * time.Second
 
 	apinewRepository := _apinewRepository.NewAPINewsRepository(http.Client{})
 	apinewUseCase := _apinewUseCase.NewAPINewsUseCase(apinewRepository, timeoutContext)
@@ -254,5 +254,5 @@ func main() {
 
 	routesInit.RouteRegister(*e)
 
-	log.Fatal(e.Start((config.ServerAddress)))
+	log.Fatal(e.Start((viper.GetString(`server.address`))))
 }

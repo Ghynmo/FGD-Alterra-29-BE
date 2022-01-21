@@ -3,6 +3,8 @@ RUN mkdir /app
 RUN ls
 ADD . /app
 RUN ls
+WORKDIR /app
+RUN ls
 WORKDIR /app/app
 RUN ls
 RUN go mod tidy -compat=1.17
@@ -13,9 +15,9 @@ WORKDIR /app
 RUN ls
 WORKDIR /app/app
 RUN ls
-WORKDIR /app/app/configs
+WORKDIR /app/app/confiz
 RUN ls
-COPY --from=builder /app/.env .
+COPY --from=builder /app/app/app.env .
 COPY --from=builder /app/app/main .
 EXPOSE 8080
 CMD ["./main"]

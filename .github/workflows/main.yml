@@ -36,8 +36,17 @@ jobs:
           touch app.env
       - name: Add env var
         run:
-          echo API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com" >> app.env
-          echo API_KEY=${{ secrets.API_KEY }} >> app.env
+          echo DB_HOST=${{ secrets.DB_HOST }} >> app.env
+          echo DB_USER=${{ secrets.DB_USER }} >> app.env
+          echo DB_PASS=${{ secrets.DB_PASS }} >> app.env
+          echo DB_NAME=${{ secrets.DB_NAME }} >> app.env
+          echo DB_PORT="3306" >> app.env
+
+          echo CTXTIMEOUT=2 >> app.env
+          echo SERVER_ADDRESS=":8080" >> app.env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> app.env
+          echo JWT_EXPIRED=72 >> app.env
+          
           cat app.env
 
   # This workflow contains a single job called "build"

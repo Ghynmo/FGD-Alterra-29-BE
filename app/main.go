@@ -116,7 +116,7 @@ func DbMigrate(db *gorm.DB) {
 
 func main() {
 
-	config, err := configs.LoadConfig("app/config")
+	config, err := configs.LoadConfig("./") //My .env file stored
 	if err != nil {
 		log.Fatal("cannot load config:", err)
 	}

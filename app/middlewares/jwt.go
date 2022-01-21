@@ -2,11 +2,14 @@ package middlewares
 
 import (
 	"fmt"
+	"log"
+	"strconv"
 	"time"
+
+	"fgd-alterra-29/app/configs"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/spf13/viper"
 )
 
 type JWTClaims struct {
@@ -35,15 +38,21 @@ func (JwtConf *ConfigJWT) GenerateToken(id int, admin bool) (string, error) {
 		IsAdmin = false
 	}
 
+	config, err := configs.LoadConfig("./") //My .env file stored
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+	NewExpiredJWT, _ := strconv.Atoi(config.JWTExpired)
+
 	claims := JWTClaims{
 		id,
 		IsAdmin,
 		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(viper.GetInt64(`jwt.expired`)))),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(NewExpiredJWT))),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	jwtToken, err := token.SignedString([]byte(viper.GetString(`jwt.secret`)))
+	jwtToken, err := token.SignedString([]byte(config.JWTSecret))
 
 	if err != nil {
 		return "", err
@@ -53,7 +62,12 @@ func (JwtConf *ConfigJWT) GenerateToken(id int, admin bool) (string, error) {
 }
 
 func ExtractClaims(tokenStr string) (jwt.MapClaims, bool) {
-	hmacSecret := []byte(viper.GetString(`jwt.secret`))
+
+	config, err := configs.LoadConfig("./") //My .env file stored
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+	hmacSecret := []byte(config.JWTSecret)
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		// check token signing method etc
 		return hmacSecret, nil

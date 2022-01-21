@@ -7,6 +7,7 @@ import (
 	_mysqlDriver "fgd-alterra-29/drivers/mysql"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	_apinewUseCase "fgd-alterra-29/business/api_news"
@@ -141,10 +142,10 @@ func main() {
 	// 	Secret:    viper.GetString(`jwt.secret`),
 	// 	ExpiresAt: viper.GetInt64(`jwt.expired`),
 	// }
-
+	NewExpiredJWT, _ := strconv.Atoi(config.JWTExpired)
 	ConfigJWT := _middlewares.ConfigJWT{
 		Secret:    config.JWTSecret,
-		ExpiresAt: int64(config.JWTExpired),
+		ExpiresAt: int64(NewExpiredJWT),
 	}
 
 	Conn := configDB.InitialDB()
@@ -162,7 +163,8 @@ func main() {
 	e.Use(echo.WrapMiddleware(corsMiddleware.Handler))
 
 	// timeoutContext := time.Duration(viper.GetInt(`jwt.expired`)) * time.Second
-	timeoutContext := time.Duration(config.CTXTimeout) * time.Second
+	NewCtxTimeout, _ := strconv.Atoi(config.CTXTimeout)
+	timeoutContext := time.Duration(NewCtxTimeout) * time.Second
 
 	apinewRepository := _apinewRepository.NewAPINewsRepository(http.Client{})
 	apinewUseCase := _apinewUseCase.NewAPINewsUseCase(apinewRepository, timeoutContext)

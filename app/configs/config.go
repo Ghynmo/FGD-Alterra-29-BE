@@ -8,10 +8,10 @@ type Config struct {
 	DBPass        string `mapstructure:"DB_PASS"`
 	DBName        string `mapstructure:"DB_NAME"`
 	DBPort        string `mapstructure:"DB_PORT"`
-	CTXTimeout    int    `mapstructure:"CTXTIMEOUT"`
+	CTXTimeout    string `mapstructure:"CTXTIMEOUT"`
 	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
 	JWTSecret     string `mapstructure:"JWT_SECRET"`
-	JWTExpired    int    `mapstructure:"JWT_EXPIRED"`
+	JWTExpired    string `mapstructure:"JWT_EXPIRED"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

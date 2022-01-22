@@ -14,11 +14,13 @@ type Domain struct {
 }
 
 type UseCase interface {
+	GetCategoriesController(ctx context.Context) ([]Domain, error)
 	GetUserActiveInCategory(ctx context.Context, id int) ([]Domain, error)
 	CreateCategoriesController(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type Repository interface {
+	GetCategories(ctx context.Context) ([]Domain, error)
 	GetUserActiveInCategory(ctx context.Context, id int) ([]Domain, error)
 	CreateCategories(ctx context.Context, domain Domain) (Domain, error)
 }

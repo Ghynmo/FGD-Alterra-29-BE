@@ -17,6 +17,18 @@ func NewMysqlCategoryRepository(conn *gorm.DB) categories.Repository {
 	}
 }
 
+func (DB *MysqlCategoryRepository) GetCategories(ctx context.Context) ([]categories.Domain, error) {
+	var Category []Categories
+
+	result := DB.Conn.Table("categories").Select("category").Find(&Category)
+
+	if result.Error != nil {
+		return []categories.Domain{}, result.Error
+	}
+
+	return ToListDomain(Category), nil
+}
+
 func (DB *MysqlCategoryRepository) GetUserActiveInCategory(ctx context.Context, id int) ([]categories.Domain, error) {
 	var Category []Categories
 

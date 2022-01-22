@@ -129,6 +129,8 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("search", cl.ThreadController.GetSearch)
 	e.GET("sidenews", cl.APINewsController.GetAPINewsController)
 
+	e.GET("categories", cl.CategoryController.GetCategoriesController, jwtAuth)
+
 	e.GET("commentbythread", cl.CommentController.GetCommentByThreadController, jwtAuth)
 	e.GET("comment/reply/:id", cl.CommentController.GetReplyComments, jwtAuth)
 	e.POST("comment", cl.CommentController.CreateCommentController, jwtAuth)
@@ -140,7 +142,6 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.POST("threadsave", cl.ThreadSaveController.SaveThread, jwtAuth)
 	e.POST("threadshare", cl.ThreadShareController.ShareThread, jwtAuth)
 
-	//Report Thread page
 	e.GET("report-thread", cl.ReportCaseController.GetReportForm, jwtAuth)
 	e.POST("report-thread", cl.ThreadReportController.CreateReportThread, jwtAuth)
 

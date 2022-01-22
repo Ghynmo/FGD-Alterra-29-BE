@@ -17,6 +17,15 @@ func NewCategoryUseCase(repo Repository, timeout time.Duration) UseCase {
 	}
 }
 
+func (uc *CategoryUseCase) GetCategoriesController(ctx context.Context) ([]Domain, error) {
+	thread, err := uc.Repo.GetCategories(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}
+
 func (uc *CategoryUseCase) GetUserActiveInCategory(ctx context.Context, id int) ([]Domain, error) {
 	thread, err := uc.Repo.GetUserActiveInCategory(ctx, id)
 	if err != nil {

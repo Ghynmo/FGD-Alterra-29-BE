@@ -4,6 +4,7 @@ import (
 	"fgd-alterra-29/business/categories"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/categories/request"
+	"fgd-alterra-29/controllers/categories/responses"
 	"net/http"
 	"strconv"
 
@@ -20,15 +21,25 @@ func NewCategoryController(categoryUseCase categories.UseCase) *CategoryControll
 	}
 }
 
+func (handler CategoryController) GetCategoriesController(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	categories, err := handler.CategoryUseCase.GetCategoriesController(ctx)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListCategories(categories))
+}
+
 func (handler CategoryController) GetUserActiveInCategory(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()
 
-	thread, err := handler.CategoryUseCase.GetUserActiveInCategory(ctx, id)
+	categories, err := handler.CategoryUseCase.GetUserActiveInCategory(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, thread)
+	return controllers.NewSuccessResponse(c, categories)
 }
 
 func (handler CategoryController) CreateCategoryController(c echo.Context) error {
@@ -39,9 +50,9 @@ func (handler CategoryController) CreateCategoryController(c echo.Context) error
 
 	ctx := c.Request().Context()
 
-	thread, err := handler.CategoryUseCase.CreateCategoriesController(ctx, domain)
+	categories, err := handler.CategoryUseCase.CreateCategoriesController(ctx, domain)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NoDataSuccessResponse(c, thread)
+	return controllers.NoDataSuccessResponse(c, categories)
 }

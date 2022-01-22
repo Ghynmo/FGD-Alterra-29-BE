@@ -20,7 +20,7 @@ func NewMysqlCategoryRepository(conn *gorm.DB) categories.Repository {
 func (DB *MysqlCategoryRepository) GetCategories(ctx context.Context) ([]categories.Domain, error) {
 	var Category []Categories
 
-	result := DB.Conn.Table("categories").Select("category").Find(&Category)
+	result := DB.Conn.Table("categories").Select("category, id").Find(&Category)
 
 	if result.Error != nil {
 		return []categories.Domain{}, result.Error

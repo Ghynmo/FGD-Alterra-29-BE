@@ -17,8 +17,8 @@ type UseCase interface {
 }
 
 type Repository interface {
-	NewSave(ctx context.Context, domain Domain) (Domain, error)
-	Save(ctx context.Context, domain Domain) (Domain, error)
-	Unsave(ctx context.Context, domain Domain) (Domain, error)
+	NewSave(ctx context.Context, domain Domain, id int) (Domain, error)
+	Save(ctx context.Context, domain Domain, id int) (Domain, error)
+	Unsave(ctx context.Context, domain Domain, id int) (Domain, error)
 	GetSaveState(ctx context.Context, domain Domain, id int) (Domain, error)
 }

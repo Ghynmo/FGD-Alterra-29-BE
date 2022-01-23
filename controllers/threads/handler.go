@@ -84,7 +84,7 @@ func (handler ThreadController) GetHomepageThreads(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+	return controllers.NewSuccessResponse(c, responses.ToListHomeThreads(thread))
 }
 
 func (handler ThreadController) GetRecommendationThreads(c echo.Context) error {
@@ -95,7 +95,7 @@ func (handler ThreadController) GetRecommendationThreads(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+	return controllers.NewSuccessResponse(c, responses.ToListHomeThreads(thread))
 }
 
 func (handler ThreadController) GetHotThreads(c echo.Context) error {
@@ -105,7 +105,7 @@ func (handler ThreadController) GetHotThreads(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+	return controllers.NewSuccessResponse(c, responses.ToListHomeThreads(thread))
 }
 
 func (handler ThreadController) GetSearch(c echo.Context) error {
@@ -116,7 +116,7 @@ func (handler ThreadController) GetSearch(c echo.Context) error {
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToListRecommendationThreads(thread))
+	return controllers.NewSuccessResponse(c, responses.ToListHomeThreads(thread))
 }
 
 func (handler ThreadController) CreateThread(c echo.Context) error {

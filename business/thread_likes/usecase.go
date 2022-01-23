@@ -21,7 +21,7 @@ func (uc *ThreadLikeUseCase) LikeController(ctx context.Context, domain Domain, 
 	state, _ := uc.Repo.GetLikeState(ctx, domain, id)
 
 	if state.User_id == 0 {
-		threads, err := uc.Repo.NewLike(ctx, domain)
+		threads, err := uc.Repo.NewLike(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}
@@ -29,7 +29,7 @@ func (uc *ThreadLikeUseCase) LikeController(ctx context.Context, domain Domain, 
 	}
 
 	if state.User_id != 0 && !state.State {
-		threads, err := uc.Repo.Like(ctx, domain)
+		threads, err := uc.Repo.Like(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}
@@ -37,7 +37,7 @@ func (uc *ThreadLikeUseCase) LikeController(ctx context.Context, domain Domain, 
 	}
 
 	if state.User_id != 0 && state.State {
-		threads, err := uc.Repo.Unlike(ctx, domain)
+		threads, err := uc.Repo.Unlike(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}

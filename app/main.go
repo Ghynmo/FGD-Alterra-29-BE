@@ -95,7 +95,6 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_followRepository.Follows{})
 	db.AutoMigrate(&_threadRepository.Threads{})
 	db.AutoMigrate(&_commentRepository.Comments{})
-	db.AutoMigrate(&_commentlikeRepository.CommentLikes{})
 	db.AutoMigrate(&_userbadgeRepository.UserBadges{})
 	db.AutoMigrate(&_reportcaseRepository.ReportCases{})
 	db.AutoMigrate(&_threadreportRepository.ThreadReport{})
@@ -103,6 +102,7 @@ func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_threadlikeRepository.ThreadLikes{})
 	db.AutoMigrate(&_threadfollowRepository.ThreadFollows{})
 	db.AutoMigrate(&_threadsaveRepository.ThreadSaves{})
+	db.AutoMigrate(&_commentlikeRepository.CommentLikes{})
 	db.AutoMigrate(&_threadshareRepository.ThreadShares{})
 	db.AutoMigrate(&_userpointRepository.UserPoints{})
 }

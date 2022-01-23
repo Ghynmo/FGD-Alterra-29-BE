@@ -21,7 +21,7 @@ func (uc *ThreadSaveUseCase) SaveThreadController(ctx context.Context, domain Do
 	state, _ := uc.Repo.GetSaveState(ctx, domain, id)
 
 	if state.User_id == 0 {
-		threads, err := uc.Repo.NewSave(ctx, domain)
+		threads, err := uc.Repo.NewSave(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}
@@ -29,7 +29,7 @@ func (uc *ThreadSaveUseCase) SaveThreadController(ctx context.Context, domain Do
 	}
 
 	if state.User_id != 0 && !state.State {
-		threads, err := uc.Repo.Save(ctx, domain)
+		threads, err := uc.Repo.Save(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}
@@ -37,7 +37,7 @@ func (uc *ThreadSaveUseCase) SaveThreadController(ctx context.Context, domain Do
 	}
 
 	if state.User_id != 0 && state.State {
-		threads, err := uc.Repo.Unsave(ctx, domain)
+		threads, err := uc.Repo.Unsave(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}

@@ -6,6 +6,7 @@ import (
 
 type RecommendationThreads struct {
 	ID        int    `json:"thread_id"`
+	UserID    int    `json:"user_id"`
 	Name      string `json:"thread_maker"`
 	Title     string `json:"title"`
 	Content   string `json:"content"`
@@ -14,9 +15,10 @@ type RecommendationThreads struct {
 	// Comments  []home.CommentRecommendation `json:"comments"`
 }
 
-func ToRecommendationThreads(Domain threads.Domain) RecommendationThreads {
+func ToHomeThreads(Domain threads.Domain) RecommendationThreads {
 	return RecommendationThreads{
 		ID:        Domain.ID,
+		UserID:    Domain.User_id,
 		Name:      Domain.Name,
 		Title:     Domain.Title,
 		Content:   Domain.Content,
@@ -26,11 +28,11 @@ func ToRecommendationThreads(Domain threads.Domain) RecommendationThreads {
 	}
 }
 
-func ToListRecommendationThreads(t []threads.Domain) []RecommendationThreads {
+func ToListHomeThreads(t []threads.Domain) []RecommendationThreads {
 	var Domains []RecommendationThreads
 
 	for _, val := range t {
-		Domains = append(Domains, ToRecommendationThreads(val))
+		Domains = append(Domains, ToHomeThreads(val))
 	}
 	return Domains
 }

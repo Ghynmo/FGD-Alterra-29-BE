@@ -46,11 +46,11 @@ func (DB *MysqlFollowRepository) GetFollowing(ctx context.Context, target_id int
 	return ToListDomain(Follow), nil
 }
 
-func (DB *MysqlFollowRepository) NewFollow(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+func (DB *MysqlFollowRepository) NewFollow(ctx context.Context, domain follows.Domain, my_id int) (follows.Domain, error) {
 
 	data := Follows{
 		User_id:     domain.User_id,
-		Follower_id: domain.Follower_id,
+		Follower_id: my_id,
 		Followed_at: time.Now(),
 	}
 
@@ -63,9 +63,9 @@ func (DB *MysqlFollowRepository) NewFollow(ctx context.Context, domain follows.D
 	return follows.Domain{}, nil
 }
 
-func (DB *MysqlFollowRepository) Follows(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+func (DB *MysqlFollowRepository) Follows(ctx context.Context, domain follows.Domain, my_id int) (follows.Domain, error) {
 	var follow Follows
-	result := DB.Conn.Model(&follow).Where("user_id = ? AND follower_id = ?", domain.User_id, domain.Follower_id).
+	result := DB.Conn.Model(&follow).Where("user_id = ? AND follower_id = ?", domain.User_id, my_id).
 		Updates(Follows{State: true, Followed_at: time.Now()})
 
 	if result.Error != nil {
@@ -75,10 +75,10 @@ func (DB *MysqlFollowRepository) Follows(ctx context.Context, domain follows.Dom
 	return follow.ToDomain(), nil
 }
 
-func (DB *MysqlFollowRepository) Unfollow(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+func (DB *MysqlFollowRepository) Unfollow(ctx context.Context, domain follows.Domain, my_id int) (follows.Domain, error) {
 	var follow Follows
 
-	result := DB.Conn.Model(&follow).Where("user_id = ? AND follower_id = ?", domain.User_id, domain.Follower_id).
+	result := DB.Conn.Model(&follow).Where("user_id = ? AND follower_id = ?", domain.User_id, my_id).
 		Update("state", false)
 
 	if result.Error != nil {

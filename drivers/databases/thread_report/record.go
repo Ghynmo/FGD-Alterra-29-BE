@@ -11,7 +11,7 @@ type ThreadReport struct {
 	Reporter_id   int
 	ReportCase_id int
 	Message       string
-	State         string `gorm:"default:pending"`
+	Status        string `gorm:"default:pending"`
 	Created_at    time.Time
 	Updated_at    time.Time
 	Deleted_at    time.Time
@@ -27,7 +27,7 @@ func (TR *ThreadReport) ToDomain() threadreport.Domain {
 		Reporter_id:   TR.Reporter_id,
 		ReportCase_id: TR.ReportCase_id,
 		Message:       TR.Message,
-		State:         TR.State,
+		State:         TR.Status,
 		Created_at:    TR.Created_at,
 		Updated_at:    TR.Updated_at,
 		Deleted_at:    TR.Deleted_at,

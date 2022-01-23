@@ -1,6 +1,8 @@
 package userbadges
 
-import userbadges "fgd-alterra-29/business/user_badges"
+import (
+	userbadges "fgd-alterra-29/business/user_badges"
+)
 
 type UserBadges struct {
 	User_id  int

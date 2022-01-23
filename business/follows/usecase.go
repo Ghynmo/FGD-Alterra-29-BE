@@ -47,7 +47,7 @@ func (uc *FollowUseCase) FollowsController(ctx context.Context, domain Domain, m
 	state, _ := uc.Repo.GetFollowState(ctx, domain, my_id)
 
 	if state.User_id == 0 {
-		follow, err := uc.Repo.NewFollow(ctx, domain)
+		follow, err := uc.Repo.NewFollow(ctx, domain, my_id)
 		if err != nil {
 			return Domain{}, err
 		}
@@ -55,7 +55,7 @@ func (uc *FollowUseCase) FollowsController(ctx context.Context, domain Domain, m
 	}
 
 	if state.User_id != 0 && !state.State {
-		follow, err := uc.Repo.Follows(ctx, domain)
+		follow, err := uc.Repo.Follows(ctx, domain, my_id)
 		if err != nil {
 			return Domain{}, err
 		}
@@ -63,7 +63,7 @@ func (uc *FollowUseCase) FollowsController(ctx context.Context, domain Domain, m
 	}
 
 	if state.User_id != 0 && state.State {
-		follow, err := uc.Repo.Unfollow(ctx, domain)
+		follow, err := uc.Repo.Unfollow(ctx, domain, my_id)
 		if err != nil {
 			return Domain{}, err
 		}

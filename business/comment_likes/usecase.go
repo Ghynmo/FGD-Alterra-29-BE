@@ -21,7 +21,7 @@ func (uc *CommentLikeUseCase) LikeController(ctx context.Context, domain Domain,
 	state, _ := uc.Repo.GetLikeState(ctx, domain, id)
 
 	if state.Liker_id == 0 {
-		comments, err := uc.Repo.NewLike(ctx, domain)
+		comments, err := uc.Repo.NewLike(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}
@@ -29,7 +29,7 @@ func (uc *CommentLikeUseCase) LikeController(ctx context.Context, domain Domain,
 	}
 
 	if state.Liker_id != 0 && !state.State {
-		comments, err := uc.Repo.Like(ctx, domain)
+		comments, err := uc.Repo.Like(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}
@@ -37,7 +37,7 @@ func (uc *CommentLikeUseCase) LikeController(ctx context.Context, domain Domain,
 	}
 
 	if state.Liker_id != 0 && state.State {
-		comments, err := uc.Repo.Unlike(ctx, domain)
+		comments, err := uc.Repo.Unlike(ctx, domain, id)
 		if err != nil {
 			return Domain{}, err
 		}

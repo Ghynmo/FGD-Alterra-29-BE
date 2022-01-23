@@ -18,9 +18,9 @@ func NewMysqlThreadLikeRepository(conn *gorm.DB) threadlikes.Repository {
 	}
 }
 
-func (DB *MysqlThreadLikeRepository) NewLike(ctx context.Context, domain threadlikes.Domain) (threadlikes.Domain, error) {
+func (DB *MysqlThreadLikeRepository) NewLike(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, error) {
 	data := ThreadLikes{
-		User_id:   domain.User_id,
+		User_id:   id,
 		Thread_id: domain.Thread_id,
 		Liked_at:  time.Now(),
 	}
@@ -33,9 +33,9 @@ func (DB *MysqlThreadLikeRepository) NewLike(ctx context.Context, domain threadl
 	return data.ToDomain(), nil
 }
 
-func (DB *MysqlThreadLikeRepository) Like(ctx context.Context, domain threadlikes.Domain) (threadlikes.Domain, error) {
+func (DB *MysqlThreadLikeRepository) Like(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, error) {
 	var TL ThreadLikes
-	result := DB.Conn.Model(&TL).Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).
+	result := DB.Conn.Model(&TL).Where("thread_id = ? AND user_id = ?", domain.Thread_id, id).
 		Updates(ThreadLikes{State: true, Liked_at: time.Now()})
 
 	if result.Error != nil {
@@ -45,10 +45,10 @@ func (DB *MysqlThreadLikeRepository) Like(ctx context.Context, domain threadlike
 	return TL.ToDomain(), nil
 }
 
-func (DB *MysqlThreadLikeRepository) Unlike(ctx context.Context, domain threadlikes.Domain) (threadlikes.Domain, error) {
+func (DB *MysqlThreadLikeRepository) Unlike(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, error) {
 	var ThreadLike ThreadLikes
 
-	result := DB.Conn.Model(&ThreadLike).Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).
+	result := DB.Conn.Model(&ThreadLike).Where("thread_id = ? AND user_id = ?", domain.Thread_id, id).
 		Update("state", false)
 
 	if result.Error != nil {

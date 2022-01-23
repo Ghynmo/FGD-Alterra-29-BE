@@ -18,9 +18,9 @@ func NewMysqlThreadSaveRepository(conn *gorm.DB) threadsaves.Repository {
 	}
 }
 
-func (DB *MysqlThreadSaveRepository) NewSave(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
+func (DB *MysqlThreadSaveRepository) NewSave(ctx context.Context, domain threadsaves.Domain, id int) (threadsaves.Domain, error) {
 	data := ThreadSaves{
-		User_id:   domain.User_id,
+		User_id:   id,
 		Thread_id: domain.Thread_id,
 		Saved_at:  time.Now(),
 	}
@@ -33,9 +33,9 @@ func (DB *MysqlThreadSaveRepository) NewSave(ctx context.Context, domain threads
 	return data.ToDomain(), nil
 }
 
-func (DB *MysqlThreadSaveRepository) Save(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
+func (DB *MysqlThreadSaveRepository) Save(ctx context.Context, domain threadsaves.Domain, id int) (threadsaves.Domain, error) {
 	var TL ThreadSaves
-	result := DB.Conn.Model(&TL).Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).
+	result := DB.Conn.Model(&TL).Where("thread_id = ? AND user_id = ?", domain.Thread_id, id).
 		Updates(ThreadSaves{State: true, Saved_at: time.Now()})
 
 	if result.Error != nil {
@@ -45,10 +45,10 @@ func (DB *MysqlThreadSaveRepository) Save(ctx context.Context, domain threadsave
 	return TL.ToDomain(), nil
 }
 
-func (DB *MysqlThreadSaveRepository) Unsave(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
+func (DB *MysqlThreadSaveRepository) Unsave(ctx context.Context, domain threadsaves.Domain, id int) (threadsaves.Domain, error) {
 	var ThreadSave ThreadSaves
 
-	result := DB.Conn.Model(&ThreadSave).Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).
+	result := DB.Conn.Model(&ThreadSave).Where("thread_id = ? AND user_id = ?", domain.Thread_id, id).
 		Update("state", false)
 
 	if result.Error != nil {

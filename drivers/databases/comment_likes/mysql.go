@@ -18,11 +18,11 @@ func NewMysqlCommentLikeRepository(conn *gorm.DB) commentlikes.Repository {
 	}
 }
 
-func (DB *MysqlCommentLikeRepository) NewLike(ctx context.Context, domain commentlikes.Domain) (commentlikes.Domain, error) {
+func (DB *MysqlCommentLikeRepository) NewLike(ctx context.Context, domain commentlikes.Domain, id int) (commentlikes.Domain, error) {
 
 	data := CommentLikes{
 		Comment_id: domain.Comment_id,
-		Liker_id:   domain.Liker_id,
+		Liker_id:   id,
 		Liked_at:   time.Now(),
 	}
 
@@ -35,9 +35,9 @@ func (DB *MysqlCommentLikeRepository) NewLike(ctx context.Context, domain commen
 	return data.ToDomain(), nil
 }
 
-func (DB *MysqlCommentLikeRepository) Like(ctx context.Context, domain commentlikes.Domain) (commentlikes.Domain, error) {
+func (DB *MysqlCommentLikeRepository) Like(ctx context.Context, domain commentlikes.Domain, id int) (commentlikes.Domain, error) {
 	var CL CommentLikes
-	result := DB.Conn.Model(&CL).Where("comment_id = ? AND liker_id = ?", domain.Comment_id, domain.Liker_id).
+	result := DB.Conn.Model(&CL).Where("comment_id = ? AND liker_id = ?", domain.Comment_id, id).
 		Updates(CommentLikes{State: true, Liked_at: time.Now()})
 
 	if result.Error != nil {
@@ -46,10 +46,10 @@ func (DB *MysqlCommentLikeRepository) Like(ctx context.Context, domain commentli
 	return CL.ToDomain(), nil
 }
 
-func (DB *MysqlCommentLikeRepository) Unlike(ctx context.Context, domain commentlikes.Domain) (commentlikes.Domain, error) {
+func (DB *MysqlCommentLikeRepository) Unlike(ctx context.Context, domain commentlikes.Domain, id int) (commentlikes.Domain, error) {
 	var CommentLike CommentLikes
 
-	result := DB.Conn.Model(&CommentLike).Where("comment_id = ? AND liker_id = ?", domain.Comment_id, domain.Liker_id).
+	result := DB.Conn.Model(&CommentLike).Where("comment_id = ? AND liker_id = ?", domain.Comment_id, id).
 		Update("state", false)
 
 	if result.Error != nil {

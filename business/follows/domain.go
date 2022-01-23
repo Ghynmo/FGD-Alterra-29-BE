@@ -27,8 +27,8 @@ type UseCase interface {
 type Repository interface {
 	GetFollowers(ctx context.Context, target_id int, my_id int) ([]Domain, error)
 	GetFollowing(ctx context.Context, target_id int, my_id int) ([]Domain, error)
-	Follows(ctx context.Context, domain Domain) (Domain, error)
-	Unfollow(ctx context.Context, domain Domain) (Domain, error)
-	NewFollow(ctx context.Context, domain Domain) (Domain, error)
+	Follows(ctx context.Context, domain Domain, my_id int) (Domain, error)
+	Unfollow(ctx context.Context, domain Domain, my_id int) (Domain, error)
+	NewFollow(ctx context.Context, domain Domain, my_id int) (Domain, error)
 	GetFollowState(ctx context.Context, domain Domain, my_id int) (Domain, error)
 }

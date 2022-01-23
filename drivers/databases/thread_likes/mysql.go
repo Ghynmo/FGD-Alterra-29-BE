@@ -58,10 +58,10 @@ func (DB *MysqlThreadLikeRepository) Unlike(ctx context.Context, domain threadli
 	return ThreadLike.ToDomain(), nil
 }
 
-func (DB *MysqlThreadLikeRepository) GetLikeState(ctx context.Context, domain threadlikes.Domain) (threadlikes.Domain, error) {
+func (DB *MysqlThreadLikeRepository) GetLikeState(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, error) {
 	var TL ThreadLikes
 
-	result := DB.Conn.Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).Find(&TL)
+	result := DB.Conn.Where("thread_id = ? AND user_id = ?", domain.Thread_id, id).Find(&TL)
 
 	if result.Error != nil {
 		return threadlikes.Domain{}, result.Error

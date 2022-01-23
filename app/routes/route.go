@@ -19,9 +19,6 @@ import (
 	userbadges "fgd-alterra-29/controllers/user_badges"
 	userpoints "fgd-alterra-29/controllers/user_points"
 	"fgd-alterra-29/controllers/users"
-	"fmt"
-	"reflect"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -52,18 +49,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.Use(middleware.Logger())
 	jwtAuth := middleware.JWTWithConfig(cl.JwtConfig)
 	admin := e.Group("admin")
-	admin.Use(middleware.KeyAuth(func(key string, c echo.Context) (bool, error) {
-		reqToken := c.Request().Header.Get("Authorization")
-		splitToken := strings.Split(reqToken, "Bearer ")
-		reqToken = splitToken[1]
-
-		claims, _ := middlewares.ExtractClaims(reqToken)
-		val := reflect.ValueOf(claims["Admin"])
-		data := val.Bool()
-
-		fmt.Println(data)
-		return data, nil
-	}))
+	admin.Use(middleware.KeyAuth(func(key string, c echo.Context) (bool, error) { return middlewares.ExtractAdmin(c) }))
 
 	//Main Page of Admin
 	admin.GET("", cl.UserController.GetDashboardController, jwtAuth)
@@ -76,14 +62,14 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	//List of Threads (Admin Access)
 	admin.GET("/threads", cl.ThreadController.GetThreadsController, jwtAuth)
 	admin.GET("/threads/search/:title", cl.ThreadController.GetThreadsByTitleController, jwtAuth)
-	admin.PUT("/threads/thread/:id", cl.ThreadController.DeleteThread, jwtAuth)
-	admin.PUT("/threads/thread/:id", cl.ThreadController.ActivateThread, jwtAuth)
+	admin.PUT("/threads/unactivate/:id", cl.ThreadController.DeleteThread, jwtAuth)
+	admin.PUT("/threads/activate/:id", cl.ThreadController.ActivateThread, jwtAuth)
 
 	//List of Posts (Admin Access)
 	admin.GET("/posts", cl.CommentController.GetPostsController, jwtAuth)
 	admin.GET("/posts/search/:comment", cl.CommentController.GetPostsByCommentController, jwtAuth)
-	admin.PUT("/posts/post/:id", cl.CommentController.UnactivatingPostController, jwtAuth)
-	admin.PUT("/posts/post/:id", cl.CommentController.ActivatingPostController, jwtAuth)
+	admin.PUT("/posts/unactivate/:id", cl.CommentController.UnactivatingPostController, jwtAuth)
+	admin.PUT("/posts/activate/:id", cl.CommentController.ActivatingPostController, jwtAuth)
 
 	//List of Comment's Reports (Admin Access)
 	// admin.GET("/comment-reports", cl.CommentReportController.AdminGetReports, jwtAuth)
@@ -96,8 +82,8 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	admin.PUT("/thread-reports/thread-report/:id", cl.ThreadReportController.SolvedThreadReport, jwtAuth)
 
 	//Edit Profile page
-	admin.GET("/edit/:id", cl.UserController.GetAdminSettingController, jwtAuth)
-	admin.PUT("/edit/:id", cl.UserController.UpdateAdminProfile, jwtAuth)
+	admin.GET("/edit", cl.UserController.GetAdminSettingController, jwtAuth)
+	admin.PUT("/edit", cl.UserController.UpdateAdminProfile, jwtAuth)
 
 	//Report Comment page
 	// admin.GET("/report-comment", cl.ReportCaseController.GetReportForm, jwtAuth)
@@ -119,12 +105,12 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("thread/:id", cl.ThreadController.GetProfileThreads, jwtAuth)
 	e.GET("followers", cl.FollowController.GetFollowers)
 	e.GET("following", cl.FollowController.GetFollowing)
-	e.GET("user/edit/:id", cl.UserController.GetUserSettingController, jwtAuth)
-	e.PUT("user/edit/:id", cl.UserController.UpdateUserProfile, jwtAuth)
+	e.GET("user/edit", cl.UserController.GetUserSettingController, jwtAuth)
+	e.PUT("user/edit", cl.UserController.UpdateUserProfile, jwtAuth)
 
 	e.GET("", cl.ThreadController.GetHotThreads)
-	e.GET("home/:id", cl.ThreadController.GetHomepageThreads, jwtAuth)
-	e.GET("recommendation/:id", cl.ThreadController.GetRecommendationThreads, jwtAuth)
+	e.GET("home", cl.ThreadController.GetHomepageThreads, jwtAuth)
+	e.GET("recommendation", cl.ThreadController.GetRecommendationThreads, jwtAuth)
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
 	e.GET("search", cl.ThreadController.GetSearch)
 	e.GET("sidenews", cl.APINewsController.GetAPINewsController)
@@ -132,7 +118,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("categories", cl.CategoryController.GetCategoriesController, jwtAuth)
 
 	e.GET("commentbythread", cl.CommentController.GetCommentByThreadController, jwtAuth)
-	e.GET("comment/reply/:id", cl.CommentController.GetReplyComments, jwtAuth)
+	e.GET("comment/reply/:reply_of", cl.CommentController.GetReplyComments, jwtAuth)
 	e.POST("comment", cl.CommentController.CreateCommentController, jwtAuth)
 	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth, jwtAuth)
 	e.POST("follows", cl.FollowController.FollowsController, jwtAuth)

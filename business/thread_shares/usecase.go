@@ -17,8 +17,8 @@ func NewThreadShareUseCase(repo Repository, timeout time.Duration) UseCase {
 	}
 }
 
-func (uc *ThreadShareUseCase) ThreadShareController(ctx context.Context, domain Domain) (Domain, error) {
-	thread, err := uc.Repo.ThreadShare(ctx, domain)
+func (uc *ThreadShareUseCase) ThreadShareController(ctx context.Context, domain Domain, id int) (Domain, error) {
+	thread, err := uc.Repo.ThreadShare(ctx, domain, id)
 	if err != nil {
 		return Domain{}, err
 	}

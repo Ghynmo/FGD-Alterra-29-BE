@@ -1,6 +1,7 @@
 package threads
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/threads/request"
@@ -76,7 +77,7 @@ func (handler ThreadController) ActivateThread(c echo.Context) error {
 }
 
 func (handler ThreadController) GetHomepageThreads(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := middlewares.ExtractID(c)
 	ctx := c.Request().Context()
 
 	thread, err := handler.ThreadUseCase.GetHomepageThreads(ctx, id)
@@ -87,7 +88,7 @@ func (handler ThreadController) GetHomepageThreads(c echo.Context) error {
 }
 
 func (handler ThreadController) GetRecommendationThreads(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := middlewares.ExtractID(c)
 	ctx := c.Request().Context()
 
 	thread, err := handler.ThreadUseCase.GetRecommendationThreads(ctx, id)
@@ -119,6 +120,7 @@ func (handler ThreadController) GetSearch(c echo.Context) error {
 }
 
 func (handler ThreadController) CreateThread(c echo.Context) error {
+	id := middlewares.ExtractID(c)
 	NewThread := request.CreateThread{}
 	c.Bind(&NewThread)
 
@@ -126,7 +128,7 @@ func (handler ThreadController) CreateThread(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	thread, err := handler.ThreadUseCase.CreateThread(ctx, domain)
+	thread, err := handler.ThreadUseCase.CreateThread(ctx, domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

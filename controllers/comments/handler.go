@@ -1,6 +1,7 @@
 package comments
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/business/comments"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/comments/request"
@@ -34,15 +35,16 @@ func (handler CommentController) GetPostsByCommentController(c echo.Context) err
 }
 
 func (handler CommentController) GetCommentByThreadController(c echo.Context) error {
+	id := middlewares.ExtractID(c)
+
 	GetComment := request.GetByThread{}
 	c.Bind(&GetComment)
 
 	thread_id := GetComment.Thread_id
-	my_id := GetComment.MyUser_id
 
 	ctx := c.Request().Context()
 
-	comments, err := handler.CommentUseCase.GetCommentByThreadController(ctx, thread_id, my_id)
+	comments, err := handler.CommentUseCase.GetCommentByThreadController(ctx, thread_id, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
@@ -51,10 +53,12 @@ func (handler CommentController) GetCommentByThreadController(c echo.Context) er
 }
 
 func (handler CommentController) GetReplyComments(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := middlewares.ExtractID(c)
+
+	reply_of, _ := strconv.Atoi(c.Param("reply_of"))
 	ctx := c.Request().Context()
 
-	comments, err := handler.CommentUseCase.GetCommentReply(ctx, id)
+	comments, err := handler.CommentUseCase.GetCommentReply(ctx, id, reply_of)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
@@ -122,6 +126,7 @@ func (handler CommentController) ActivatingPostController(c echo.Context) error 
 }
 
 func (handler CommentController) CreateCommentController(c echo.Context) error {
+	id := middlewares.ExtractID(c)
 	NewComment := request.CreateComment{}
 	c.Bind(&NewComment)
 
@@ -129,7 +134,7 @@ func (handler CommentController) CreateCommentController(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	comments, err := handler.CommentUseCase.CreateCommentController(ctx, domain)
+	comments, err := handler.CommentUseCase.CreateCommentController(ctx, domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

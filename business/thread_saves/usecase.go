@@ -17,8 +17,8 @@ func NewThreadSaveUseCase(repo Repository, timeout time.Duration) UseCase {
 	}
 }
 
-func (uc *ThreadSaveUseCase) SaveThreadController(ctx context.Context, domain Domain) (Domain, error) {
-	state, _ := uc.Repo.GetSaveState(ctx, domain)
+func (uc *ThreadSaveUseCase) SaveThreadController(ctx context.Context, domain Domain, id int) (Domain, error) {
+	state, _ := uc.Repo.GetSaveState(ctx, domain, id)
 
 	if state.User_id == 0 {
 		threads, err := uc.Repo.NewSave(ctx, domain)

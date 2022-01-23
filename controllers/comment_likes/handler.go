@@ -1,6 +1,7 @@
 package commentlikes
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	commentlikes "fgd-alterra-29/business/comment_likes"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/comment_likes/request"
@@ -20,6 +21,8 @@ func NewCommentLikeController(threadUseCase commentlikes.UseCase) *CommentLikeCo
 }
 
 func (handler CommentLikeController) Likes(c echo.Context) error {
+	id := middlewares.ExtractID(c)
+
 	NewLike := request.Like{}
 	c.Bind(&NewLike)
 
@@ -27,7 +30,7 @@ func (handler CommentLikeController) Likes(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	commentlikes, err := handler.CommentLikeUseCase.LikeController(ctx, domain)
+	commentlikes, err := handler.CommentLikeUseCase.LikeController(ctx, domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

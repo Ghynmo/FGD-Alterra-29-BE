@@ -59,10 +59,10 @@ func (DB *MysqlCommentLikeRepository) Unlike(ctx context.Context, domain comment
 	return CommentLike.ToDomain(), nil
 }
 
-func (DB *MysqlCommentLikeRepository) GetLikeState(ctx context.Context, domain commentlikes.Domain) (commentlikes.Domain, error) {
+func (DB *MysqlCommentLikeRepository) GetLikeState(ctx context.Context, domain commentlikes.Domain, id int) (commentlikes.Domain, error) {
 	var CL CommentLikes
 
-	result := DB.Conn.Where("comment_id = ? AND liker_id = ?", domain.Comment_id, domain.Liker_id).Find(&CL)
+	result := DB.Conn.Where("comment_id = ? AND liker_id = ?", domain.Comment_id, id).Find(&CL)
 
 	if result.Error != nil {
 		return commentlikes.Domain{}, result.Error

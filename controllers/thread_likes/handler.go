@@ -1,6 +1,7 @@
 package threadlikes
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	threadlikes "fgd-alterra-29/business/thread_likes"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/thread_likes/request"
@@ -24,10 +25,11 @@ func (handler ThreadLikeController) Likes(c echo.Context) error {
 	c.Bind(&NewLike)
 
 	domain := NewLike.ToDomain()
+	id := middlewares.ExtractID(c)
 
 	ctx := c.Request().Context()
 
-	threadlikes, err := handler.ThreadLikeUseCase.LikeController(ctx, domain)
+	threadlikes, err := handler.ThreadLikeUseCase.LikeController(ctx, domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

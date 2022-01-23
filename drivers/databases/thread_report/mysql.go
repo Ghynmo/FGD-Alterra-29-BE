@@ -3,6 +3,7 @@ package threadreport
 import (
 	"context"
 	threadreport "fgd-alterra-29/business/thread_report"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -46,16 +47,23 @@ func (DB *MysqlThreadReportRepository) GetThreadReportStat(ctx context.Context) 
 	return ToListDomain(ThreadReport), nil
 }
 
-func (DB *MysqlThreadReportRepository) CreateReportThread(ctx context.Context, domain threadreport.Domain) (threadreport.Domain, error) {
-	var ThreadReport ThreadReport
+func (DB *MysqlThreadReportRepository) CreateReportThread(ctx context.Context, domain threadreport.Domain, my_id int) (threadreport.Domain, error) {
 
-	result := DB.Conn.Model(&ThreadReport).Create(&domain)
+	data := ThreadReport{
+		Reporter_id:   my_id,
+		Thread_id:     domain.Thread_id,
+		ReportCase_id: domain.ReportCase_id,
+		Message:       domain.Message,
+		Created_at:    time.Now(),
+	}
+
+	result := DB.Conn.Model(&data).Create(&data)
 
 	if result.Error != nil {
 		return threadreport.Domain{}, result.Error
 	}
 
-	return ThreadReport.ToDomain(), nil
+	return data.ToDomain(), nil
 }
 
 func (DB *MysqlThreadReportRepository) AdminGetReports(ctx context.Context) ([]threadreport.Domain, error) {

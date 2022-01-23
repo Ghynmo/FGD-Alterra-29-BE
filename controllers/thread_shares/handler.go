@@ -1,6 +1,7 @@
 package threadshares
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	threadshares "fgd-alterra-29/business/thread_shares"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/thread_shares/request"
@@ -20,6 +21,7 @@ func NewThreadShareController(threadUseCase threadshares.UseCase) *ThreadShareCo
 }
 
 func (handler ThreadShareController) ShareThread(c echo.Context) error {
+	id := middlewares.ExtractID(c)
 	NewShare := request.Share{}
 	c.Bind(&NewShare)
 
@@ -27,7 +29,7 @@ func (handler ThreadShareController) ShareThread(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	threadshares, err := handler.ThreadShareUseCase.ThreadShareController(ctx, domain)
+	threadshares, err := handler.ThreadShareUseCase.ThreadShareController(ctx, domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

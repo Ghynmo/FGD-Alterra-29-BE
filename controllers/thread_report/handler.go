@@ -1,6 +1,7 @@
 package threadreport
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	threadreport "fgd-alterra-29/business/thread_report"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/thread_report/request"
@@ -43,6 +44,7 @@ func (handler ThreadReportController) GetThreadReportStat(c echo.Context) error 
 }
 
 func (handler ThreadReportController) CreateReportThread(c echo.Context) error {
+	id := middlewares.ExtractID(c)
 	NewReport := request.CreateReport{}
 	c.Bind(&NewReport)
 
@@ -50,7 +52,7 @@ func (handler ThreadReportController) CreateReportThread(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	threadreport, err := handler.ThreadReportUseCase.CreateReportThread(ctx, domain)
+	threadreport, err := handler.ThreadReportUseCase.CreateReportThread(ctx, domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

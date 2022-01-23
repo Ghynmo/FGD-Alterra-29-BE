@@ -88,10 +88,10 @@ func (DB *MysqlFollowRepository) Unfollow(ctx context.Context, domain follows.Do
 	return follow.ToDomain(), nil
 }
 
-func (DB *MysqlFollowRepository) GetFollowState(ctx context.Context, domain follows.Domain) (follows.Domain, error) {
+func (DB *MysqlFollowRepository) GetFollowState(ctx context.Context, domain follows.Domain, my_id int) (follows.Domain, error) {
 	var follow Follows
 
-	result := DB.Conn.Where("user_id = ? AND follower_id = ?", domain.User_id, domain.Follower_id).Find(&follow)
+	result := DB.Conn.Where("user_id = ? AND follower_id = ?", domain.User_id, my_id).Find(&follow)
 
 	if result.Error != nil {
 		return follows.Domain{}, result.Error

@@ -153,7 +153,7 @@ func (DB *MysqlThreadRepository) GetThreadByID(ctx context.Context, id int) (thr
 
 func (DB *MysqlThreadRepository) DeleteThread(ctx context.Context, id int) (threads.Domain, error) {
 	var Thread Threads
-	result := DB.Conn.Model(&Thread).Where("threads.id = ?", id).Update("active", "false")
+	result := DB.Conn.Model(&Thread).Where("threads.id = ?", id).Update("active", 0)
 
 	if result.Error != nil {
 		return threads.Domain{}, result.Error
@@ -164,7 +164,7 @@ func (DB *MysqlThreadRepository) DeleteThread(ctx context.Context, id int) (thre
 
 func (DB *MysqlThreadRepository) ActivateThread(ctx context.Context, id int) (threads.Domain, error) {
 	var Thread Threads
-	result := DB.Conn.Model(&Thread).Where("threads.id = ?", id).Update("active", "true")
+	result := DB.Conn.Model(&Thread).Where("threads.id = ?", id).Update("active", 1)
 
 	if result.Error != nil {
 		return threads.Domain{}, result.Error
@@ -215,10 +215,10 @@ func (DB *MysqlThreadRepository) GetSideNewsThreads(ctx context.Context) ([]thre
 	return ToListDomain(Thread), nil
 }
 
-func (DB *MysqlThreadRepository) CreateThread(ctx context.Context, domain threads.Domain) (threads.Domain, error) {
+func (DB *MysqlThreadRepository) CreateThread(ctx context.Context, domain threads.Domain, id int) (threads.Domain, error) {
 
 	data := Threads{
-		User_id:     domain.User_id,
+		User_id:     id,
 		Title:       domain.Title,
 		Category_id: domain.Category_id,
 		Content:     domain.Content,

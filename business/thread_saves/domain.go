@@ -13,12 +13,12 @@ type Domain struct {
 }
 
 type UseCase interface {
-	SaveThreadController(ctx context.Context, domain Domain) (Domain, error)
+	SaveThreadController(ctx context.Context, domain Domain, id int) (Domain, error)
 }
 
 type Repository interface {
 	NewSave(ctx context.Context, domain Domain) (Domain, error)
 	Save(ctx context.Context, domain Domain) (Domain, error)
 	Unsave(ctx context.Context, domain Domain) (Domain, error)
-	GetSaveState(ctx context.Context, domain Domain) (Domain, error)
+	GetSaveState(ctx context.Context, domain Domain, id int) (Domain, error)
 }

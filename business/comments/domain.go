@@ -34,8 +34,8 @@ type UseCase interface {
 	GetPostsController(ctx context.Context) ([]Domain, error)
 	UnactivatingPostController(ctx context.Context, id int) (Domain, error)
 	ActivatingPostController(ctx context.Context, id int) (Domain, error)
-	GetCommentReply(ctx context.Context, id int) ([]Domain, error)
-	CreateCommentController(ctx context.Context, domain Domain) (Domain, error)
+	GetCommentReply(ctx context.Context, id int, reply_of int) ([]Domain, error)
+	CreateCommentController(ctx context.Context, domain Domain, id int) (Domain, error)
 }
 
 type Repository interface {
@@ -46,6 +46,6 @@ type Repository interface {
 	GetPosts(ctx context.Context) ([]Domain, error)
 	UnactivatingPost(ctx context.Context, id int) (Domain, error)
 	ActivatingPost(ctx context.Context, id int) (Domain, error)
-	GetCommentReply(ctx context.Context, id int) ([]Domain, error)
-	CreateComment(ctx context.Context, domain Domain) (Domain, error)
+	GetCommentReply(ctx context.Context, id int, reply_of int) ([]Domain, error)
+	CreateComment(ctx context.Context, domain Domain, id int) (Domain, error)
 }

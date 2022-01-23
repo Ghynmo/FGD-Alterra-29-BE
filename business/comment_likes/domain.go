@@ -13,12 +13,12 @@ type Domain struct {
 }
 
 type UseCase interface {
-	LikeController(ctx context.Context, domain Domain) (Domain, error)
+	LikeController(ctx context.Context, domain Domain, id int) (Domain, error)
 }
 
 type Repository interface {
 	NewLike(ctx context.Context, domain Domain) (Domain, error)
 	Like(ctx context.Context, domain Domain) (Domain, error)
 	Unlike(ctx context.Context, domain Domain) (Domain, error)
-	GetLikeState(ctx context.Context, domain Domain) (Domain, error)
+	GetLikeState(ctx context.Context, domain Domain, id int) (Domain, error)
 }

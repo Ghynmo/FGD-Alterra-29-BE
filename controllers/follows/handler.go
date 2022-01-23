@@ -1,6 +1,7 @@
 package follows
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/business/follows"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/follows/request"
@@ -25,7 +26,7 @@ func (handler FollowController) GetFollowers(c echo.Context) error {
 	c.Bind(&GetFollows)
 
 	target_id := GetFollows.Target_id
-	my_id := GetFollows.My_id
+	my_id := middlewares.ExtractID(c)
 
 	ctx := c.Request().Context()
 
@@ -43,7 +44,7 @@ func (handler FollowController) GetFollowing(c echo.Context) error {
 	c.Bind(&GetFollows)
 
 	target_id := GetFollows.Target_id
-	my_id := GetFollows.My_id
+	my_id := middlewares.ExtractID(c)
 
 	ctx := c.Request().Context()
 
@@ -57,6 +58,7 @@ func (handler FollowController) GetFollowing(c echo.Context) error {
 }
 
 func (handler FollowController) FollowsController(c echo.Context) error {
+	id := middlewares.ExtractID(c)
 	NewFollow := request.Follow{}
 
 	c.Bind(&NewFollow)
@@ -64,7 +66,7 @@ func (handler FollowController) FollowsController(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	follows, err := handler.FollowUseCase.FollowsController(ctx, domain)
+	follows, err := handler.FollowUseCase.FollowsController(ctx, domain, id)
 
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)

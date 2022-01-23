@@ -18,10 +18,10 @@ func NewMysqlThreadShareRepository(conn *gorm.DB) threadshares.Repository {
 	}
 }
 
-func (DB *MysqlThreadShareRepository) ThreadShare(ctx context.Context, domain threadshares.Domain) (threadshares.Domain, error) {
+func (DB *MysqlThreadShareRepository) ThreadShare(ctx context.Context, domain threadshares.Domain, id int) (threadshares.Domain, error) {
 
 	data := ThreadShares{
-		User_id:   domain.User_id,
+		User_id:   id,
 		Thread_id: domain.Thread_id,
 		Shared_at: time.Now(),
 	}

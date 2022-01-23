@@ -36,8 +36,8 @@ func (uc *CommentUseCase) GetCommentByThreadController(ctx context.Context, thre
 	return comments, nil
 }
 
-func (uc *CommentUseCase) GetCommentReply(ctx context.Context, id int) ([]Domain, error) {
-	comments, err := uc.Repo.GetCommentReply(ctx, id)
+func (uc *CommentUseCase) GetCommentReply(ctx context.Context, id int, reply_of int) ([]Domain, error) {
+	comments, err := uc.Repo.GetCommentReply(ctx, id, reply_of)
 	if err != nil {
 		return []Domain{}, err
 	}
@@ -70,8 +70,8 @@ func (uc *CommentUseCase) GetPostQuantityController(ctx context.Context) (Domain
 	return post, nil
 }
 
-func (uc *CommentUseCase) CreateCommentController(ctx context.Context, domain Domain) (Domain, error) {
-	comments, err := uc.Repo.CreateComment(ctx, domain)
+func (uc *CommentUseCase) CreateCommentController(ctx context.Context, domain Domain, id int) (Domain, error) {
+	comments, err := uc.Repo.CreateComment(ctx, domain, id)
 	if err != nil {
 		return Domain{}, err
 	}

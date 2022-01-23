@@ -47,8 +47,8 @@ func (uc *ThreadUseCase) GetThreadQuantity(ctx context.Context) (Domain, error) 
 	return thread, nil
 }
 
-func (uc *ThreadUseCase) CreateThread(ctx context.Context, domain Domain) (Domain, error) {
-	thread, err := uc.Repo.CreateThread(ctx, domain)
+func (uc *ThreadUseCase) CreateThread(ctx context.Context, domain Domain, id int) (Domain, error) {
+	thread, err := uc.Repo.CreateThread(ctx, domain, id)
 	if err != nil {
 		return Domain{}, err
 	}

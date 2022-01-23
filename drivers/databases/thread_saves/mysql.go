@@ -58,10 +58,10 @@ func (DB *MysqlThreadSaveRepository) Unsave(ctx context.Context, domain threadsa
 	return ThreadSave.ToDomain(), nil
 }
 
-func (DB *MysqlThreadSaveRepository) GetSaveState(ctx context.Context, domain threadsaves.Domain) (threadsaves.Domain, error) {
+func (DB *MysqlThreadSaveRepository) GetSaveState(ctx context.Context, domain threadsaves.Domain, id int) (threadsaves.Domain, error) {
 	var TL ThreadSaves
 
-	result := DB.Conn.Where("thread_id = ? AND user_id = ?", domain.Thread_id, domain.User_id).Find(&TL)
+	result := DB.Conn.Where("thread_id = ? AND user_id = ?", domain.Thread_id, id).Find(&TL)
 
 	if result.Error != nil {
 		return threadsaves.Domain{}, result.Error

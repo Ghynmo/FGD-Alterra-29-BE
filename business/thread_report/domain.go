@@ -23,7 +23,7 @@ type Domain struct {
 type UseCase interface {
 	SearchReportsByCategoryController(ctx context.Context, category string) ([]Domain, error)
 	GetThreadReportStat(ctx context.Context) ([]Domain, error)
-	CreateReportThread(ctx context.Context, domain Domain) (Domain, error)
+	CreateReportThread(ctx context.Context, domain Domain, my_id int) (Domain, error)
 	AdminGetReports(ctx context.Context) ([]Domain, error)
 	SolvedThreadReport(ctx context.Context, id int) (Domain, error)
 }
@@ -31,7 +31,7 @@ type UseCase interface {
 type Repository interface {
 	SearchReportsByCategory(ctx context.Context, category string) ([]Domain, error)
 	GetThreadReportStat(ctx context.Context) ([]Domain, error)
-	CreateReportThread(ctx context.Context, domain Domain) (Domain, error)
+	CreateReportThread(ctx context.Context, domain Domain, my_id int) (Domain, error)
 	AdminGetReports(ctx context.Context) ([]Domain, error)
 	SolvedThreadReport(ctx context.Context, id int) (Domain, error)
 }

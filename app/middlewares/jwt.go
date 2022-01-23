@@ -1,14 +1,17 @@
 package middlewares
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 	"time"
 
 	"fgd-alterra-29/app/configs"
 
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
@@ -84,4 +87,36 @@ func ExtractClaims(tokenStr string) (jwt.MapClaims, bool) {
 		fmt.Println("Invalid JWT Token")
 		return nil, false
 	}
+}
+
+func ExtractID(c echo.Context) int {
+	reqToken := c.Request().Header.Get("Authorization")
+	splitToken := strings.Split(reqToken, "Bearer ")
+	reqToken = splitToken[1]
+
+	// convert map to json
+	claims, _ := ExtractClaims(reqToken)
+	jsonString, _ := json.Marshal(claims)
+
+	// convert json to struct
+	s := JWTClaims{}
+	json.Unmarshal(jsonString, &s)
+
+	return s.UserID
+}
+
+func ExtractAdmin(c echo.Context) (bool, error) {
+	reqToken := c.Request().Header.Get("Authorization")
+	splitToken := strings.Split(reqToken, "Bearer ")
+	reqToken = splitToken[1]
+
+	// convert map to json
+	claims, _ := ExtractClaims(reqToken)
+	jsonString, _ := json.Marshal(claims)
+
+	// convert json to struct
+	s := JWTClaims{}
+	json.Unmarshal(jsonString, &s)
+
+	return s.Admin, nil
 }

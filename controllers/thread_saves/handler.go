@@ -1,6 +1,7 @@
 package threadsaves
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	threadsaves "fgd-alterra-29/business/thread_saves"
 	"fgd-alterra-29/controllers"
 	"fgd-alterra-29/controllers/thread_saves/request"
@@ -20,6 +21,8 @@ func NewThreadSaveController(threadUseCase threadsaves.UseCase) *ThreadSaveContr
 }
 
 func (handler ThreadSaveController) SaveThread(c echo.Context) error {
+	id := middlewares.ExtractID(c)
+
 	NewSave := request.Save{}
 	c.Bind(&NewSave)
 
@@ -27,7 +30,7 @@ func (handler ThreadSaveController) SaveThread(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	threadsaves, err := handler.ThreadSaveUseCase.SaveThreadController(ctx, domain)
+	threadsaves, err := handler.ThreadSaveUseCase.SaveThreadController(ctx, domain, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

@@ -38,13 +38,13 @@ func (uc *FollowUseCase) GetFollowing(ctx context.Context, target_id int, my_id 
 	return following, nil
 }
 
-func (uc *FollowUseCase) FollowsController(ctx context.Context, domain Domain) (Domain, error) {
+func (uc *FollowUseCase) FollowsController(ctx context.Context, domain Domain, my_id int) (Domain, error) {
 
 	if domain.User_id == domain.Follower_id {
 		return Domain{}, errors.New("CANNOT FOLLOWS YOURSELF")
 	}
 
-	state, _ := uc.Repo.GetFollowState(ctx, domain)
+	state, _ := uc.Repo.GetFollowState(ctx, domain, my_id)
 
 	if state.User_id == 0 {
 		follow, err := uc.Repo.NewFollow(ctx, domain)

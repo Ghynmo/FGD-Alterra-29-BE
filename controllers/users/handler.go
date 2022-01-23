@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fgd-alterra-29/app/middlewares"
 	"fgd-alterra-29/business/badges"
 	"fgd-alterra-29/business/categories"
 	"fgd-alterra-29/business/comments"
@@ -143,7 +144,7 @@ func (handler UserController) GetDashboardController(c echo.Context) error {
 }
 
 func (handler UserController) GetAdminSettingController(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := middlewares.ExtractID(c)
 	ctx := c.Request().Context()
 
 	user, err := handler.UserUseCase.GetProfileSetting(ctx, id)
@@ -154,7 +155,7 @@ func (handler UserController) GetAdminSettingController(c echo.Context) error {
 }
 
 func (handler UserController) GetUserSettingController(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := middlewares.ExtractID(c)
 	ctx := c.Request().Context()
 
 	user, err := handler.UserUseCase.GetProfileSetting(ctx, id)
@@ -165,7 +166,7 @@ func (handler UserController) GetUserSettingController(c echo.Context) error {
 }
 
 func (handler UserController) UpdateAdminProfile(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := middlewares.ExtractID(c)
 	Updateadmin := request.UpdateProfile{}
 	c.Bind(&Updateadmin)
 
@@ -181,7 +182,7 @@ func (handler UserController) UpdateAdminProfile(c echo.Context) error {
 }
 
 func (handler UserController) UpdateUserProfile(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := middlewares.ExtractID(c)
 	Updateuser := request.UpdateProfile{}
 	c.Bind(&Updateuser)
 

@@ -36,8 +36,8 @@ func (DB *MysqlCommentRepository) GetPostsByComment(ctx context.Context, comment
 func (DB *MysqlCommentRepository) GetCommentByThread(ctx context.Context, thread_id int, my_id int) ([]comments.Domain, error) {
 	var Comment []Comments
 
-	result := DB.Conn.Raw("SELECT comments.id, name, photo_url, comment, state AS LikeState FROM comments LEFT JOIN (SELECT * FROM comment_likes WHERE comment_likes.liker_id = ?) AS B ON comments.id = B.comment_id JOIN users ON comments.user_id = users.id WHERE thread_id = ?",
-		my_id, thread_id).Scan(&Comment)
+	result := DB.Conn.Raw("SELECT comments.id, name, photo_url, comment, state AS LikeState FROM comments LEFT JOIN (SELECT * FROM comment_likes WHERE comment_likes.liker_id = ?) AS B ON comments.id = B.comment_id JOIN users ON comments.user_id = users.id WHERE (thread_id = ? AND comments.active = ?)",
+		my_id, thread_id, "true").Scan(&Comment)
 
 	if result.Error != nil {
 		return []comments.Domain{}, result.Error
@@ -45,12 +45,11 @@ func (DB *MysqlCommentRepository) GetCommentByThread(ctx context.Context, thread
 	return ToListDomain(Comment), nil
 }
 
-func (DB *MysqlCommentRepository) GetCommentReply(ctx context.Context, id int) ([]comments.Domain, error) {
+func (DB *MysqlCommentRepository) GetCommentReply(ctx context.Context, id int, reply_of int) ([]comments.Domain, error) {
 	var Comment []Comments
 
-	result := DB.Conn.Table("comments").Where("user_id = ? AND comments.active = 1", id).Select("comments.id, name, photo_url, comment").
-		Joins("join users on comments.user_id = users.id").Order("comments.created_at desc").
-		Find(&Comment)
+	result := DB.Conn.Raw("SELECT comments.id, name, photo_url, comment, state AS LikeState FROM comments LEFT JOIN (SELECT * FROM comment_likes WHERE comment_likes.liker_id = ?) AS B ON comments.id = B.comment_id JOIN users ON comments.user_id = users.id WHERE (reply_of = ? AND comments.active = ?)",
+		id, reply_of, "true").Scan(&Comment)
 
 	if result.Error != nil {
 		return []comments.Domain{}, result.Error
@@ -103,7 +102,7 @@ func (DB *MysqlCommentRepository) GetPosts(ctx context.Context) ([]comments.Doma
 func (DB *MysqlCommentRepository) UnactivatingPost(ctx context.Context, id int) (comments.Domain, error) {
 	var Comment Comments
 
-	result := DB.Conn.Model(&Comment).Where("comments.id = ?", id).Update("active", "false")
+	result := DB.Conn.Model(&Comment).Where("comments.id = ?", id).Update("active", false)
 
 	if result.Error != nil {
 		return comments.Domain{}, result.Error
@@ -115,7 +114,7 @@ func (DB *MysqlCommentRepository) UnactivatingPost(ctx context.Context, id int) 
 func (DB *MysqlCommentRepository) ActivatingPost(ctx context.Context, id int) (comments.Domain, error) {
 	var Comment Comments
 
-	result := DB.Conn.Model(&Comment).Where("comments.id = ?", id).Update("active", "true")
+	result := DB.Conn.Model(&Comment).Where("comments.id = ?", id).Update("active", true)
 
 	if result.Error != nil {
 		return comments.Domain{}, result.Error
@@ -124,18 +123,18 @@ func (DB *MysqlCommentRepository) ActivatingPost(ctx context.Context, id int) (c
 	return Comment.ToDomain(), nil
 }
 
-func (DB *MysqlCommentRepository) CreateComment(ctx context.Context, domain comments.Domain) (comments.Domain, error) {
+func (DB *MysqlCommentRepository) CreateComment(ctx context.Context, domain comments.Domain, id int) (comments.Domain, error) {
 	var Comment Comments
 
 	if domain.ReplyOf == 0 {
 		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of, created_at) VALUES (?, ?, ?, NULL, ?)",
-			domain.Thread_id, domain.User_id, domain.Comment, time.Now())
+			domain.Thread_id, id, domain.Comment, time.Now())
 		if result.Error != nil {
 			return comments.Domain{}, result.Error
 		}
 	} else {
 		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of, created_at) VALUES (?, ?, ?, ?, ?)",
-			domain.Thread_id, domain.User_id, domain.Comment, domain.ReplyOf, time.Now())
+			domain.Thread_id, id, domain.Comment, domain.ReplyOf, time.Now())
 		if result.Error != nil {
 			return comments.Domain{}, result.Error
 		}

@@ -12,9 +12,9 @@ type Domain struct {
 }
 
 type UseCase interface {
-	ThreadShareController(ctx context.Context, domain Domain) (Domain, error)
+	ThreadShareController(ctx context.Context, domain Domain, id int) (Domain, error)
 }
 
 type Repository interface {
-	ThreadShare(ctx context.Context, domain Domain) (Domain, error)
+	ThreadShare(ctx context.Context, domain Domain, id int) (Domain, error)
 }

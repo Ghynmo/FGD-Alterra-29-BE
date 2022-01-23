@@ -1,13 +1,17 @@
 package responses
 
-import "fgd-alterra-29/business/comments"
+import (
+	"fgd-alterra-29/business/comments"
+	"time"
+)
 
 type CommentRecommendation struct {
-	ID        int    `json:"comment_id"`
-	Name      string `json:"name"`
-	Photo_url string `json:"photo_url"`
-	Comment   string `json:"comment"`
-	LikeState bool   `json:"likes_by_me"`
+	ID        int       `json:"comment_id"`
+	Name      string    `json:"name"`
+	Photo_url string    `json:"photo_url"`
+	Comment   string    `json:"comment"`
+	Date      time.Time `json:"created_at"`
+	LikeState bool      `json:"likes_by_me"`
 }
 
 func ToCommentRecommendation(Domain comments.Domain) CommentRecommendation {

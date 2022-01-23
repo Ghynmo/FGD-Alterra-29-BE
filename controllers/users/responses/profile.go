@@ -16,6 +16,7 @@ type Profile struct {
 	Header_url     string                     `json:"header_url"`
 	Photo_url      string                     `json:"photo_url"`
 	Bio            string                     `json:"bio"`
+	Point          int                        `json:"point"`
 	Q_Following    int                        `json:"following_total"`
 	Q_Followers    int                        `json:"followers_total"`
 	Q_Post         int                        `json:"post_total"`
@@ -34,6 +35,7 @@ func ToProfile(domain users.Domain, badge []badges.Domain, catthread []categorie
 		Header_url:     domain.Header_url,
 		Photo_url:      domain.Photo_url,
 		Bio:            domain.Bio,
+		Point:          domain.Point,
 		Q_Following:    domain.Q_Following,
 		Q_Followers:    domain.Q_Followers,
 		Q_Post:         domain.Q_Post,

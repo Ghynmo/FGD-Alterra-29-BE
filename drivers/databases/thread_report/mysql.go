@@ -83,7 +83,7 @@ func (DB *MysqlThreadReportRepository) AdminGetReports(ctx context.Context) ([]t
 func (DB *MysqlThreadReportRepository) SolvedThreadReport(ctx context.Context, id int) (threadreport.Domain, error) {
 	var ThreadReport ThreadReport
 	result := DB.Conn.Model(&ThreadReport).Where("thread_reports.id = ?", id).
-		Update("state", "solved")
+		Update("status", "solved")
 	if result.Error != nil {
 		return threadreport.Domain{}, result.Error
 	}

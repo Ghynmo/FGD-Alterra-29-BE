@@ -63,7 +63,7 @@ func (handler CommentController) GetReplyComments(c echo.Context) error {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 
-	return controllers.NewSuccessResponse(c, responses.ToListPosts(comments))
+	return controllers.NewSuccessResponse(c, responses.ToListCommentRecommendation(comments))
 }
 
 func (handler CommentController) GetProfileCommentsController(c echo.Context) error {

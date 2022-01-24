@@ -115,6 +115,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
 	e.GET("search", cl.ThreadController.GetSearch)
 	e.GET("thread/:id", cl.ThreadController.GetThreadsByIDController, jwtAuth)
+	e.GET("threadbycategory/:id", cl.ThreadController.GetThreadsByCategoryID, jwtAuth)
 	e.GET("sidenews", cl.APINewsController.GetAPINewsController)
 
 	e.GET("categories", cl.CategoryController.GetCategoriesController, jwtAuth)

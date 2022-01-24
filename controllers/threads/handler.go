@@ -130,6 +130,17 @@ func (handler ThreadController) GetSearch(c echo.Context) error {
 	return controllers.NewSuccessResponse(c, responses.ToListHomeThreads(thread))
 }
 
+func (handler ThreadController) GetThreadsByCategoryID(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetThreadsByCategoryID(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToListHomeThreads(thread))
+}
+
 func (handler ThreadController) CreateThread(c echo.Context) error {
 	id := middlewares.ExtractID(c)
 	NewThread := request.CreateThread{}

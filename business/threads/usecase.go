@@ -130,6 +130,15 @@ func (uc *ThreadUseCase) GetSearch(ctx context.Context, threadname string) ([]Do
 	return thread, nil
 }
 
+func (uc *ThreadUseCase) GetThreadsByCategoryID(ctx context.Context, id int) ([]Domain, error) {
+	thread, err := uc.Repo.GetThreadsByCategoryID(ctx, id)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return thread, nil
+}
+
 func (uc *ThreadUseCase) GetSideNewsThreads(ctx context.Context) ([]Domain, error) {
 	thread, err := uc.Repo.GetSideNewsThreads(ctx)
 	if err != nil {

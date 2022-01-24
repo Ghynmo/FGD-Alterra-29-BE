@@ -29,7 +29,7 @@ func setup() {
 
 func TestRegisterController(t *testing.T) {
 	setup()
-	t.Run("Test RegisterController | Valid but Avoid Hash", func(t *testing.T) {
+	t.Run("Test RegisterController | Valid but Avoid Token", func(t *testing.T) {
 		userRepository.On("CheckUsername",
 			mock.Anything, mock.AnythingOfType("string")).Return(false, nil).Once()
 		userRepository.On("CheckEmail",
@@ -41,39 +41,51 @@ func TestRegisterController(t *testing.T) {
 		assert.NotNil(t, err)
 	})
 
+	t.Run("Test RegisterController | Invalid (Error CheckName)", func(t *testing.T) {
+		userRepository.On("CheckUsername",
+			mock.Anything, mock.AnythingOfType("string")).Return(true, errors.New("")).Once()
+
+		_, err := userService.RegisterController(context.Background(), userDomain)
+		assert.NotNil(t, err)
+	})
+
+	t.Run("Test RegisterController | Invalid (Error CheckName)", func(t *testing.T) {
+		userRepository.On("CheckUsername",
+			mock.Anything, mock.AnythingOfType("string")).Return(false, nil).Once()
+		userRepository.On("CheckEmail",
+			mock.Anything, mock.AnythingOfType("string")).Return(true, errors.New("")).Once()
+
+		_, err := userService.RegisterController(context.Background(), userDomain)
+		assert.NotNil(t, err)
+	})
+
 	t.Run("Test RegisterController | Invalid (Username Has been used)", func(t *testing.T) {
 		userRepository.On("CheckUsername",
 			mock.Anything, mock.AnythingOfType("string")).Return(true, nil).Once()
 		userRepository.On("CheckEmail",
 			mock.Anything, mock.AnythingOfType("string")).Return(false, nil).Once()
-		// userRepository.On("Register",
-		// 	mock.Anything, mock.AnythingOfType("users.Domain")).Return(userDomain, errors.New("")).Once()
 
 		_, err := userService.RegisterController(context.Background(), userDomain)
 		assert.NotNil(t, err)
 		assert.Equal(t, "USERNAME IS ALREADY USED", err.Error())
 	})
 
-	t.Run("Test RegisterController | Invalid (Username Has been used)", func(t *testing.T) {
+	t.Run("Test RegisterController | Invalid (Email Has been used)", func(t *testing.T) {
 		userRepository.On("CheckUsername",
 			mock.Anything, mock.AnythingOfType("string")).Return(false, nil).Once()
 		userRepository.On("CheckEmail",
 			mock.Anything, mock.AnythingOfType("string")).Return(true, nil).Once()
-		// userRepository.On("Register",
-		// 	mock.Anything, mock.AnythingOfType("users.Domain")).Return(userDomain, errors.New("")).Once()
 
 		_, err := userService.RegisterController(context.Background(), userDomain)
 		assert.NotNil(t, err)
 		assert.Equal(t, "EMAIL IS ALREADY USED", err.Error())
 	})
 
-	t.Run("Test RegisterController | Invalid (Username Has been used)", func(t *testing.T) {
+	t.Run("Test RegisterController | Invalid (Username & Email Has been used)", func(t *testing.T) {
 		userRepository.On("CheckUsername",
 			mock.Anything, mock.AnythingOfType("string")).Return(true, nil).Once()
 		userRepository.On("CheckEmail",
 			mock.Anything, mock.AnythingOfType("string")).Return(true, nil).Once()
-		// userRepository.On("Register",
-		// 	mock.Anything, mock.AnythingOfType("users.Domain")).Return(userDomain, errors.New("")).Once()
 
 		_, err := userService.RegisterController(context.Background(), userDomain)
 		assert.NotNil(t, err)

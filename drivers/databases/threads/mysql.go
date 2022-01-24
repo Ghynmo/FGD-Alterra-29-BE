@@ -202,6 +202,25 @@ func (DB *MysqlThreadRepository) GetSearch(ctx context.Context, threadname strin
 	return ToListDomain(Thread), nil
 }
 
+func (DB *MysqlThreadRepository) GetThreadsByCategoryID(ctx context.Context, id int) ([]threads.Domain, error) {
+	var Thread []Threads
+
+	Q_Like := DB.Conn.Table("thread_likes").Where("thread_id = threads.id").Select("count(thread_likes.user_id)").Group("thread_id")
+	Q_Comment := DB.Conn.Table("comments").Where("thread_id = threads.id").Select("count(comment)").Group("thread_id")
+
+	result := DB.Conn.Table("threads").Select("*, threads.id, title, content, (?) as Q_Like, (?) as Q_Comment", Q_Like, Q_Comment).
+		Where("threads.category_id = ? AND threads.active = 1", id).
+		Joins("join users on threads.user_id = users.id").
+		Order("threads.created_at desc").
+		Find(&Thread)
+
+	if result.Error != nil {
+		return []threads.Domain{}, result.Error
+	}
+
+	return ToListDomain(Thread), nil
+}
+
 func (DB *MysqlThreadRepository) GetSideNewsThreads(ctx context.Context) ([]threads.Domain, error) {
 	var Thread []Threads
 

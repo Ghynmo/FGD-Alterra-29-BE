@@ -50,6 +50,7 @@ type UseCase interface {
 	GetRecommendationThreads(ctx context.Context, id int) ([]Domain, error)
 	GetHotThreads(ctx context.Context) ([]Domain, error)
 	GetSearch(ctx context.Context, threadname string) ([]Domain, error)
+	GetThreadsByCategoryID(ctx context.Context, id int) ([]Domain, error)
 	GetSideNewsThreads(ctx context.Context) ([]Domain, error)
 	CreateThread(ctx context.Context, domain Domain, id int) (Domain, error)
 }
@@ -66,6 +67,7 @@ type Repository interface {
 	GetRecommendationThreads(ctx context.Context, id int) ([]Domain, error)
 	GetHotThreads(ctx context.Context) ([]Domain, error)
 	GetSearch(ctx context.Context, threadname string) ([]Domain, error)
+	GetThreadsByCategoryID(ctx context.Context, id int) ([]Domain, error)
 	GetSideNewsThreads(ctx context.Context) ([]Domain, error)
 	CreateThread(ctx context.Context, domain Domain, id int) (Domain, error)
 }

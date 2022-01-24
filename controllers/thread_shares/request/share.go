@@ -5,7 +5,7 @@ import (
 )
 
 type Share struct {
-	Thread_id int `form:"thread_id"`
+	Thread_id int `form:"thread_id" json:"thread_id"`
 }
 
 func (like *Share) ToDomain() threadshares.Domain {

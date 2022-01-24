@@ -3,9 +3,9 @@ package request
 import "fgd-alterra-29/business/users"
 
 type Register struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Name     string `form:"name" json:"name"`
+	Email    string `form:"email" json:"email"`
+	Password string `form:"password" json:"password"`
 }
 
 func (reg *Register) FromRegister() users.Domain {

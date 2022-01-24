@@ -67,7 +67,7 @@ func (handler CommentController) GetReplyComments(c echo.Context) error {
 }
 
 func (handler CommentController) GetProfileCommentsController(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id := middlewares.ExtractID(c)
 	ctx := c.Request().Context()
 
 	comments, err := handler.CommentUseCase.GetCommentProfileController(ctx, id)

@@ -49,6 +49,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.Use(middleware.Logger())
 	jwtAuth := middleware.JWTWithConfig(cl.JwtConfig)
 	admin := e.Group("admin")
+	profile := e.Group("profile")
 	admin.Use(middleware.KeyAuth(func(key string, c echo.Context) (bool, error) { return middlewares.ExtractAdmin(c) }))
 
 	//Main Page of Admin
@@ -100,19 +101,20 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 	e.POST("login", cl.UserController.LoginController)
 
 	//Profile Page
-	e.GET("profile/:id", cl.UserController.GetProfileController, jwtAuth)
-	e.GET("post/:id", cl.CommentController.GetProfileCommentsController, jwtAuth)
-	e.GET("thread/:id", cl.ThreadController.GetProfileThreads, jwtAuth)
-	e.GET("followers", cl.FollowController.GetFollowers)
-	e.GET("following", cl.FollowController.GetFollowing)
-	e.GET("user/edit", cl.UserController.GetUserSettingController, jwtAuth)
-	e.PUT("user/edit", cl.UserController.UpdateUserProfile, jwtAuth)
+	profile.GET("/:id", cl.UserController.GetProfileController, jwtAuth)
+	profile.GET("/post/:id", cl.CommentController.GetProfileCommentsController, jwtAuth)
+	profile.GET("/thread/:id", cl.ThreadController.GetProfileThreads, jwtAuth)
+	profile.GET("/followers", cl.FollowController.GetFollowers)
+	profile.GET("/following", cl.FollowController.GetFollowing)
+	profile.GET("/user/edit", cl.UserController.GetUserSettingController, jwtAuth)
+	profile.PUT("/user/edit", cl.UserController.UpdateUserProfile, jwtAuth)
 
 	e.GET("", cl.ThreadController.GetHotThreads)
 	e.GET("home", cl.ThreadController.GetHomepageThreads, jwtAuth)
 	e.GET("recommendation", cl.ThreadController.GetRecommendationThreads, jwtAuth)
 	e.GET("hotthread", cl.ThreadController.GetHotThreads)
 	e.GET("search", cl.ThreadController.GetSearch)
+	e.GET("thread/:id", cl.ThreadController.GetThreadsByIDController, jwtAuth)
 	e.GET("sidenews", cl.APINewsController.GetAPINewsController)
 
 	e.GET("categories", cl.CategoryController.GetCategoriesController, jwtAuth)

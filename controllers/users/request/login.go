@@ -3,8 +3,8 @@ package request
 import "fgd-alterra-29/business/users"
 
 type Login struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `form:"email" json:"email"`
+	Password string `form:"password" json:"password"`
 }
 
 func (log *Login) FromLogin() users.Domain {

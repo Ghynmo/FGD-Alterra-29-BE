@@ -5,7 +5,7 @@ import (
 )
 
 type Save struct {
-	Thread_id int `form:"thread_id"`
+	Thread_id int `form:"thread_id" json:"thread_id"`
 }
 
 func (like *Save) ToDomain() threadsaves.Domain {

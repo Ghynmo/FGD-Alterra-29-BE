@@ -3,7 +3,7 @@ package request
 import reportcases "fgd-alterra-29/business/report_cases"
 
 type AddCase struct {
-	Case string `form:"case"`
+	Case string `form:"case" json:"case"`
 }
 
 func (ac *AddCase) ToDomain() reportcases.Domain {

@@ -5,7 +5,7 @@ import (
 )
 
 type Follow struct {
-	User_id int `form:"user_id"`
+	User_id int `form:"user_id" json:"user_id"`
 }
 
 func (follow *Follow) ToDomain() follows.Domain {

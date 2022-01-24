@@ -33,6 +33,17 @@ func (handler ThreadController) GetThreadsByTitleController(c echo.Context) erro
 	return controllers.NewSuccessResponse(c, responses.ToListThread(thread))
 }
 
+func (handler ThreadController) GetThreadsByIDController(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	ctx := c.Request().Context()
+
+	thread, err := handler.ThreadUseCase.GetThreadByID(ctx, id)
+	if err != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToHomeThreads(thread))
+}
+
 func (handler ThreadController) GetProfileThreads(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	ctx := c.Request().Context()

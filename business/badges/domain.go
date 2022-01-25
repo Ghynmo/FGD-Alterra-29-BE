@@ -18,7 +18,7 @@ type Domain struct {
 type UseCase interface {
 	GetBadgesByUserController(ctx context.Context, id int) ([]Domain, error)
 	CreateBadgeController(ctx context.Context, domain Domain) (Domain, error)
-	BadgeStatusController(ctx context.Context, domain Domain) (Domain, error)
+	// BadgeStatusController(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type Repository interface {

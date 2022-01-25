@@ -78,18 +78,6 @@ func (handler CommentController) GetProfileCommentsController(c echo.Context) er
 	return controllers.NewSuccessResponse(c, responses.ToListPostProfile(comments))
 }
 
-func (handler CommentController) GetProfileComments(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-	ctx := c.Request().Context()
-
-	comments, err := handler.CommentUseCase.GetCommentProfileController(ctx, id)
-	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
-	}
-
-	return controllers.NewSuccessResponse(c, responses.ToListPostProfile(comments))
-}
-
 func (handler CommentController) GetPostsController(c echo.Context) error {
 	ctx := c.Request().Context()
 

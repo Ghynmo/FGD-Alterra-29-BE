@@ -2,6 +2,11 @@ package helpers
 
 import "golang.org/x/crypto/bcrypt"
 
+type Bycript interface {
+	Hash(password string) (string, error)
+	ValidateHash(password, hash string) bool
+}
+
 func Hash(secret string) (string, error) {
 	result, err := bcrypt.GenerateFromPassword([]byte(secret), bcrypt.MinCost)
 	if err != nil {

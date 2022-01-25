@@ -53,7 +53,10 @@ func (uc *ThreadUseCase) CreateThread(ctx context.Context, domain Domain, id int
 		return Domain{}, err
 	}
 
-	uc.RepoPoint.AddThreadPoint(ctx, domain.User_id)
+	_, err2 := uc.RepoPoint.AddThreadPoint(ctx, domain.User_id)
+	if err2 != nil {
+		return Domain{}, err2
+	}
 
 	return thread, nil
 }

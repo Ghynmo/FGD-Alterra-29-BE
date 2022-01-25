@@ -18,7 +18,10 @@ func NewCommentLikeUseCase(repo Repository, timeout time.Duration) UseCase {
 }
 
 func (uc *CommentLikeUseCase) LikeController(ctx context.Context, domain Domain, id int) (Domain, error) {
-	state, _ := uc.Repo.GetLikeState(ctx, domain, id)
+	state, errState := uc.Repo.GetLikeState(ctx, domain, id)
+	if errState != nil {
+		return Domain{}, errState
+	}
 
 	if state.Liker_id == 0 {
 		comments, err := uc.Repo.NewLike(ctx, domain, id)

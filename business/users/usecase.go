@@ -97,10 +97,6 @@ func (uc *UserUseCase) LoginController(ctx context.Context, domain Domain) (Doma
 		return Domain{}, err
 	}
 
-	if !(helpers.ValidateHash(domain.Password, user.Password)) {
-		return Domain{}, errors.New("WRONG PASSWORD")
-	}
-
 	var IsAdmin bool
 
 	RolesID := user.Role_id
@@ -108,6 +104,10 @@ func (uc *UserUseCase) LoginController(ctx context.Context, domain Domain) (Doma
 		IsAdmin = true
 	} else {
 		IsAdmin = false
+	}
+
+	if !(helpers.ValidateHash(domain.Password, user.Password)) {
+		return Domain{}, errors.New("WRONG PASSWORD")
 	}
 
 	var errT error

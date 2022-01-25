@@ -44,7 +44,10 @@ func (uc *FollowUseCase) FollowsController(ctx context.Context, domain Domain, m
 		return Domain{}, errors.New("CANNOT FOLLOWS YOURSELF")
 	}
 
-	state, _ := uc.Repo.GetFollowState(ctx, domain, my_id)
+	state, errState := uc.Repo.GetFollowState(ctx, domain, my_id)
+	if errState != nil {
+		return Domain{}, errState
+	}
 
 	if state.User_id == 0 {
 		follow, err := uc.Repo.NewFollow(ctx, domain, my_id)

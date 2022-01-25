@@ -45,15 +45,6 @@ func (uc *CommentUseCase) GetCommentReply(ctx context.Context, id int, reply_of 
 	return comments, nil
 }
 
-func (uc *CommentUseCase) GetCommentProfile(ctx context.Context, id int) ([]Domain, error) {
-	comments, err := uc.Repo.GetCommentProfile(ctx, id)
-	if err != nil {
-		return []Domain{}, err
-	}
-
-	return comments, nil
-}
-
 func (uc *CommentUseCase) GetCommentProfileController(ctx context.Context, id int) ([]Domain, error) {
 	post, err := uc.Repo.GetCommentProfile(ctx, id)
 	if err != nil {

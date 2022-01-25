@@ -18,7 +18,10 @@ func NewThreadLikeUseCase(repo Repository, timeout time.Duration) UseCase {
 }
 
 func (uc *ThreadLikeUseCase) LikeController(ctx context.Context, domain Domain, id int) (Domain, error) {
-	state, _ := uc.Repo.GetLikeState(ctx, domain, id)
+	state, errState := uc.Repo.GetLikeState(ctx, domain, id)
+	if errState != nil {
+		return Domain{}, errState
+	}
 
 	if state.User_id == 0 {
 		threads, err := uc.Repo.NewLike(ctx, domain, id)

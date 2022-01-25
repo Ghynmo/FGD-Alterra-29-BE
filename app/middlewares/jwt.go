@@ -26,6 +26,13 @@ type ConfigJWT struct {
 	ExpiresAt int64
 }
 
+type JWTFunc interface {
+	GenerateToken(id int, admin bool) (string, error)
+	ExtractClaims(tokenStr string) (jwt.MapClaims, bool)
+	ExtractID(c echo.Context) int
+	ExtractAdmin(c echo.Context)
+}
+
 func (JwtConf *ConfigJWT) Init() middleware.JWTConfig {
 	return middleware.JWTConfig{
 		Claims:     &JWTClaims{},

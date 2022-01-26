@@ -14,6 +14,48 @@ type Repository struct {
 	mock.Mock
 }
 
+// CheckGetBadge provides a mock function with given fields: ctx, user_id, badge_id
+func (_m *Repository) CheckGetBadge(ctx context.Context, user_id int, badge_id int) (userbadges.Domain, error) {
+	ret := _m.Called(ctx, user_id, badge_id)
+
+	var r0 userbadges.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, int, int) userbadges.Domain); ok {
+		r0 = rf(ctx, user_id, badge_id)
+	} else {
+		r0 = ret.Get(0).(userbadges.Domain)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int, int) error); ok {
+		r1 = rf(ctx, user_id, badge_id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// CreatenewRecord provides a mock function with given fields: ctx, user_id, badge_id
+func (_m *Repository) CreatenewRecord(ctx context.Context, user_id int, badge_id int) (userbadges.Domain, error) {
+	ret := _m.Called(ctx, user_id, badge_id)
+
+	var r0 userbadges.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, int, int) userbadges.Domain); ok {
+		r0 = rf(ctx, user_id, badge_id)
+	} else {
+		r0 = ret.Get(0).(userbadges.Domain)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int, int) error); ok {
+		r1 = rf(ctx, user_id, badge_id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetUserBadge provides a mock function with given fields: ctx, id
 func (_m *Repository) GetUserBadge(ctx context.Context, id int) ([]userbadges.Domain, error) {
 	ret := _m.Called(ctx, id)

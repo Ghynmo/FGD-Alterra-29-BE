@@ -2,18 +2,21 @@ package comments
 
 import (
 	"context"
+	up "fgd-alterra-29/business/user_points"
 	"time"
 )
 
 type CommentUseCase struct {
 	Repo           Repository
 	contextTimeout time.Duration
+	UserPointRepo  up.Repository
 }
 
-func NewCommentUseCase(repo Repository, timeout time.Duration) UseCase {
+func NewCommentUseCase(repo Repository, timeout time.Duration, up up.Repository) UseCase {
 	return &CommentUseCase{
 		Repo:           repo,
 		contextTimeout: timeout,
+		UserPointRepo:  up,
 	}
 }
 
@@ -62,7 +65,8 @@ func (uc *CommentUseCase) GetPostQuantityController(ctx context.Context) (Domain
 }
 
 func (uc *CommentUseCase) CreateCommentController(ctx context.Context, domain Domain, id int) (Domain, error) {
-	comments, err := uc.Repo.CreateComment(ctx, domain, id)
+	comments, user_id, err := uc.Repo.CreateComment(ctx, domain, id)
+	uc.UserPointRepo.AddReputationPoint(ctx, 1, user_id)
 	if err != nil {
 		return Domain{}, err
 	}

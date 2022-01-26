@@ -34,3 +34,12 @@ func (uc *UserPointUseCase) AddPostPointController(ctx context.Context, id int) 
 
 	return user, nil
 }
+
+func (uc *UserPointUseCase) AddReputationPointController(ctx context.Context, multiple int, id int) (Domain, error) {
+	user, err := uc.Repo.AddReputationPoint(ctx, multiple, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return user, nil
+}

@@ -3,8 +3,8 @@ package profile
 import "fgd-alterra-29/business/badges"
 
 type ProfileBadges struct {
-	Badge    string
-	BadgeUrl string
+	Badge    string `json:"badge"`
+	BadgeUrl string `json:"badge_url"`
 }
 
 func ToProfileBadges(Domain badges.Domain) ProfileBadges {

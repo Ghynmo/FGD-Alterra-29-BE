@@ -6,13 +6,14 @@ import (
 )
 
 type Domain struct {
-	ID               int
-	Badge            string
-	BadgeURL         string
-	Description      string
-	RequirementPoint int
-	Status           bool
-	UserBadges       []userbadges.Domain
+	ID                int
+	Badge             string
+	BadgeURL          string
+	Description       string
+	RequirementThread int
+	Status            bool
+	Category_id       int
+	UserBadges        []userbadges.Domain
 }
 
 type UseCase interface {
@@ -22,6 +23,7 @@ type UseCase interface {
 }
 
 type Repository interface {
+	GetBadgesIdByThread(ctx context.Context, thread_qty int) (int, error)
 	GetBadgesByUser(ctx context.Context, id int) ([]Domain, error)
 	CreateBadge(ctx context.Context, domain Domain) (Domain, error)
 	ActivateBadge(ctx context.Context, domain Domain) (Domain, error)

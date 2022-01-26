@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fgd-alterra-29/business/comments"
 	_commentMocks "fgd-alterra-29/business/comments/mocks"
+	userpoint "fgd-alterra-29/business/user_points"
 	"testing"
 	"time"
 
@@ -13,11 +14,12 @@ import (
 )
 
 var commentRepository _commentMocks.Repository
+var userpointRepository userpoint.Repository
 var commentService comments.UseCase
 var commentDomain comments.Domain
 
 func setup() {
-	commentService = comments.NewCommentUseCase(&commentRepository, time.Hour*1)
+	commentService = comments.NewCommentUseCase(&commentRepository, time.Hour*1, userpointRepository)
 	commentDomain = comments.Domain{
 		Comment:   "test hai",
 		Thread_id: 1,

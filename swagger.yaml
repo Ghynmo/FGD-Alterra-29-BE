@@ -1,0 +1,426 @@
+swagger: "2.0"
+info:
+  title: DKKU Forum Group Discussion
+  description: Capstone Project for Alterra Academy. On this project make a website for people who want to discuss about anything. Contribute by Ilham Prasetya, Wahyu Hauzan Rafi, and Muhammad Ghifari.
+  version: 1.0.0
+host: 54.196.139.145:8080
+basePath: /
+schemes:
+  - http
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+paths:
+
+  /register:
+    post:
+      summary: Register account for access the entire of feature.
+      description: Optional extended description in Markdown.
+      parameters:
+        - in: body
+          name: body
+          description: Create account
+          schema:
+            type: object
+            required:
+              - username
+              - email
+              - password
+            properties:
+              username:
+                type: string
+                example: myusername123
+              email:
+                type: string
+                example: myemail@mail.com
+              password:
+                type: string
+                example: secretpassword
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: myusername123
+              email:
+                type: string
+                example: myemail@mail.com
+              token:
+                type: string
+                example: random_string_for_access
+                
+  /login:
+    post:
+      summary: Login account
+      description: Optional extended description in Markdown.
+      parameters:
+        - in: body
+          name: body
+          description: Create account
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                example: myusername123
+              password:
+                type: string
+                example: secretpassword
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: myusername123
+              email:
+                type: string
+                example: myemail@mail.com
+              token:
+                type: string
+                example: random string for access
+                
+  /home:
+    get:
+      summary: Get Threads
+      description: Get threads by user that has been followed
+      security:
+      - Bearer: []
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7
+                
+  /recommendations:
+    get:
+      summary: Get Threads
+      description: Get Threads by user active in category ..
+      security:
+      - Bearer: []
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7
+  /hotthread:
+    get:
+      summary: Get Threads
+      description: Get Threads by user active in category ..
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7
+                
+  /search:
+    get:
+      summary: Search Threads
+      description: Get Threads by title of thread
+      parameters:
+        - in: query
+          name: title
+          type: string
+          required: true
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7                
+
+  /thread/{id}:
+    get:
+      summary: Get Threads by ID
+      description: Get Threads by title of thread
+      security:
+      - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: thread id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7
+
+    post:
+      summary: Get Threads by Category ID
+      description: Get Threads by category of thread
+      security:
+      - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: category id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7        
+  
+    
+  /threadbycategory/{id}:
+    get:
+      summary: Get Threads by Category ID
+      description: Get Threads by category of thread
+      security:
+      - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: category id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7   
+
+  /threadlike:
+    post:
+      summary: Like Thread
+      description: Like Thread
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: thread_id
+          type: integer
+          required: true
+          description: thread id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7       
+                
+  /threadsave:
+    post:
+      summary: Save Thread
+      description: Like Thread
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: thread_id
+          type: integer
+          required: true
+          description: thread id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_id:
+                type: integer
+                example: 7
+              user_id:
+                type: integer
+                example: 1
+              thread_maker:
+                type: string
+                example: user01
+              content:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              likes_total:
+                type: integer
+                example: 2
+              comments_total:
+                type: integer
+                example: 7                        

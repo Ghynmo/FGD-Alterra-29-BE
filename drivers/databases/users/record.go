@@ -19,7 +19,6 @@ import (
 type Users struct {
 	ID            int    `gorm:"primaryKey"`
 	Role_id       int    `gorm:"default:2"`
-	Reputation_id int    `gorm:"default:1"`
 	Name          string `gorm:"not null"`
 	Email         string `gorm:"not null"`
 	Password      string `gorm:"not null"`
@@ -66,7 +65,6 @@ func (user *Users) ToDomain() users.Domain {
 	return users.Domain{
 		ID:            user.ID,
 		Role_id:       user.Role_id,
-		Reputation_id: user.Reputation_id,
 		Name:          user.Name,
 		Email:         user.Email,
 		Password:      user.Password,

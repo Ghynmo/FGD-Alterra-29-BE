@@ -5,6 +5,7 @@ import (
 	"errors"
 	tl "fgd-alterra-29/business/thread_likes"
 	_threadlikeMocks "fgd-alterra-29/business/thread_likes/mocks"
+	userpoint "fgd-alterra-29/business/user_points"
 	"testing"
 	"time"
 
@@ -13,11 +14,12 @@ import (
 )
 
 var threadlikeRepository _threadlikeMocks.Repository
+var userpointRepository userpoint.Repository
 var threadlikeService tl.UseCase
 var threadlikeDomain tl.Domain
 
 func setup() {
-	threadlikeService = tl.NewThreadLikeUseCase(&threadlikeRepository, time.Hour*1)
+	threadlikeService = tl.NewThreadLikeUseCase(&threadlikeRepository, time.Hour*1, userpointRepository)
 	threadlikeDomain = tl.Domain{
 		User_id:  1,
 		Liked_at: time.Time{},

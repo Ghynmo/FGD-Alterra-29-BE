@@ -18,7 +18,6 @@ import (
 type Domain struct {
 	ID            int
 	Role_id       int
-	Reputation_id int
 	Name          string
 	Email         string
 	Password      string

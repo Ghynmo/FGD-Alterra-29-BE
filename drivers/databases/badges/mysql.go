@@ -17,20 +17,29 @@ func NewMysqlBadgeRepository(conn *gorm.DB) badges.Repository {
 	}
 }
 
+func (DB *MysqlBadgeRepository) GetBadgesIdByThread(ctx context.Context, mythread_qty int) (int, error) {
+
+	var NewBadge_id int
+
+	row := DB.Conn.Table("badges").Select("id").Where("requirement_thread <= ?", mythread_qty).Order("requirement_thread desc").Limit(1).Row()
+	row.Scan(&NewBadge_id)
+
+	if row.Err() != nil {
+		return 0, row.Err()
+	}
+	return NewBadge_id, nil
+}
+
 func (DB *MysqlBadgeRepository) GetBadgesByUser(ctx context.Context, id int) ([]badges.Domain, error) {
-	var Badge []Badges
-	var points int
+	var Badges []Badges
 
-	row := DB.Conn.Table("users").Select("points").Where("users.id = ?", id).Row()
-	row.Scan(&points)
-
-	result := DB.Conn.Table("badges").Where("badges.requirement_point < ?", points).
-		Find(&Badge)
+	result := DB.Conn.Table("badges").Select("badge, badge_url").Where("user_id = ?", id).
+		Joins("join user_badges on badges.id = user_badges.badge_id").Find(&Badges)
 
 	if result.Error != nil {
 		return []badges.Domain{}, result.Error
 	}
-	return ToListDomain(Badge), nil
+	return ToListDomain(Badges), nil
 }
 
 func (DB *MysqlBadgeRepository) CreateBadge(ctx context.Context, domain badges.Domain) (badges.Domain, error) {
@@ -47,7 +56,7 @@ func (DB *MysqlBadgeRepository) CreateBadge(ctx context.Context, domain badges.D
 func (DB *MysqlBadgeRepository) ActivateBadge(ctx context.Context, domain badges.Domain) (badges.Domain, error) {
 	var Badge Badges
 
-	result := DB.Conn.Table("badges").Where("badges.requirement_point < ?").
+	result := DB.Conn.Table("badges").Where("badges.requirement_thread < ?").
 		Find(&Badge)
 
 	if result.Error != nil {
@@ -59,7 +68,7 @@ func (DB *MysqlBadgeRepository) ActivateBadge(ctx context.Context, domain badges
 func (DB *MysqlBadgeRepository) UnactivateBadge(ctx context.Context, domain badges.Domain) (badges.Domain, error) {
 	var Badge Badges
 
-	result := DB.Conn.Table("badges").Where("badges.requirement_point < ?").
+	result := DB.Conn.Table("badges").Where("badges.requirement_thread < ?").
 		Find(&Badge)
 
 	if result.Error != nil {

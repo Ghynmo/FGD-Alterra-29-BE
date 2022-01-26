@@ -3,9 +3,10 @@ package threads_test
 import (
 	"context"
 	"errors"
+	"fgd-alterra-29/business/badges"
 	"fgd-alterra-29/business/threads"
 	_threadMocks "fgd-alterra-29/business/threads/mocks"
-	userpoints "fgd-alterra-29/business/user_points"
+	userbadges "fgd-alterra-29/business/user_badges"
 
 	// _userpointMocks "fgd-alterra-29/business/user_points/mocks"
 	"testing"
@@ -20,17 +21,14 @@ var threadRepository _threadMocks.Repository
 // var userpointRepository _userpointMocks.Repository
 var threadService threads.UseCase
 var threadDomain threads.Domain
-var upRepository userpoints.Repository
-var upDomain userpoints.Domain
+var ubRepository userbadges.Repository
+var badgeRepository badges.Repository
 
 func setup() {
-	threadService = threads.NewThreadUseCase(&threadRepository, time.Hour*1, upRepository)
+	threadService = threads.NewThreadUseCase(&threadRepository, time.Hour*1, badgeRepository, ubRepository)
 	threadDomain = threads.Domain{
 		Title:    "test",
 		Q_Thread: 5,
-	}
-	upDomain = userpoints.Domain{
-		ThreadPoint: 50,
 	}
 }
 

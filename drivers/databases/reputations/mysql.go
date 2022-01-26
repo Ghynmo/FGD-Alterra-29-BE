@@ -27,3 +27,19 @@ func (DB *MysqlReputationRepository) CreateReputation(ctx context.Context, domai
 
 	return reputation.ToDomain(), nil
 }
+
+func (DB *MysqlReputationRepository) GetReputationByUser(ctx context.Context, id int) (reputations.Domain, error) {
+	var Badge Reputations
+	var points int
+
+	row := DB.Conn.Table("users").Select("points").Where("users.id = ?", id).Row()
+	row.Scan(&points)
+
+	result := DB.Conn.Table("reputations").Where("like_points <= ?", points).Order("like_points desc").
+		Find(&Badge)
+
+	if result.Error != nil {
+		return reputations.Domain{}, result.Error
+	}
+	return Badge.ToDomain(), nil
+}

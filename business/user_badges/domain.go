@@ -15,4 +15,6 @@ type UseCase interface {
 
 type Repository interface {
 	GetUserBadge(ctx context.Context, id int) ([]Domain, error)
+	CheckGetBadge(ctx context.Context, user_id int, badge_id int) (Domain, error)
+	CreatenewRecord(ctx context.Context, user_id int, badge_id int) (Domain, error)
 }

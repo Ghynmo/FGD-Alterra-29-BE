@@ -34,3 +34,24 @@ func (_m *Repository) CreateReputation(ctx context.Context, domain reputations.D
 
 	return r0, r1
 }
+
+// GetReputationByUser provides a mock function with given fields: ctx, id
+func (_m *Repository) GetReputationByUser(ctx context.Context, id int) (reputations.Domain, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 reputations.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, int) reputations.Domain); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(reputations.Domain)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}

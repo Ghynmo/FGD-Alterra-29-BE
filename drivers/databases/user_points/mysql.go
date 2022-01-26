@@ -38,3 +38,13 @@ func (DB *MysqlUserPointRepository) AddPostPoint(ctx context.Context, id int) (u
 	}
 	return userpoint.Domain{}, nil
 }
+
+func (DB *MysqlUserPointRepository) AddReputationPoint(ctx context.Context, multiple int, id int) (userpoint.Domain, error) {
+
+	result := DB.Conn.Table("users").Where("id = ?", id).Update("points", gorm.Expr("points + ?", multiple))
+
+	if result.Error != nil {
+		return userpoint.Domain{}, result.Error
+	}
+	return userpoint.Domain{}, nil
+}

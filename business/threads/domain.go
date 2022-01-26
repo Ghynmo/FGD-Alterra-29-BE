@@ -59,6 +59,7 @@ type Repository interface {
 	GetThreadsByTitle(ctx context.Context, title string) ([]Domain, error)
 	GetProfileThreads(ctx context.Context, id int) ([]Domain, error)
 	GetThreadQuantity(ctx context.Context) (Domain, error)
+	GetThreadQtyByCategory(ctx context.Context, domain Domain, id int) (Domain, error)
 	GetThreads(ctx context.Context) ([]Domain, error)
 	GetThreadByID(ctx context.Context, id int) (Domain, error)
 	DeleteThread(ctx context.Context, id int) (Domain, error)

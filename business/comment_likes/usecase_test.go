@@ -5,6 +5,7 @@ import (
 	"errors"
 	tl "fgd-alterra-29/business/comment_likes"
 	_commentlikeMocks "fgd-alterra-29/business/comment_likes/mocks"
+	userpoint "fgd-alterra-29/business/user_points"
 	"testing"
 	"time"
 
@@ -13,11 +14,12 @@ import (
 )
 
 var commentlikeRepository _commentlikeMocks.Repository
+var userpointRepository userpoint.Repository
 var commentlikeService tl.UseCase
 var commentlikeDomain tl.Domain
 
 func setup() {
-	commentlikeService = tl.NewCommentLikeUseCase(&commentlikeRepository, time.Hour*1)
+	commentlikeService = tl.NewCommentLikeUseCase(&commentlikeRepository, time.Hour*1, userpointRepository)
 	commentlikeDomain = tl.Domain{
 		Liker_id: 1,
 		Liked_at: time.Time{},

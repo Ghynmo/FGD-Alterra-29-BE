@@ -26,3 +26,13 @@ func (uc *ReputationUseCase) CreateReputationController(ctx context.Context, dom
 
 	return reputation, nil
 }
+
+func (uc *ReputationUseCase) GetReputationByUser(ctx context.Context, id int) (Domain, error) {
+
+	reputation, err := uc.Repo.GetReputationByUser(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	return reputation, nil
+}

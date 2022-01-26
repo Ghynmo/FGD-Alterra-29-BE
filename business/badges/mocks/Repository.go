@@ -79,6 +79,27 @@ func (_m *Repository) GetBadgesByUser(ctx context.Context, id int) ([]badges.Dom
 	return r0, r1
 }
 
+// GetBadgesIdByThread provides a mock function with given fields: ctx, thread_qty
+func (_m *Repository) GetBadgesIdByThread(ctx context.Context, thread_qty int) (int, error) {
+	ret := _m.Called(ctx, thread_qty)
+
+	var r0 int
+	if rf, ok := ret.Get(0).(func(context.Context, int) int); ok {
+		r0 = rf(ctx, thread_qty)
+	} else {
+		r0 = ret.Get(0).(int)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int) error); ok {
+		r1 = rf(ctx, thread_qty)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UnactivateBadge provides a mock function with given fields: ctx, domain
 func (_m *Repository) UnactivateBadge(ctx context.Context, domain badges.Domain) (badges.Domain, error) {
 	ret := _m.Called(ctx, domain)

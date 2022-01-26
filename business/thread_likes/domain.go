@@ -17,8 +17,8 @@ type UseCase interface {
 }
 
 type Repository interface {
-	NewLike(ctx context.Context, domain Domain, id int) (Domain, error)
-	Like(ctx context.Context, domain Domain, id int) (Domain, error)
-	Unlike(ctx context.Context, domain Domain, id int) (Domain, error)
+	NewLike(ctx context.Context, domain Domain, id int) (Domain, int, error)
+	Like(ctx context.Context, domain Domain, id int) (Domain, int, error)
+	Unlike(ctx context.Context, domain Domain, id int) (Domain, int, error)
 	GetLikeState(ctx context.Context, domain Domain, id int) (Domain, error)
 }

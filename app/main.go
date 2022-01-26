@@ -149,21 +149,25 @@ func main() {
 	apinewUseCase := _apinewUseCase.NewAPINewsUseCase(apinewRepository, timeoutContext)
 	apinewController := _apinewController.NewAPINewsController(apinewUseCase)
 
-	commentRepository := _commentRepository.NewMysqlCommentRepository(Conn)
-	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext)
-	commentController := _commentController.NewCommentController(commentUseCase)
-
 	userpointRepository := _userpointRepository.NewMysqlUserPointRepository(Conn)
 	userpointUseCase := _userpointUseCase.NewUserPointUseCase(userpointRepository, timeoutContext)
 	userpointController := _userpointController.NewUserPointController(userpointUseCase)
 
-	threadRepository := _threadRepository.NewMysqlThreadRepository(Conn)
-	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext, userpointRepository)
-	threadController := _threadController.NewThreadController(threadUseCase)
+	commentRepository := _commentRepository.NewMysqlCommentRepository(Conn)
+	commentUseCase := _commentUseCase.NewCommentUseCase(commentRepository, timeoutContext, userpointRepository)
+	commentController := _commentController.NewCommentController(commentUseCase)
+
+	badgeRepository := _badgeRepository.NewMysqlBadgeRepository(Conn)
+	badgeUseCase := _badgeUseCase.NewBadgeUseCase(badgeRepository, timeoutContext)
+	badgeController := _badgeController.NewBadgeController(badgeUseCase)
 
 	userbadgeRepository := _userbadgeRepository.NewMysqlUserBadgeRepository(Conn)
 	userbadgeUseCase := _userbadgeUseCase.NewUserBadgeUseCase(userbadgeRepository, timeoutContext)
 	userbadgeController := _userbadgeController.NewUserBadgeController(userbadgeUseCase)
+
+	threadRepository := _threadRepository.NewMysqlThreadRepository(Conn)
+	threadUseCase := _threadUseCase.NewThreadUseCase(threadRepository, timeoutContext, badgeRepository, userbadgeRepository)
+	threadController := _threadController.NewThreadController(threadUseCase)
 
 	followRepository := _followRepository.NewMysqlFollowRepository(Conn)
 	followUseCase := _followUseCase.NewFollowUseCase(followRepository, timeoutContext)
@@ -186,7 +190,7 @@ func main() {
 	commentreportController := _commentreportController.NewCommentReportController(commentreportUseCase)
 
 	threadlikeRepository := _threadlikeRepository.NewMysqlThreadLikeRepository(Conn)
-	threadlikeUseCase := _threadlikeUseCase.NewThreadLikeUseCase(threadlikeRepository, timeoutContext)
+	threadlikeUseCase := _threadlikeUseCase.NewThreadLikeUseCase(threadlikeRepository, timeoutContext, userpointRepository)
 	threadlikeController := _threadlikeController.NewThreadLikeController(threadlikeUseCase)
 
 	threadsaveRepository := _threadsaveRepository.NewMysqlThreadSaveRepository(Conn)
@@ -197,21 +201,17 @@ func main() {
 	threadshareUseCase := _threadshareUseCase.NewThreadShareUseCase(threadshareRepository, timeoutContext)
 	threadshareController := _threadshareController.NewThreadShareController(threadshareUseCase)
 
-	badgeRepository := _badgeRepository.NewMysqlBadgeRepository(Conn)
-	badgeUseCase := _badgeUseCase.NewBadgeUseCase(badgeRepository, timeoutContext)
-	badgeController := _badgeController.NewBadgeController(badgeUseCase)
-
 	reputationRepository := _reputationRepository.NewMysqlReputationRepository(Conn)
 	reputationUseCase := _reputationUseCase.NewReputationUseCase(reputationRepository, timeoutContext)
 	reputationController := _reputationController.NewReputationController(reputationUseCase)
 
 	commentlikeRepository := _commentlikeRepository.NewMysqlCommentLikeRepository(Conn)
-	commentlikeUseCase := _commentlikeUseCase.NewCommentLikeUseCase(commentlikeRepository, timeoutContext)
+	commentlikeUseCase := _commentlikeUseCase.NewCommentLikeUseCase(commentlikeRepository, timeoutContext, userpointRepository)
 	commentlikeController := _commentlikeController.NewCommentLikeController(commentlikeUseCase)
 
 	userRepository := _userRepository.NewMysqlUserRepository(Conn)
 	userUseCase := _userUseCase.NewUserUseCase(userRepository, timeoutContext, ConfigJWT)
-	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase, badgeUseCase)
+	userController := _userController.NewUserController(userUseCase, threadUseCase, userbadgeUseCase, categoryUseCase, threadreportUseCase, commentUseCase, badgeUseCase, reputationUseCase)
 
 	routesInit := routes.ControllerList{
 		JwtConfig:               ConfigJWT.Init(),

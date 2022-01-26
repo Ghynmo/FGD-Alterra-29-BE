@@ -11,9 +11,11 @@ type Domain struct {
 type UseCase interface {
 	AddThreadPointController(ctx context.Context, id int) (Domain, error)
 	AddPostPointController(ctx context.Context, id int) (Domain, error)
+	AddReputationPointController(ctx context.Context, multiple int, id int) (Domain, error)
 }
 
 type Repository interface {
 	AddThreadPoint(ctx context.Context, id int) (Domain, error)
 	AddPostPoint(ctx context.Context, id int) (Domain, error)
+	AddReputationPoint(ctx context.Context, multiple int, id int) (Domain, error)
 }

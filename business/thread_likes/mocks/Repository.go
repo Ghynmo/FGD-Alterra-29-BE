@@ -36,7 +36,7 @@ func (_m *Repository) GetLikeState(ctx context.Context, domain threadlikes.Domai
 }
 
 // Like provides a mock function with given fields: ctx, domain, id
-func (_m *Repository) Like(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, error) {
+func (_m *Repository) Like(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, int, error) {
 	ret := _m.Called(ctx, domain, id)
 
 	var r0 threadlikes.Domain
@@ -46,18 +46,25 @@ func (_m *Repository) Like(ctx context.Context, domain threadlikes.Domain, id in
 		r0 = ret.Get(0).(threadlikes.Domain)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, threadlikes.Domain, int) error); ok {
+	var r1 int
+	if rf, ok := ret.Get(1).(func(context.Context, threadlikes.Domain, int) int); ok {
 		r1 = rf(ctx, domain, id)
 	} else {
-		r1 = ret.Error(1)
+		r1 = ret.Get(1).(int)
 	}
 
-	return r0, r1
+	var r2 error
+	if rf, ok := ret.Get(2).(func(context.Context, threadlikes.Domain, int) error); ok {
+		r2 = rf(ctx, domain, id)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
 }
 
 // NewLike provides a mock function with given fields: ctx, domain, id
-func (_m *Repository) NewLike(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, error) {
+func (_m *Repository) NewLike(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, int, error) {
 	ret := _m.Called(ctx, domain, id)
 
 	var r0 threadlikes.Domain
@@ -67,18 +74,25 @@ func (_m *Repository) NewLike(ctx context.Context, domain threadlikes.Domain, id
 		r0 = ret.Get(0).(threadlikes.Domain)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, threadlikes.Domain, int) error); ok {
+	var r1 int
+	if rf, ok := ret.Get(1).(func(context.Context, threadlikes.Domain, int) int); ok {
 		r1 = rf(ctx, domain, id)
 	} else {
-		r1 = ret.Error(1)
+		r1 = ret.Get(1).(int)
 	}
 
-	return r0, r1
+	var r2 error
+	if rf, ok := ret.Get(2).(func(context.Context, threadlikes.Domain, int) error); ok {
+		r2 = rf(ctx, domain, id)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
 }
 
 // Unlike provides a mock function with given fields: ctx, domain, id
-func (_m *Repository) Unlike(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, error) {
+func (_m *Repository) Unlike(ctx context.Context, domain threadlikes.Domain, id int) (threadlikes.Domain, int, error) {
 	ret := _m.Called(ctx, domain, id)
 
 	var r0 threadlikes.Domain
@@ -88,12 +102,19 @@ func (_m *Repository) Unlike(ctx context.Context, domain threadlikes.Domain, id 
 		r0 = ret.Get(0).(threadlikes.Domain)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, threadlikes.Domain, int) error); ok {
+	var r1 int
+	if rf, ok := ret.Get(1).(func(context.Context, threadlikes.Domain, int) int); ok {
 		r1 = rf(ctx, domain, id)
 	} else {
-		r1 = ret.Error(1)
+		r1 = ret.Get(1).(int)
 	}
 
-	return r0, r1
+	var r2 error
+	if rf, ok := ret.Get(2).(func(context.Context, threadlikes.Domain, int) error); ok {
+		r2 = rf(ctx, domain, id)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
 }

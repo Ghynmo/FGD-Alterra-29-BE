@@ -3,6 +3,7 @@ package responses
 import (
 	"fgd-alterra-29/business/badges"
 	"fgd-alterra-29/business/categories"
+	"fgd-alterra-29/business/reputations"
 	"fgd-alterra-29/business/threads"
 	"fgd-alterra-29/business/users"
 	"fgd-alterra-29/controllers/users/responses/profile"
@@ -11,7 +12,7 @@ import (
 type Profile struct {
 	ID             int                        `json:"user_id"`
 	Role_id        int                        `json:"role_id"`
-	Reputation_id  int                        `json:"reputation_id"`
+	Reputation     profile.Reputation         `json:"reputation"`
 	Name           string                     `json:"name"`
 	Header_url     string                     `json:"header_url"`
 	Photo_url      string                     `json:"photo_url"`
@@ -26,11 +27,10 @@ type Profile struct {
 	ThreadProfile  []profile.ThreadProfile    `json:"thread_on_profile"`
 }
 
-func ToProfile(domain users.Domain, badge []badges.Domain, catthread []categories.Domain, thread []threads.Domain) Profile {
+func ToProfile(domain users.Domain, badge []badges.Domain, catthread []categories.Domain, thread []threads.Domain, rep reputations.Domain) Profile {
 	return Profile{
 		ID:             domain.ID,
 		Role_id:        domain.Role_id,
-		Reputation_id:  domain.Reputation_id,
 		Name:           domain.Name,
 		Header_url:     domain.Header_url,
 		Photo_url:      domain.Photo_url,
@@ -43,5 +43,6 @@ func ToProfile(domain users.Domain, badge []badges.Domain, catthread []categorie
 		UserBadgesTrue: profile.ToListProfileBadges(badge),
 		ActiveCategory: profile.ToListActiveOnC(catthread),
 		ThreadProfile:  profile.ToListThreadProfile(thread),
+		Reputation:     profile.ToNewReputation(rep),
 	}
 }

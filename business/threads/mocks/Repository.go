@@ -236,6 +236,27 @@ func (_m *Repository) GetThreadByID(ctx context.Context, id int) (threads.Domain
 	return r0, r1
 }
 
+// GetThreadQtyByCategory provides a mock function with given fields: ctx, domain, id
+func (_m *Repository) GetThreadQtyByCategory(ctx context.Context, domain threads.Domain, id int) (threads.Domain, error) {
+	ret := _m.Called(ctx, domain, id)
+
+	var r0 threads.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, threads.Domain, int) threads.Domain); ok {
+		r0 = rf(ctx, domain, id)
+	} else {
+		r0 = ret.Get(0).(threads.Domain)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, threads.Domain, int) error); ok {
+		r1 = rf(ctx, domain, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetThreadQuantity provides a mock function with given fields: ctx
 func (_m *Repository) GetThreadQuantity(ctx context.Context) (threads.Domain, error) {
 	ret := _m.Called(ctx)

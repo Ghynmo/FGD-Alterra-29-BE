@@ -5,6 +5,7 @@ import (
 	"fgd-alterra-29/business/badges"
 	"fgd-alterra-29/business/categories"
 	"fgd-alterra-29/business/comments"
+	"fgd-alterra-29/business/reputations"
 	threadreport "fgd-alterra-29/business/thread_report"
 	"fgd-alterra-29/business/threads"
 	userbadges "fgd-alterra-29/business/user_badges"
@@ -27,9 +28,10 @@ type UserController struct {
 	ThreadReportUseCase threadreport.UseCase
 	CommentUseCase      comments.UseCase
 	BadgeUseCase        badges.UseCase
+	ReputationUseCase   reputations.UseCase
 }
 
-func NewUserController(userUC users.UseCase, threadUC threads.UseCase, userbadgeUC userbadges.UseCase, categoryUC categories.UseCase, threadreportUC threadreport.UseCase, commentUC comments.UseCase, badgeUC badges.UseCase) *UserController {
+func NewUserController(userUC users.UseCase, threadUC threads.UseCase, userbadgeUC userbadges.UseCase, categoryUC categories.UseCase, threadreportUC threadreport.UseCase, commentUC comments.UseCase, badgeUC badges.UseCase, repUC reputations.UseCase) *UserController {
 	return &UserController{
 		UserUseCase:         userUC,
 		ThreadUseCase:       threadUC,
@@ -38,6 +40,7 @@ func NewUserController(userUC users.UseCase, threadUC threads.UseCase, userbadge
 		ThreadReportUseCase: threadreportUC,
 		CommentUseCase:      commentUC,
 		BadgeUseCase:        badgeUC,
+		ReputationUseCase:   repUC,
 	}
 }
 
@@ -102,19 +105,23 @@ func (handler UserController) GetProfileController(c echo.Context) error {
 	thread, err1 := handler.ThreadUseCase.GetProfileThreads(ctx, id)
 	badges, err2 := handler.BadgeUseCase.GetBadgesByUserController(ctx, id)
 	catthreads, err3 := handler.CategoryUseCase.GetUserActiveInCategory(ctx, id)
+	reputations, err4 := handler.ReputationUseCase.GetReputationByUser(ctx, id)
 	if err != nil {
 		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
 	if err1 != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err1)
 	}
 	if err2 != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err2)
 	}
 	if err3 != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err3)
 	}
-	return controllers.NewSuccessResponse(c, responses.ToProfile(user, badges, catthreads, thread))
+	if err4 != nil {
+		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err4)
+	}
+	return controllers.NewSuccessResponse(c, responses.ToProfile(user, badges, catthreads, thread, reputations))
 }
 
 func (handler UserController) GetDashboardController(c echo.Context) error {

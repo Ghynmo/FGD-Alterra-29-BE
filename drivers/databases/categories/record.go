@@ -2,6 +2,7 @@ package categories
 
 import (
 	"fgd-alterra-29/business/categories"
+	"fgd-alterra-29/drivers/databases/badges"
 	"fgd-alterra-29/drivers/databases/threads"
 )
 
@@ -10,6 +11,7 @@ type Categories struct {
 	Category string `gorm:"not null"`
 	IconUrl  string
 	Threads  []threads.Threads `gorm:"foreignKey:Category_id"`
+	Badges   []badges.Badges   `gorm:"foreignKey:Category_id"`
 	Q_Title  int               `gorm:"-:migration;->"`
 }
 

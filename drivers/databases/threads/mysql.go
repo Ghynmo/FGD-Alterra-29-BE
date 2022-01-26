@@ -62,6 +62,20 @@ func (DB *MysqlThreadRepository) GetThreadQuantity(ctx context.Context) (threads
 	return Thread.ToDomain(), nil
 }
 
+func (DB *MysqlThreadRepository) GetThreadQtyByCategory(ctx context.Context, domain threads.Domain, id int) (threads.Domain, error) {
+
+	var Thread Threads
+	result := DB.Conn.Table("threads").Select("count(title) as Q_Thread").
+		Where("threads.active = 1 AND category_id = ? AND user_id = ?", domain.Category_id, id).
+		Find(&Thread)
+
+	if result.Error != nil {
+		return threads.Domain{}, result.Error
+	}
+
+	return Thread.ToDomain(), nil
+}
+
 func (DB *MysqlThreadRepository) GetThreads(ctx context.Context) ([]threads.Domain, error) {
 	var Thread []Threads
 	result := DB.Conn.Table("threads").Select("threads.id, name, photo_url as Photo, title, category, threads.created_at").

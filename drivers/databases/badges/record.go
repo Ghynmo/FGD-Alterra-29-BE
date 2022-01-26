@@ -6,21 +6,24 @@ import (
 )
 
 type Badges struct {
-	ID               int    `gorm:"primaryKey"`
-	Badge            string `gorm:"not null"`
-	Description      string
-	UserBadges       []userbadges.UserBadges `gorm:"foreignKey:Badge_id"`
-	BadgeURL         string
-	RequirementPoint int
+	ID                int    `gorm:"primaryKey"`
+	Badge             string `gorm:"not null"`
+	BadgeURL          string
+	Description       string
+	RequirementThread int
+	UserBadges        []userbadges.UserBadges `gorm:"foreignKey:Badge_id"`
+	Category_id       int
 }
 
 func (Badge *Badges) ToDomain() badges.Domain {
 	return badges.Domain{
-		ID:          Badge.ID,
-		Badge:       Badge.Badge,
-		BadgeURL:    Badge.BadgeURL,
-		Description: Badge.Description,
-		UserBadges:  userbadges.ToListDomain(Badge.UserBadges),
+		ID:                Badge.ID,
+		Badge:             Badge.Badge,
+		BadgeURL:          Badge.BadgeURL,
+		Description:       Badge.Description,
+		RequirementThread: Badge.RequirementThread,
+		UserBadges:        userbadges.ToListDomain(Badge.UserBadges),
+		Category_id:       Badge.Category_id,
 	}
 }
 

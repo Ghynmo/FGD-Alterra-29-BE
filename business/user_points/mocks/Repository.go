@@ -35,6 +35,27 @@ func (_m *Repository) AddPostPoint(ctx context.Context, id int) (userpoints.Doma
 	return r0, r1
 }
 
+// AddReputationPoint provides a mock function with given fields: ctx, multiple, id
+func (_m *Repository) AddReputationPoint(ctx context.Context, multiple int, id int) (userpoints.Domain, error) {
+	ret := _m.Called(ctx, multiple, id)
+
+	var r0 userpoints.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, int, int) userpoints.Domain); ok {
+		r0 = rf(ctx, multiple, id)
+	} else {
+		r0 = ret.Get(0).(userpoints.Domain)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, int, int) error); ok {
+		r1 = rf(ctx, multiple, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // AddThreadPoint provides a mock function with given fields: ctx, id
 func (_m *Repository) AddThreadPoint(ctx context.Context, id int) (userpoints.Domain, error) {
 	ret := _m.Called(ctx, id)

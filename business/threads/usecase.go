@@ -2,21 +2,25 @@ package threads
 
 import (
 	"context"
-	userpoints "fgd-alterra-29/business/user_points"
+	"fgd-alterra-29/business/badges"
+	ub "fgd-alterra-29/business/user_badges"
+	"fmt"
 	"time"
 )
 
 type ThreadUseCase struct {
 	Repo           Repository
 	contextTimeout time.Duration
-	RepoPoint      userpoints.Repository
+	RepoBadges     badges.Repository
+	RepoUserBadges ub.Repository
 }
 
-func NewThreadUseCase(repo Repository, timeout time.Duration, up userpoints.Repository) UseCase {
+func NewThreadUseCase(repo Repository, timeout time.Duration, repobadge badges.Repository, ub ub.Repository) UseCase {
 	return &ThreadUseCase{
 		Repo:           repo,
 		contextTimeout: timeout,
-		RepoPoint:      up,
+		RepoBadges:     repobadge,
+		RepoUserBadges: ub,
 	}
 }
 
@@ -48,14 +52,39 @@ func (uc *ThreadUseCase) GetThreadQuantity(ctx context.Context) (Domain, error) 
 }
 
 func (uc *ThreadUseCase) CreateThread(ctx context.Context, domain Domain, id int) (Domain, error) {
+	fmt.Println("thisis id", id)
 	thread, err := uc.Repo.CreateThread(ctx, domain, id)
 	if err != nil {
 		return Domain{}, err
 	}
 
-	_, err2 := uc.RepoPoint.AddThreadPoint(ctx, domain.User_id)
-	if err2 != nil {
-		return Domain{}, err2
+	qty, err := uc.Repo.GetThreadQtyByCategory(ctx, domain, id)
+	fmt.Println("TC1", qty)
+	if err != nil {
+		fmt.Println("TC1 error")
+		return Domain{}, err
+	}
+
+	newbadge, err3 := uc.RepoBadges.GetBadgesIdByThread(ctx, qty.Q_Thread)
+	fmt.Println("TC2", newbadge)
+	if err3 != nil {
+		fmt.Println("TC2 error")
+		return Domain{}, err3
+	}
+
+	checkBadgeID, err4 := uc.RepoUserBadges.CheckGetBadge(ctx, id, newbadge)
+	fmt.Println("TC3", checkBadgeID)
+	if err4 != nil {
+		fmt.Println("TC3 error")
+		return Domain{}, err3
+	}
+	if checkBadgeID.User_id == 0 {
+		_, err4 := uc.RepoUserBadges.CreatenewRecord(ctx, id, newbadge)
+		if err4 != nil {
+			fmt.Println("TC3 error")
+			return Domain{}, err4
+		}
+		return thread, nil
 	}
 
 	return thread, nil

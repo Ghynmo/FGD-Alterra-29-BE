@@ -47,5 +47,5 @@ type Repository interface {
 	UnactivatingPost(ctx context.Context, id int) (Domain, error)
 	ActivatingPost(ctx context.Context, id int) (Domain, error)
 	GetCommentReply(ctx context.Context, id int, reply_of int) ([]Domain, error)
-	CreateComment(ctx context.Context, domain Domain, id int) (Domain, error)
+	CreateComment(ctx context.Context, domain Domain, id int) (Domain, int, error)
 }

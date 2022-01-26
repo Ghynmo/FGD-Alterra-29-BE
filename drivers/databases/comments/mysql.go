@@ -123,24 +123,30 @@ func (DB *MysqlCommentRepository) ActivatingPost(ctx context.Context, id int) (c
 	return Comment.ToDomain(), nil
 }
 
-func (DB *MysqlCommentRepository) CreateComment(ctx context.Context, domain comments.Domain, id int) (comments.Domain, error) {
+func (DB *MysqlCommentRepository) CreateComment(ctx context.Context, domain comments.Domain, id int) (comments.Domain, int, error) {
 	var Comment Comments
+	var thread_user_id int
 
 	if domain.ReplyOf == 0 {
 		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of, created_at) VALUES (?, ?, ?, NULL, ?)",
 			domain.Thread_id, id, domain.Comment, time.Now())
 		if result.Error != nil {
-			return comments.Domain{}, result.Error
+			return comments.Domain{}, 0, result.Error
 		}
+		row := DB.Conn.Table("threads").Where("id = ?", domain.Thread_id).Select("user_id").Row()
+		row.Scan(&thread_user_id)
+
 	} else {
 		result := DB.Conn.Exec("INSERT INTO comments (thread_id, user_id, comment, reply_of, created_at) VALUES (?, ?, ?, ?, ?)",
 			domain.Thread_id, id, domain.Comment, domain.ReplyOf, time.Now())
 		if result.Error != nil {
-			return comments.Domain{}, result.Error
+			return comments.Domain{}, 0, result.Error
 		}
+		row := DB.Conn.Table("threads").Where("id = ?", domain.Thread_id).Select("user_id").Row()
+		row.Scan(&thread_user_id)
 	}
 
-	return Comment.ToDomain(), nil
+	return Comment.ToDomain(), thread_user_id, nil
 }
 
 // func (DB *MysqlCommentRepository) GetCommentParent(ctx context.Context, id int) ([]comments.Domain, error) {

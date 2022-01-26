@@ -120,7 +120,7 @@ func (cl *ControllerList) RouteRegister(e echo.Echo) {
 
 	e.GET("categories", cl.CategoryController.GetCategoriesController, jwtAuth)
 
-	e.GET("commentbythread", cl.CommentController.GetCommentByThreadController, jwtAuth)
+	e.GET("commentbythread/:id", cl.CommentController.GetCommentByThreadController, jwtAuth)
 	e.GET("comment/reply/:reply_of", cl.CommentController.GetReplyComments, jwtAuth)
 	e.POST("comment", cl.CommentController.CreateCommentController, jwtAuth)
 	e.POST("thread", cl.ThreadController.CreateThread, jwtAuth, jwtAuth)

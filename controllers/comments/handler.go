@@ -36,11 +36,7 @@ func (handler CommentController) GetPostsByCommentController(c echo.Context) err
 
 func (handler CommentController) GetCommentByThreadController(c echo.Context) error {
 	id := middlewares.ExtractID(c)
-
-	GetComment := request.GetByThread{}
-	c.Bind(&GetComment)
-
-	thread_id := GetComment.Thread_id
+	thread_id, _ := strconv.Atoi(c.Param("id"))
 
 	ctx := c.Request().Context()
 

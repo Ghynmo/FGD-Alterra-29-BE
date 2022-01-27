@@ -16,8 +16,8 @@ paths:
 
   /register:
     post:
-      summary: Register account for access the entire of feature.
-      description: Optional extended description in Markdown.
+      summary: Register account
+      description: Register account for access the entire of feature.
       parameters:
         - in: body
           name: body
@@ -59,7 +59,7 @@ paths:
   /login:
     post:
       summary: Login account
-      description: Optional extended description in Markdown.
+      description: Login account for access the entire of feature.
       parameters:
         - in: body
           name: body
@@ -119,7 +119,7 @@ paths:
                 example: user01
               content:
                 type: string
-                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                example: Lorem ipsum dolor sit amet...
               likes_total:
                 type: integer
                 example: 2
@@ -130,7 +130,7 @@ paths:
   /recommendations:
     get:
       summary: Get Threads
-      description: Get Threads by user active in category ..
+      description: Get Threads by category that user active
       security:
       - Bearer: []
       produces:
@@ -162,7 +162,7 @@ paths:
   /hotthread:
     get:
       summary: Get Threads
-      description: Get Threads by user active in category ..
+      description: Get Threads and sorted by like and comment
       produces:
         - application/json
       responses:
@@ -193,7 +193,7 @@ paths:
   /search:
     get:
       summary: Search Threads
-      description: Get Threads by title of thread
+      description: Search Threads by title of thread
       parameters:
         - in: query
           name: title
@@ -228,8 +228,8 @@ paths:
 
   /thread/{id}:
     get:
-      summary: Get Threads by ID
-      description: Get Threads by title of thread
+      summary: Get Thread by ID
+      description: Get Threads by thread_id
       security:
       - Bearer: []
       parameters:
@@ -264,18 +264,30 @@ paths:
               comments_total:
                 type: integer
                 example: 7
-
+  /thread:
     post:
-      summary: Get Threads by Category ID
-      description: Get Threads by category of thread
+      summary: Create Thread
+      description: Create your own thread
       security:
       - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
       parameters:
-        - in: path
-          name: id
+        - in: formData
+          name: title
+          type: string
+          required: true
+          description: title of thread
+        - in: formData
+          name: category_id
           type: integer
           required: true
           description: category id
+        - in: formData
+          name: content
+          type: string
+          required: true
+          description: content of your thread
       produces:
         - application/json
       responses:
@@ -365,29 +377,13 @@ paths:
           schema:
             type: object
             properties:
-              thread_id:
-                type: integer
-                example: 7
-              user_id:
-                type: integer
-                example: 1
-              thread_maker:
-                type: string
-                example: user01
-              content:
-                type: string
-                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-              likes_total:
-                type: integer
-                example: 2
-              comments_total:
-                type: integer
-                example: 7       
+              data:
+                example: null 
                 
   /threadsave:
     post:
       summary: Save Thread
-      description: Like Thread
+      description: Save Thread
       security:
       - Bearer: []
       consumes: 
@@ -406,21 +402,1298 @@ paths:
           schema:
             type: object
             properties:
-              thread_id:
+              data:
+                example: null                
+  
+  /threadshare:
+    post:
+      summary: Share Thread
+      description: Share Thread
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: thread_id
+          type: integer
+          required: true
+          description: thread id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+  
+  /commentbythread/{id}:
+    get:
+      summary: Get comment by thread id
+      description: Get comment by thread id
+      security:
+      - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: thread id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              comment_id:
                 type: integer
-                example: 7
+                example: 3
+              name:
+                type: string
+                example: admin
+              photo_url:
+                type: string
+                example: https:/url
+              comment:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              created_at:
+                type: string
+                example: "2022-01-26T10:40:40.702+07:00"
+              likes_by_me:
+                type: boolean
+                example: false   
+    
+  /comment/reply/{id}:
+    get:
+      summary: Get reply of comment
+      description: Get reply of comment (nested)
+      security:
+      - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: comment id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              comment_id:
+                type: integer
+                example: 3
+              name:
+                type: string
+                example: admin
+              photo_url:
+                type: string
+                example: https:/url
+              comment:
+                type: string
+                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+              created_at:
+                type: string
+                example: "2022-01-26T10:40:40.702+07:00"
+              likes_by_me:
+                type: boolean
+                example: false  
+  /comment:
+    post:
+      summary: Create New Comment
+      description: Create New Comment
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: thread_id
+          type: integer
+          required: true
+          description: thread id
+        - in: formData
+          name: reply_of
+          type: integer
+          required: false
+          description: comment id
+        - in: formData
+          name: comment
+          type: string
+          required: false
+          description: your comment
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null 
+
+  /commentlike:
+    post:
+      summary: Like comment
+      description: Like comment 
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: comment_id
+          type: integer
+          required: true
+          description: comment id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null 
+  
+  /profile/{id}:
+    get:
+      summary: Get Profile data
+      description: Get Entire of profile data such as profile, followers, following, own thread and post/comment, and badge that you get
+      security:
+      - Bearer: []
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: user id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
               user_id:
                 type: integer
                 example: 1
-              thread_maker:
+              role_id:
+                type: integer
+                example: 1
+              reputation:
+                type: string
+                example: newbie
+              Photo_url:
+                type: string
+                example: https://url
+              bio:
+                type: string
+                example: Hi there!
+              point:
+                type: integer
+                example: 20  
+              following_total:
+                type: integer
+                example: 5  
+              followers_total:
+                type: integer
+                example: 6
+              post_total:
+                type: integer
+                example: 4
+              thread_total:
+                type: integer
+                example: 3
+              badge_list:
+                type: object
+                properties:
+                  badge:
+                    type: string
+                    example: Politics Threader
+                  badge_url:
+                    type: string
+                    example: https://url
+              active_on_category:
+                type: object
+                properties:
+                  category:
+                    type: string
+                    example: Politics
+                  thread_quantity:
+                    type: integer
+                    example: 6
+                  icon:
+                    type: string
+                    example: https://url
+              thread_on_profile:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: Create Thread [Tutorials]
+                  recent_replier:
+                    type: string
+                    example: user02
+                  recent_comment:
+                    type: string
+                    example: Thanks, really great tutorial!
+                    
+  /profile/thread:
+    get:
+      summary: get Thread summary on profile
+      description: Get list of own thread with recent comment
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: id
+          type: integer
+          required: true
+          description: user id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              thread_title:
+                type: string
+                example: Create Thread [Tutorials]
+              recent_replier:
+                type: string
+                example: user02
+              recent_comment:
+                type: string
+                example: Thanks, really great tutorial!
+
+  /profile/post:
+    get:
+      summary: Get Post/Comments summary on profile
+      description: Get Post/Comments activity
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: id
+          type: integer
+          required: true
+          description: user id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              comment_target:
                 type: string
                 example: user01
-              content:
+              thread:
                 type: string
-                example: Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-              likes_total:
+                example: Lorem ipsum
+              comment:
+                type: string
+                example: loremipsum dolor sit amet
+                
+  /profile/followers:
+    get:
+      summary: Get user followers
+      description: Get the totals of your followers
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: id
+          type: integer
+          required: true
+          description: user id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+                
+  /profile/following:
+    get:
+      summary: Get following user
+      description: Get the totals users that you following
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: id
+          type: integer
+          required: true
+          description: user id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+                
+  /profile/user/edit:
+    get:
+      summary: get Thread summary on profile
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: id
+          type: integer
+          required: true
+          description: comment id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: yourname
+              email:
+                type: string
+                example: your@mail.com
+              photo:
+                type: string
+                example: https://url
+              phone:
+                type: string
+                example: 0857XXXX
+              bio:
+                type: string
+                example: loremipsum dolor sit amet
+              address:
+                type: string
+                example: loremipsum dolor sit amet
+    put:
+      summary: get Thread summary on profile
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: name
+          type: string
+          required: false
+          description: the title of badge
+        - in: formData
+          name: phone
+          type: string
+          required: false
+          description: url as icon
+        - in: formData
+          name: bio
+          type: string
+          required: false
+          description: the title of badge
+        - in: formData
+          name: email
+          type: string
+          required: false
+          description: url as icon
+        - in: formData
+          name: address
+          type: string
+          required: false
+          description: url as icon
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: yourname
+              email:
+                type: string
+                example: your@mail.com
+              photo:
+                type: string
+                example: https://url
+              phone:
+                type: string
+                example: 0857XXXX
+              bio:
+                type: string
+                example: loremipsum dolor sit amet
+              address:
+                type: string
+                example: loremipsum dolor sit amet
+  /follows:
+    post:
+      summary: Add New Badge
+      description: Add New Badge
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: user id
+          type: integer
+          required: true
+          description: user id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null       
+  /admin:
+    get:
+      summary: get Nested comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              user_list:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    user_id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: user02
+                    email:
+                      type: string
+                      example: your@mail.com
+                    phot_url:
+                      type: string
+                      example: https://url
+                    status:
+                      type: string
+                      example: active
+              thread_report_statistic:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    report_case_id:
+                      type: integer
+                      example: 1
+                    case:
+                      type: string
+                      example: spam
+                    report_total:
+                      type: integer
+                      example: 1
+              user_total:
                 type: integer
-                example: 2
-              comments_total:
+                example: 10
+              thread_total:
                 type: integer
-                example: 7                        
+                example: 5
+              posts_total:
+                type: integer
+                example: 13
+                
+  /admin/edit:
+    get:
+      summary: get Thread summary on profile
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: id
+          type: integer
+          required: true
+          description: comment id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: yourname
+              email:
+                type: string
+                example: your@mail.com
+              photo:
+                type: string
+                example: https://url
+              phone:
+                type: string
+                example: 0857XXXX
+    put:
+      summary: get Thread summary on profile
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: name
+          type: string
+          required: false
+          description: the title of badge
+        - in: formData
+          name: photo
+          type: string
+          required: false
+          description: url as icon
+        - in: formData
+          name: phone
+          type: string
+          required: false
+          description: url as icon
+        - in: formData
+          name: email
+          type: string
+          required: false
+          description: url as icon
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: yourname
+              email:
+                type: string
+                example: your@mail.com
+              photo:
+                type: string
+                example: https://url
+              phone:
+                type: string
+                example: 0857XXXX
+                
+  /admin/users:
+    get:
+      summary: get Nested comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: user02
+                email:
+                  type: string
+                  example: your@mail.com
+                photo_url:
+                  type: string
+                  example: https://url
+                status:
+                  type: string
+                  example: active
+                  
+  /admin/users/search/{username}:
+    get:
+      summary: get Nested comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: username
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: user02
+                email:
+                  type: string
+                  example: your@mail.com
+                photo_url:
+                  type: string
+                  example: https://url
+                status:
+                  type: string
+                  example: active
+                      
+  /admin/users/banned/{id}:
+    get:
+      summary: Banned or Unbanned User
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: user id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+                
+  /admin/threads:
+    get:
+      summary: get Nested comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                thread_id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: user02
+                photo_url:
+                  type: string
+                  example: https://url
+                thread_title:
+                  type: string
+                  example: Lorem ipsum
+                category:
+                  type: string
+                  example: Technology
+                created_at:
+                  type: string
+                  example: "2022-01-23 18:01:35.258 +0000 UTC"
+                  
+  /admin/threads/search/{title}:
+    get:
+      summary: get Nested comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: title
+          type: string
+          required: true
+          description: title of thread
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                thread_id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: user02
+                photo_url:
+                  type: string
+                  example: https://url
+                thread_title:
+                  type: string
+                  example: Lorem ipsum
+                category:
+                  type: string
+                  example: Technology
+                created_at:
+                  type: string
+                  example: "2022-01-23 18:01:35.258 +0000 UTC"
+  
+  /admin/threads/activate/{id}:
+    put:
+      summary: Activate Threads
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: thread id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+  
+  /admin/threads/unactivate/{id}:
+    put:
+      summary: Unactivated Threads
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: thread id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+  
+  /admin/posts:
+    get:
+      summary: get Nested comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                post_id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: user02
+                photo_url:
+                  type: string
+                  example: https://url
+                post:
+                  type: string
+                  example: Lorem ipsum
+                created_at:
+                  type: string
+                  example: "2022-01-23 18:01:35.258 +0000 UTC"
+                active:
+                  type: boolean
+                  example: true
+                    
+  /admin/posts/search/{post}:
+    get:
+      summary: get Nested comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: post
+          type: string
+          required: true
+          description: post/comment
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                post_id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: user02
+                photo_url:
+                  type: string
+                  example: https://url
+                post:
+                  type: string
+                  example: Lorem ipsum
+                created_at:
+                  type: string
+                  example: "2022-01-23 18:01:35.258 +0000 UTC"
+                active:
+                  type: boolean
+                  example: true
+    
+  /admin/posts/activate/{id}:
+    put:
+      summary: Activate Post/Comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: post/comment id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+                example: Post Activated
+  
+  /admin/posts/unactivate/{id}:
+    put:
+      summary: Unactivated Post/Comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: post/comment id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+                example: Post Unactivated
+  
+  /admin/thread-reports:
+    get:
+      summary: get Nested comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                report_id:
+                  type: integer
+                  example: 1
+                title_thread:
+                  type: string
+                  example: Lorem Ipsum
+                message:
+                  type: string
+                  example: spam a lot
+                report_case:
+                  type: string
+                  example: Spam
+                state:
+                  type: string
+                  example: pending
+                    
+  /admin/thread-reports/search/{category}:
+    get:
+      summary: Search report by Case/Report Category
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: category
+          type: string
+          required: true
+          description: thread-reports
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                report_id:
+                  type: integer
+                  example: 1
+                title_thread:
+                  type: string
+                  example: Lorem Ipsum
+                message:
+                  type: string
+                  example: spam a lot
+                report_case:
+                  type: string
+                  example: Spam
+                state:
+                  type: string
+                  example: pending
+    
+  /admin/thread-reports/thread-report/{id}:
+    put:
+      summary: Activate Post/Comment
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: thread-report id
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+                example: Report deleted success
+  
+  /report_thread:
+    post:
+      summary: Add New Badge
+      description: Add New Badge
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: thread_id
+          type: integer
+          required: true
+          description: the title of badge
+        - in: formData
+          name: report_case_id
+          type: integer
+          required: true
+          description: url as icon
+        - in: formData
+          name: message
+          type: string
+          required: true
+          description: description of badge
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+  
+  /report-thread:
+    get:
+      summary: get Thread summary on profile
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              report_case_id:
+                type: integer
+                example: 1
+              case:
+                type: string
+                example: Spam
+    
+  /admin/reportcase:
+    post:
+      summary: Add New Badge
+      description: Add New Badge
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: case
+          type: string
+          required: true
+          description: the title of badge
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+       
+  /categories:
+    get:
+      summary: get Thread summary on profile
+      description: Get
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              category_id:
+                type: integer
+                example: 1
+              category:
+                type: string
+                example: Technology
+  
+  /admin/category:
+    post:
+      summary: Add New Badge
+      description: Add New Badge
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: category
+          type: string
+          required: true
+          description: the title of badge
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+  
+  /admin/reputation:
+    post:
+      summary: Add New Badge
+      description: Add New Badge
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: reputation
+          type: string
+          required: true
+          description: the title of badge
+        - in: formData
+          name: likepoint
+          type: integer
+          required: true
+          description: url as icon
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null
+  
+  /admin/badge:
+    post:
+      summary: Add New Badge
+      description: Add New Badge
+      security:
+      - Bearer: []
+      consumes: 
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: badge_name
+          type: string
+          required: true
+          description: the title of badge
+        - in: formData
+          name: badge_url
+          type: string
+          required: false
+          description: url as icon
+        - in: formData
+          name: description
+          type: string
+          required: false
+          description: description of badge
+        - in: formData
+          name: thread_qty
+          type: integer
+          required: true
+          description: minimum thread for get this badge
+        - in: formData
+          name: category_id
+          type: integer
+          required: true
+          description: specific category of this badge
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              data:
+                example: null

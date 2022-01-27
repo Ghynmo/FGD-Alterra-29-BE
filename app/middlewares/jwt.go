@@ -2,7 +2,6 @@ package middlewares
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -91,7 +90,6 @@ func ExtractClaims(tokenStr string) (jwt.MapClaims, bool) {
 
 		return claims, true
 	} else {
-		fmt.Println("Invalid JWT Token")
 		return nil, false
 	}
 }

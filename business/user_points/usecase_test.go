@@ -57,3 +57,19 @@ func TestAddPostPointController(t *testing.T) {
 		assert.NotNil(t, err)
 	})
 }
+func TestAddReputationPoint(t *testing.T) {
+	setup()
+	t.Run("Test Case 1 | Valid", func(t *testing.T) {
+		userpointRepository.On("AddReputationPoint", mock.Anything, mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(userpointDomain, nil).Once()
+
+		userpoint, err := userpointService.AddReputationPointController(context.Background(), 2, userpointDomain.User_id)
+		assert.Nil(t, err)
+		assert.Equal(t, 1, userpoint.User_id)
+	})
+	t.Run("Test Case 2 | Invalid", func(t *testing.T) {
+		userpointRepository.On("AddReputationPoint", mock.Anything, mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(userpointDomain, errors.New("")).Once()
+
+		_, err := userpointService.AddReputationPointController(context.Background(), 2, userpointDomain.User_id)
+		assert.NotNil(t, err)
+	})
+}

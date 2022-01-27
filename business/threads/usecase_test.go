@@ -3,12 +3,12 @@ package threads_test
 import (
 	"context"
 	"errors"
-	"fgd-alterra-29/business/badges"
+	_badgeMocks "fgd-alterra-29/business/badges/mocks"
 	"fgd-alterra-29/business/threads"
 	_threadMocks "fgd-alterra-29/business/threads/mocks"
 	userbadges "fgd-alterra-29/business/user_badges"
+	_ubMocks "fgd-alterra-29/business/user_badges/mocks"
 
-	// _userpointMocks "fgd-alterra-29/business/user_points/mocks"
 	"testing"
 	"time"
 
@@ -17,15 +17,15 @@ import (
 )
 
 var threadRepository _threadMocks.Repository
+var badgeRepository _badgeMocks.Repository
+var ubRepository _ubMocks.Repository
 
-// var userpointRepository _userpointMocks.Repository
 var threadService threads.UseCase
 var threadDomain threads.Domain
-var ubRepository userbadges.Repository
-var badgeRepository badges.Repository
+var ubDomain userbadges.Domain
 
 func setup() {
-	threadService = threads.NewThreadUseCase(&threadRepository, time.Hour*1, badgeRepository, ubRepository)
+	threadService = threads.NewThreadUseCase(&threadRepository, time.Hour*1, &badgeRepository, &ubRepository)
 	threadDomain = threads.Domain{
 		Title:    "test",
 		Q_Thread: 5,
@@ -81,31 +81,37 @@ func TestGetThreadQuantity(t *testing.T) {
 	})
 }
 
-// func TestCreateThread(t *testing.T) {
-// 	setup()
-// 	t.Run("Test Case 1 | Valid", func(t *testing.T) {
-// 		threadRepository.On("CreateThread", mock.Anything, mock.Anything, mock.AnythingOfType("int")).Return(threadDomain, nil).Once()
-// 		userpointRepository.On("AddThreadPoint", mock.AnythingOfType("int")).Return(upDomain, nil)
+func TestCreateThread(t *testing.T) {
+	setup()
+	t.Run("Test Case 1 | Valid", func(t *testing.T) {
+		threadRepository.On("CreateThread", mock.Anything, mock.Anything, mock.AnythingOfType("int")).Return(threadDomain, nil).Once()
+		threadRepository.On("GetThreadQtyByCategory", mock.Anything, mock.Anything, mock.AnythingOfType("int")).Return(threadDomain, nil).Once()
+		badgeRepository.On("GetBadgesIdByThread", mock.Anything, mock.AnythingOfType("int")).Return(1, nil).Once()
+		ubRepository.On("CheckGetBadge", mock.Anything, mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(ubDomain, nil).Once()
+		ubRepository.On("CreatenewRecord", mock.Anything, mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(ubDomain, nil).Once()
 
-// 		thread, err := threadService.CreateThread(context.Background(), threadDomain, threadDomain.ID)
-// 		assert.Nil(t, err)
-// 		assert.Equal(t, "test", thread.Title)
-// 	})
-// 	t.Run("Test Case 2 | Invalid", func(t *testing.T) {
-// 		threadRepository.On("CreateThread", mock.Anything, mock.AnythingOfType("threads.Domain"), mock.AnythingOfType("int")).Return(threadDomain, nil).Once()
-// 		userpointRepository.On("AddThreadPoint", mock.AnythingOfType("int")).Return(upDomain, errors.New(""))
+		thread, err := threadService.CreateThread(context.Background(), threadDomain, threadDomain.ID)
+		assert.Nil(t, err)
+		assert.Equal(t, "test", thread.Title)
+	})
+	t.Run("Test Case 2 | Invalid", func(t *testing.T) {
+		threadRepository.On("CreateThread", mock.Anything, mock.AnythingOfType("threads.Domain"), mock.AnythingOfType("int")).Return(threadDomain, nil).Once()
+		threadRepository.On("GetThreadQtyByCategory", mock.Anything, mock.Anything, mock.AnythingOfType("int")).Return(threadDomain, nil).Once()
+		badgeRepository.On("GetBadgesIdByThread", mock.Anything, mock.AnythingOfType("int")).Return(1, nil).Once()
+		ubRepository.On("CheckGetBadge", mock.Anything, mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(ubDomain, nil).Once()
+		ubRepository.On("CreatenewRecord", mock.Anything, mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(ubDomain, nil).Once()
 
-// 		thread, err := threadService.CreateThread(context.Background(), threadDomain, threadDomain.ID)
-// 		assert.Nil(t, err)
-// 		assert.Equal(t, "test", thread.Title)
-// 	})
-// 	t.Run("Test Case 3 | Invalid", func(t *testing.T) {
-// 		threadRepository.On("CreateThread", mock.Anything, mock.AnythingOfType("threads.Domain"), mock.AnythingOfType("int")).Return(threadDomain, errors.New("")).Once()
+		thread, err := threadService.CreateThread(context.Background(), threadDomain, threadDomain.ID)
+		assert.Nil(t, err)
+		assert.Equal(t, "test", thread.Title)
+	})
+	t.Run("Test Case 3 | Invalid", func(t *testing.T) {
+		threadRepository.On("CreateThread", mock.Anything, mock.AnythingOfType("threads.Domain"), mock.AnythingOfType("int")).Return(threadDomain, errors.New("")).Once()
 
-// 		_, err := threadService.CreateThread(context.Background(), threadDomain, threadDomain.ID)
-// 		assert.NotNil(t, err)
-// 	})
-// }
+		_, err := threadService.CreateThread(context.Background(), threadDomain, threadDomain.ID)
+		assert.NotNil(t, err)
+	})
+}
 func TestGetHomepageThreads(t *testing.T) {
 	setup()
 	t.Run("Test Case 1 | Valid", func(t *testing.T) {

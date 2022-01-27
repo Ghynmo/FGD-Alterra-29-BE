@@ -1,6 +1,7 @@
 # FGD-Alterra-29
 Capstone Project for Alterra Academy.
 On this project make a website for people who want to discuss about anything.
+Also Check our Frontend Project Over here https://github.com/whauzan/FGD-Alterra-29
 
 Contribute by: 
 1. [Ilham Prasetya](https://github.com/ilse31)

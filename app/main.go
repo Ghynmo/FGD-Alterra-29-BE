@@ -134,7 +134,7 @@ func main() {
 	e := echo.New()
 
 	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000", "https://dkku.online", "54.196.139.145"},
+		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"OPTIONS", "GET", "POST", "PUT"},
 		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,

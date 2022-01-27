@@ -5,12 +5,20 @@ import (
 )
 
 type UserResponse struct {
-	Name string `json:"name"`
+	ID     int    `json:"id"`
+	Name   string `json:"name"`
+	Email  string `json:"email"`
+	Photo  string `json:"photo"`
+	Status string `json:"status"`
 }
 
 func FromDomain(domain users.Domain) UserResponse {
 	return UserResponse{
-		Name: domain.Name,
+		ID:     domain.ID,
+		Name:   domain.Name,
+		Email:  domain.Email,
+		Photo:  domain.Photo_url,
+		Status: domain.Status,
 	}
 }
 

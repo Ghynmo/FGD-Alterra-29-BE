@@ -1,0 +1,114 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI/CD
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main, develop, bug_testing, unit-test ]
+  pull_request:
+    branches: [ main, develop ]
+    
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - name: Running unit test
+        run: go test ./... -cover
+
+  create-dotenv-build:
+    runs-on: ubuntu-latest
+    needs: unit-test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create env file
+        run: 
+          touch app.env
+      - name: Add env var
+        run:
+          echo DB_HOST=${{ secrets.DB_HOST }} >> app.env
+      - name: Add DB_USER
+        run:
+          echo DB_USER=${{ secrets.DB_USER }} >> app.env
+      - name: Add DB_PASS
+        run:
+          echo DB_PASS=${{ secrets.DB_PASS }} >> app.env
+      - name: Add DB_NAME
+        run:
+          echo DB_NAME=${{ secrets.DB_NAME }} >> app.env
+      - name: Add DB_PORT
+        run:
+          echo DB_PORT="3306" >> app.env
+
+      - name: Add CTXTIMEOUT
+        run:
+          echo CTXTIMEOUT="2" >> app.env
+      - name: Add SERVER_ADDRESS
+        run:
+          echo SERVER_ADDRESS=":8080" >> app.env
+      - name: Add JWT_SECRET
+        run:
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> app.env
+      - name: Add JWT_EXPIRED
+        run:
+          echo JWT_EXPIRED="72" >> app.env
+          
+          cat app.env
+      - name: See the Current Directory
+        run: 
+          ls
+      - name: Read Env
+        run:
+          cat app.env
+
+      # Runs a single command using the runners shell
+      - name: Build docker
+        run: docker build -t ghynmo/fgd_alterra_29:1.0.0 .
+
+      # Runs a set of commands using the runners shell
+      - name: Login docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push image to registry
+        run: |
+          docker push ghynmo/fgd_alterra_29:1.0.0
+  
+  deployment-ec2:
+    name: "Deploy to ec2 from registry docker hub"
+    runs-on: ubuntu-latest
+    needs: create-dotenv-build
+    steps:
+      - uses: actions/checkout@v2 
+      - name: configuration SSH
+        env:
+          SSH_USER: ${{ secrets.SSH_NAME }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/fgd-alta-29.pem
+          chmod 400 ~/.ssh/fgd-alta-29.pem
+          cat >>~/.ssh/config <<END
+          Host development
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/fgd-alta-29.pem
+            StrictHostKeyChecking=no
+          END
+      - name: Connect EC2 & Remove all container & Pull registry & started
+        run: ssh development 'docker rm -vf $(docker ps -a -q) || true && docker pull ghynmo/fgd_alterra_29:1.0.0 && docker run -d -p 8080:8080 --name fgd_alterra_29 ghynmo/fgd_alterra_29:1.0.0'
+

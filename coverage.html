@@ -1,0 +1,1264 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>badges: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">fgd-alterra-29/business/badges/usecase.go (100.0%)</option>
+				
+				<option value="file1">fgd-alterra-29/business/categories/usecase.go (100.0%)</option>
+				
+				<option value="file2">fgd-alterra-29/business/comment_likes/usecase.go (95.7%)</option>
+				
+				<option value="file3">fgd-alterra-29/business/comment_report/usecase.go (100.0%)</option>
+				
+				<option value="file4">fgd-alterra-29/business/comments/usecase.go (100.0%)</option>
+				
+				<option value="file5">fgd-alterra-29/business/follows/usecase.go (96.7%)</option>
+				
+				<option value="file6">fgd-alterra-29/business/report_cases/usecase.go (100.0%)</option>
+				
+				<option value="file7">fgd-alterra-29/business/reputations/usecase.go (100.0%)</option>
+				
+				<option value="file8">fgd-alterra-29/business/thread_likes/usecase.go (95.7%)</option>
+				
+				<option value="file9">fgd-alterra-29/business/thread_report/usecase.go (100.0%)</option>
+				
+				<option value="file10">fgd-alterra-29/business/thread_saves/usecase.go (95.0%)</option>
+				
+				<option value="file11">fgd-alterra-29/business/thread_shares/usecase.go (100.0%)</option>
+				
+				<option value="file12">fgd-alterra-29/business/threads/usecase.go (93.0%)</option>
+				
+				<option value="file13">fgd-alterra-29/business/user_badges/usecase.go (100.0%)</option>
+				
+				<option value="file14">fgd-alterra-29/business/user_points/usecase.go (100.0%)</option>
+				
+				<option value="file15">fgd-alterra-29/business/users/usecase.go (82.4%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package badges
+
+import (
+        "context"
+        "time"
+)
+
+type BadgeUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewBadgeUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;BadgeUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *BadgeUseCase) GetBadgesByUserController(ctx context.Context, id int) ([]Domain, error) <span class="cov8" title="1">{
+        badge, err := uc.Repo.GetBadgesByUser(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return badge, nil</span>
+}
+
+func (uc *BadgeUseCase) CreateBadgeController(ctx context.Context, domain Domain) (Domain, error) <span class="cov8" title="1">{
+        badge, err := uc.Repo.CreateBadge(ctx, domain)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return badge, nil</span>
+}
+
+//Still Maintain
+// func (uc *BadgeUseCase) BadgeStatusController(ctx context.Context, domain Domain) (Domain, error) {
+//         badge, err := uc.Repo.CreateBadge(ctx, domain)
+//         if err != nil {
+//                 return Domain{}, err
+//         }
+
+//         return badge, nil
+// }
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package categories
+
+import (
+        "context"
+        "time"
+)
+
+type CategoryUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewCategoryUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;CategoryUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *CategoryUseCase) GetCategoriesController(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetCategories(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *CategoryUseCase) GetUserActiveInCategory(ctx context.Context, id int) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetUserActiveInCategory(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *CategoryUseCase) CreateCategoriesController(ctx context.Context, domain Domain) (Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.CreateCategories(ctx, domain)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package commentlikes
+
+import (
+        "context"
+        up "fgd-alterra-29/business/user_points"
+        "time"
+)
+
+type CommentLikeUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+        UserPointRepo  up.Repository
+}
+
+func NewCommentLikeUseCase(repo Repository, timeout time.Duration, up up.Repository) UseCase <span class="cov8" title="1">{
+        return &amp;CommentLikeUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+                UserPointRepo:  up,
+        }
+}</span>
+
+func (uc *CommentLikeUseCase) LikeController(ctx context.Context, domain Domain, id int) (Domain, error) <span class="cov8" title="1">{
+        state, errState := uc.Repo.GetLikeState(ctx, domain, id)
+        if errState != nil </span><span class="cov8" title="1">{
+                return Domain{}, errState
+        }</span>
+
+        <span class="cov8" title="1">if state.Liker_id == 0 </span><span class="cov8" title="1">{
+                comments, t_user_id, err := uc.Repo.NewLike(ctx, domain, id)
+                uc.UserPointRepo.AddReputationPoint(ctx, 1, t_user_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return comments, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.Liker_id != 0 &amp;&amp; !state.State </span><span class="cov8" title="1">{
+                comments, t_user_id, err := uc.Repo.Like(ctx, domain, id)
+                uc.UserPointRepo.AddReputationPoint(ctx, 1, t_user_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return comments, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.Liker_id != 0 &amp;&amp; state.State </span><span class="cov8" title="1">{
+                comments, t_user_id, err := uc.Repo.Unlike(ctx, domain, id)
+                uc.UserPointRepo.AddReputationPoint(ctx, -1, t_user_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return comments, nil</span>
+        }
+
+        <span class="cov0" title="0">return Domain{}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package commentreport
+
+import (
+        "context"
+        "time"
+)
+
+type CommentReportUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewCommentReportUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;CommentReportUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *CommentReportUseCase) SearchReportsByCategoryController(ctx context.Context, category string) ([]Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.SearchReportsByCategory(ctx, category)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+
+func (uc *CommentReportUseCase) GetCommentReportStat(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.GetCommentReportStat(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+
+func (uc *CommentReportUseCase) CreateReportComment(ctx context.Context, domain Domain) (Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.CreateReportComment(ctx, domain)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+
+func (uc *CommentReportUseCase) AdminGetReports(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.AdminGetReports(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+
+func (uc *CommentReportUseCase) DeleteCommentReport(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.DeleteCommentReport(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package comments
+
+import (
+        "context"
+        up "fgd-alterra-29/business/user_points"
+        "time"
+)
+
+type CommentUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+        UserPointRepo  up.Repository
+}
+
+func NewCommentUseCase(repo Repository, timeout time.Duration, up up.Repository) UseCase <span class="cov8" title="1">{
+        return &amp;CommentUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+                UserPointRepo:  up,
+        }
+}</span>
+
+func (uc *CommentUseCase) GetPostsByCommentController(ctx context.Context, comment string) ([]Domain, error) <span class="cov8" title="1">{
+        post, err := uc.Repo.GetPostsByComment(ctx, comment)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+
+        }</span>
+
+        <span class="cov8" title="1">return post, nil</span>
+}
+
+func (uc *CommentUseCase) GetCommentByThreadController(ctx context.Context, thread_id int, my_id int) ([]Domain, error) <span class="cov8" title="1">{
+        comments, err := uc.Repo.GetCommentByThread(ctx, thread_id, my_id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return comments, nil</span>
+}
+
+func (uc *CommentUseCase) GetCommentReply(ctx context.Context, id int, reply_of int) ([]Domain, error) <span class="cov8" title="1">{
+        comments, err := uc.Repo.GetCommentReply(ctx, id, reply_of)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return comments, nil</span>
+}
+
+func (uc *CommentUseCase) GetCommentProfileController(ctx context.Context, id int) ([]Domain, error) <span class="cov8" title="1">{
+        post, err := uc.Repo.GetCommentProfile(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+        <span class="cov8" title="1">return post, nil</span>
+}
+
+func (uc *CommentUseCase) GetPostQuantityController(ctx context.Context) (Domain, error) <span class="cov8" title="1">{
+        post, err := uc.Repo.GetPostQuantity(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+        <span class="cov8" title="1">return post, nil</span>
+}
+
+func (uc *CommentUseCase) CreateCommentController(ctx context.Context, domain Domain, id int) (Domain, error) <span class="cov8" title="1">{
+        comments, user_id, err := uc.Repo.CreateComment(ctx, domain, id)
+        uc.UserPointRepo.AddReputationPoint(ctx, 1, user_id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return comments, nil</span>
+}
+
+func (uc *CommentUseCase) GetPostsController(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        post, err := uc.Repo.GetPosts(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return post, nil</span>
+}
+
+func (uc *CommentUseCase) UnactivatingPostController(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        post, err := uc.Repo.UnactivatingPost(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return post, nil</span>
+}
+
+func (uc *CommentUseCase) ActivatingPostController(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        post, err := uc.Repo.ActivatingPost(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return post, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package follows
+
+import (
+        "context"
+        "errors"
+        "time"
+)
+
+type FollowUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewFollowUseCase(repo Repository, time time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;FollowUseCase{
+                Repo:           repo,
+                contextTimeout: time,
+        }
+}</span>
+
+func (uc *FollowUseCase) GetFollowers(ctx context.Context, target_id int, my_id int) ([]Domain, error) <span class="cov8" title="1">{
+        followers, err := uc.Repo.GetFollowers(ctx, target_id, my_id)
+
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return followers, nil</span>
+}
+
+func (uc *FollowUseCase) GetFollowing(ctx context.Context, target_id int, my_id int) ([]Domain, error) <span class="cov8" title="1">{
+        following, err := uc.Repo.GetFollowing(ctx, target_id, my_id)
+
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return following, nil</span>
+}
+
+func (uc *FollowUseCase) FollowsController(ctx context.Context, domain Domain, my_id int) (Domain, error) <span class="cov8" title="1">{
+
+        if domain.User_id == domain.Follower_id </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("CANNOT FOLLOWS YOURSELF")
+        }</span>
+
+        <span class="cov8" title="1">state, errState := uc.Repo.GetFollowState(ctx, domain, my_id)
+        if errState != nil </span><span class="cov8" title="1">{
+                return Domain{}, errState
+        }</span>
+
+        <span class="cov8" title="1">if state.User_id == 0 </span><span class="cov8" title="1">{
+                follow, err := uc.Repo.NewFollow(ctx, domain, my_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return follow, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.User_id != 0 &amp;&amp; !state.State </span><span class="cov8" title="1">{
+                follow, err := uc.Repo.Follows(ctx, domain, my_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return follow, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.User_id != 0 &amp;&amp; state.State </span><span class="cov8" title="1">{
+                follow, err := uc.Repo.Unfollow(ctx, domain, my_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return follow, nil</span>
+        }
+
+        <span class="cov0" title="0">return Domain{}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package reportcases
+
+import (
+        "context"
+        "time"
+)
+
+type ReportCaseUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewReportCaseUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;ReportCaseUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *ReportCaseUseCase) GetReportForm(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        catreportthread, err := uc.Repo.GetReportForm(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return catreportthread, nil</span>
+}
+
+func (uc *ReportCaseUseCase) CreateCaseController(ctx context.Context, domain Domain) (Domain, error) <span class="cov8" title="1">{
+        catreportthread, err := uc.Repo.CreateCase(ctx, domain)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return catreportthread, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package reputations
+
+import (
+        "context"
+        "time"
+)
+
+type ReputationUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewReputationUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;ReputationUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *ReputationUseCase) CreateReputationController(ctx context.Context, domain Domain) (Domain, error) <span class="cov8" title="1">{
+
+        reputation, err := uc.Repo.CreateReputation(ctx, domain)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return reputation, nil</span>
+}
+
+func (uc *ReputationUseCase) GetReputationByUser(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+
+        reputation, err := uc.Repo.GetReputationByUser(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return reputation, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package threadlikes
+
+import (
+        "context"
+        up "fgd-alterra-29/business/user_points"
+        "time"
+)
+
+type ThreadLikeUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+        UserPointRepo  up.Repository
+}
+
+func NewThreadLikeUseCase(repo Repository, timeout time.Duration, up up.Repository) UseCase <span class="cov8" title="1">{
+        return &amp;ThreadLikeUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+                UserPointRepo:  up,
+        }
+}</span>
+
+func (uc *ThreadLikeUseCase) LikeController(ctx context.Context, domain Domain, id int) (Domain, error) <span class="cov8" title="1">{
+        state, errState := uc.Repo.GetLikeState(ctx, domain, id)
+        if errState != nil </span><span class="cov8" title="1">{
+                return Domain{}, errState
+        }</span>
+
+        <span class="cov8" title="1">if state.User_id == 0 </span><span class="cov8" title="1">{
+                threads, t_user_id, err := uc.Repo.NewLike(ctx, domain, id)
+                uc.UserPointRepo.AddReputationPoint(ctx, 2, t_user_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return threads, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.User_id != 0 &amp;&amp; !state.State </span><span class="cov8" title="1">{
+                threads, t_user_id, err := uc.Repo.Like(ctx, domain, id)
+                uc.UserPointRepo.AddReputationPoint(ctx, 2, t_user_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return threads, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.User_id != 0 &amp;&amp; state.State </span><span class="cov8" title="1">{
+                threads, t_user_id, err := uc.Repo.Unlike(ctx, domain, id)
+                uc.UserPointRepo.AddReputationPoint(ctx, -2, t_user_id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return threads, nil</span>
+        }
+
+        <span class="cov0" title="0">return Domain{}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package threadreport
+
+import (
+        "context"
+        "time"
+)
+
+type ThreadReportUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewThreadReportUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;ThreadReportUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *ThreadReportUseCase) SearchReportsByCategoryController(ctx context.Context, category string) ([]Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.SearchReportsByCategory(ctx, category)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+
+func (uc *ThreadReportUseCase) GetThreadReportStat(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.GetThreadReportStat(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+
+func (uc *ThreadReportUseCase) CreateReportThread(ctx context.Context, domain Domain, my_id int) (Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.CreateReportThread(ctx, domain, my_id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+
+func (uc *ThreadReportUseCase) AdminGetReports(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.AdminGetReports(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+
+func (uc *ThreadReportUseCase) SolvedThreadReport(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        report, err := uc.Repo.SolvedThreadReport(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return report, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package threadsaves
+
+import (
+        "context"
+        "time"
+)
+
+type ThreadSaveUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewThreadSaveUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;ThreadSaveUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *ThreadSaveUseCase) SaveThreadController(ctx context.Context, domain Domain, id int) (Domain, error) <span class="cov8" title="1">{
+        state, errGet := uc.Repo.GetSaveState(ctx, domain, id)
+        if errGet != nil </span><span class="cov8" title="1">{
+                return Domain{}, errGet
+        }</span>
+
+        <span class="cov8" title="1">if state.User_id == 0 </span><span class="cov8" title="1">{
+                threads, err := uc.Repo.NewSave(ctx, domain, id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return threads, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.User_id != 0 &amp;&amp; !state.State </span><span class="cov8" title="1">{
+                threads, err := uc.Repo.Save(ctx, domain, id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return threads, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.User_id != 0 &amp;&amp; state.State </span><span class="cov8" title="1">{
+                threads, err := uc.Repo.Unsave(ctx, domain, id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return threads, nil</span>
+        }
+
+        <span class="cov0" title="0">return Domain{}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package threadshares
+
+import (
+        "context"
+        "time"
+)
+
+type ThreadShareUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewThreadShareUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;ThreadShareUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *ThreadShareUseCase) ThreadShareController(ctx context.Context, domain Domain, id int) (Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.ThreadShare(ctx, domain, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package threads
+
+import (
+        "context"
+        "fgd-alterra-29/business/badges"
+        ub "fgd-alterra-29/business/user_badges"
+        "time"
+)
+
+type ThreadUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+        RepoBadges     badges.Repository
+        RepoUserBadges ub.Repository
+}
+
+func NewThreadUseCase(repo Repository, timeout time.Duration, repobadge badges.Repository, ub ub.Repository) UseCase <span class="cov8" title="1">{
+        return &amp;ThreadUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+                RepoBadges:     repobadge,
+                RepoUserBadges: ub,
+        }
+}</span>
+
+func (uc *ThreadUseCase) GetThreadsByTitleController(ctx context.Context, title string) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetThreadsByTitle(ctx, title)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetProfileThreads(ctx context.Context, id int) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetProfileThreads(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetThreadQuantity(ctx context.Context) (Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetThreadQuantity(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) CreateThread(ctx context.Context, domain Domain, id int) (Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.CreateThread(ctx, domain, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">qty, err := uc.Repo.GetThreadQtyByCategory(ctx, domain, id)
+        if err != nil </span><span class="cov0" title="0">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">newbadge, err3 := uc.RepoBadges.GetBadgesIdByThread(ctx, qty.Q_Thread)
+        if err3 != nil </span><span class="cov0" title="0">{
+                return Domain{}, err3
+        }</span>
+
+        <span class="cov8" title="1">checkBadgeID, err4 := uc.RepoUserBadges.CheckGetBadge(ctx, id, newbadge)
+        if err4 != nil </span><span class="cov0" title="0">{
+                return Domain{}, err3
+        }</span>
+        <span class="cov8" title="1">if checkBadgeID.User_id == 0 </span><span class="cov8" title="1">{
+                _, err4 := uc.RepoUserBadges.CreatenewRecord(ctx, id, newbadge)
+                if err4 != nil </span><span class="cov0" title="0">{
+                        return Domain{}, err4
+                }</span>
+                <span class="cov8" title="1">return thread, nil</span>
+        }
+
+        <span class="cov0" title="0">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetHomepageThreads(ctx context.Context, id int) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetHomepageThreads(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetThreads(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetThreads(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetRecommendationThreads(ctx context.Context, id int) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetRecommendationThreads(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetThreadByID(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetThreadByID(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) DeleteThread(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.DeleteThread(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) ActivateThread(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.ActivateThread(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetHotThreads(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetHotThreads(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetSearch(ctx context.Context, threadname string) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetSearch(ctx, threadname)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetThreadsByCategoryID(ctx context.Context, id int) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetThreadsByCategoryID(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+
+func (uc *ThreadUseCase) GetSideNewsThreads(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        thread, err := uc.Repo.GetSideNewsThreads(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return thread, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package userbadges
+
+import (
+        "context"
+        "time"
+)
+
+type UserBadgeUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewUserBadgeUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;UserBadgeUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *UserBadgeUseCase) GetUserBadge(ctx context.Context, id int) ([]Domain, error) <span class="cov8" title="1">{
+        userbadge, err := uc.Repo.GetUserBadge(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return userbadge, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package userpoints
+
+import (
+        "context"
+        "time"
+)
+
+type UserPointUseCase struct {
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewUserPointUseCase(repo Repository, timeout time.Duration) UseCase <span class="cov8" title="1">{
+        return &amp;UserPointUseCase{
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *UserPointUseCase) AddThreadPointController(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        user, err := uc.Repo.AddThreadPoint(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+
+func (uc *UserPointUseCase) AddPostPointController(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        user, err := uc.Repo.AddPostPoint(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+
+func (uc *UserPointUseCase) AddReputationPointController(ctx context.Context, multiple int, id int) (Domain, error) <span class="cov8" title="1">{
+        user, err := uc.Repo.AddReputationPoint(ctx, multiple, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package users
+
+import (
+        "context"
+        "errors"
+        "fgd-alterra-29/app/middlewares"
+        "fgd-alterra-29/helpers"
+        "time"
+)
+
+type UserUseCase struct {
+        ConfigJwt      middlewares.ConfigJWT
+        Repo           Repository
+        contextTimeout time.Duration
+}
+
+func NewUserUseCase(repo Repository, timeout time.Duration, ConfigJWT middlewares.ConfigJWT) UseCase <span class="cov8" title="1">{
+        return &amp;UserUseCase{
+                ConfigJwt:      ConfigJWT,
+                Repo:           repo,
+                contextTimeout: timeout,
+        }
+}</span>
+
+func (uc *UserUseCase) RegisterController(ctx context.Context, domain Domain) (Domain, error) <span class="cov8" title="1">{
+        if domain.Name == "" </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("NAME MUST BE FILLED")
+        }</span>
+        <span class="cov8" title="1">if domain.Email == "" </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("EMAIL MUST BE FILLED")
+        }</span>
+        <span class="cov8" title="1">if domain.Password == "" </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("PASSWORD MUST BE FILLED")
+        }</span>
+
+        <span class="cov8" title="1">checkName, errCheckName := uc.Repo.CheckUsername(ctx, domain.Name)
+        if errCheckName != nil </span><span class="cov8" title="1">{
+                return Domain{}, errCheckName
+        }</span>
+
+        <span class="cov8" title="1">checkMail, errCheckMail := uc.Repo.CheckEmail(ctx, domain.Email)
+        if errCheckMail != nil </span><span class="cov8" title="1">{
+                return Domain{}, errCheckMail
+        }</span>
+
+        <span class="cov8" title="1">if !checkName &amp;&amp; !checkMail </span><span class="cov8" title="1">{
+
+                var errHash error
+                domain.Password, errHash = helpers.Hash(domain.Password)
+                if errHash != nil </span><span class="cov0" title="0">{
+                        return Domain{}, errHash
+                }</span>
+
+                <span class="cov8" title="1">user, err := uc.Repo.Register(ctx, domain)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+
+                <span class="cov0" title="0">var IsAdmin bool
+
+                RolesID := user.Role_id
+                if RolesID == 1 </span><span class="cov0" title="0">{
+                        IsAdmin = true
+                }</span> else<span class="cov0" title="0"> {
+                        IsAdmin = false
+                }</span>
+
+                <span class="cov0" title="0">var errT error
+                user.Token, errT = uc.ConfigJwt.GenerateToken(user.ID, IsAdmin)
+                if errT != nil </span><span class="cov0" title="0">{
+                        return Domain{}, err
+                }</span>
+
+                <span class="cov0" title="0">return user, nil</span>
+        }
+        <span class="cov8" title="1">if checkName &amp;&amp; !checkMail </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("USERNAME IS ALREADY USED")
+        }</span>
+        <span class="cov8" title="1">if !checkName &amp;&amp; checkMail </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("EMAIL IS ALREADY USED")
+        }</span> else<span class="cov8" title="1"> {
+                return Domain{}, errors.New("USERNAME &amp; EMAIL IS ALREADY USED")
+        }</span>
+
+}
+
+func (uc *UserUseCase) LoginController(ctx context.Context, domain Domain) (Domain, error) <span class="cov8" title="1">{
+        if domain.Email == "" </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("EMAIL MUST BE FILLED")
+        }</span>
+        <span class="cov8" title="1">if domain.Password == "" </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("PASSWORD MUST BE FILLED")
+        }</span>
+
+        <span class="cov8" title="1">user, err := uc.Repo.Login(ctx, domain)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">var IsAdmin bool
+
+        RolesID := user.Role_id
+        if RolesID == 1 </span><span class="cov8" title="1">{
+                IsAdmin = true
+        }</span> else<span class="cov8" title="1"> {
+                IsAdmin = false
+        }</span>
+
+        <span class="cov8" title="1">if !(helpers.ValidateHash(domain.Password, user.Password)) </span><span class="cov8" title="1">{
+                return Domain{}, errors.New("WRONG PASSWORD")
+        }</span>
+
+        <span class="cov0" title="0">var errT error
+        user.Token, errT = uc.ConfigJwt.GenerateToken(user.ID, IsAdmin)
+        if errT != nil </span><span class="cov0" title="0">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov0" title="0">return user, nil</span>
+}
+
+func (uc *UserUseCase) GetUsersController(ctx context.Context) ([]Domain, error) <span class="cov8" title="1">{
+        user, err := uc.Repo.GetUsers(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+
+func (uc *UserUseCase) GetUsersByNameController(ctx context.Context, name string) ([]Domain, error) <span class="cov8" title="1">{
+        user, err := uc.Repo.GetUsersByName(ctx, name)
+        if err != nil </span><span class="cov8" title="1">{
+                return []Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+
+func (uc *UserUseCase) GetProfileController(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        user, err := uc.Repo.GetProfile(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+
+func (uc *UserUseCase) GetUsersQuantity(ctx context.Context) (Domain, error) <span class="cov8" title="1">{
+        user, err := uc.Repo.GetUsersQuantity(ctx)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+
+func (uc *UserUseCase) GetProfileSetting(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        user, err := uc.Repo.GetProfileSetting(ctx, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return user, nil</span>
+}
+
+func (uc *UserUseCase) UpdateProfile(ctx context.Context, domain Domain, id int) (Domain, error) <span class="cov8" title="1">{
+        admin, err := uc.Repo.UpdateProfile(ctx, domain, id)
+        if err != nil </span><span class="cov8" title="1">{
+                return Domain{}, err
+        }</span>
+
+        <span class="cov8" title="1">return admin, nil</span>
+}
+
+func (uc *UserUseCase) BannedUserController(ctx context.Context, id int) (Domain, error) <span class="cov8" title="1">{
+        state, _ := uc.Repo.GetBannedState(ctx, id)
+
+        if state.Status == "active" </span><span class="cov8" title="1">{
+                threads, err := uc.Repo.BannedUser(ctx, id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return threads, nil</span>
+        }
+
+        <span class="cov8" title="1">if state.Status == "banned" </span><span class="cov8" title="1">{
+                threads, err := uc.Repo.UnbannedUser(ctx, id)
+                if err != nil </span><span class="cov8" title="1">{
+                        return Domain{}, err
+                }</span>
+                <span class="cov8" title="1">return threads, nil</span>
+        }
+        <span class="cov8" title="1">return Domain{}, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

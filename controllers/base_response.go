@@ -21,6 +21,13 @@ type MetaResponse struct {
 	}
 }
 
+func NoDataSuccessResponse(c echo.Context, data interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Success"
+	return c.JSON(http.StatusOK, response)
+}
+
 func NewSuccessResponse(c echo.Context, data interface{}) error {
 	response := BaseResponse{}
 	response.Meta.Status = http.StatusOK
@@ -35,4 +42,25 @@ func NewErrorResponse(c echo.Context, status int, err error) error {
 	response.Meta.Message = err.Error()
 	response.Data = nil
 	return c.JSON(status, response)
+}
+
+func DeleteSuccessResponse(c echo.Context, data interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Delete Success"
+	return c.JSON(http.StatusOK, response)
+}
+
+func BannedSuccessResponse(c echo.Context, data interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Banned Success"
+	return c.JSON(http.StatusOK, response)
+}
+
+func UnbannedSuccessResponse(c echo.Context, data interface{}) error {
+	response := BaseResponse{}
+	response.Meta.Status = http.StatusOK
+	response.Meta.Message = "Unbanned Success"
+	return c.JSON(http.StatusOK, response)
 }

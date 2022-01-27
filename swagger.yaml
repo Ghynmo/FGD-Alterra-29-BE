@@ -767,18 +767,10 @@ paths:
                 
   /profile/user/edit:
     get:
-      summary: get Thread summary on profile
-      description: Get
+      summary: Edit profile
+      description: Edit profile information
       security:
       - Bearer: []
-      consumes: 
-        - application/x-www-form-urlencoded
-      parameters:
-        - in: formData
-          name: id
-          type: integer
-          required: true
-          description: comment id
       produces:
         - application/json
       responses:
@@ -817,27 +809,27 @@ paths:
           name: name
           type: string
           required: false
-          description: the title of badge
+          description: username
         - in: formData
           name: phone
           type: string
           required: false
-          description: url as icon
+          description: phone
         - in: formData
           name: bio
           type: string
           required: false
-          description: the title of badge
+          description: biography
         - in: formData
           name: email
           type: string
           required: false
-          description: url as icon
+          description: email
         - in: formData
           name: address
           type: string
           required: false
-          description: url as icon
+          description: address
       produces:
         - application/json
       responses:
@@ -866,8 +858,8 @@ paths:
                 example: loremipsum dolor sit amet
   /follows:
     post:
-      summary: Add New Badge
-      description: Add New Badge
+      summary: Follows user
+      description: follows user
       security:
       - Bearer: []
       consumes: 
@@ -890,8 +882,8 @@ paths:
                 example: null       
   /admin:
     get:
-      summary: get Nested comment
-      description: Get
+      summary: Get Admin Dasboard
+      description: Get Admin Dashboard
       security:
       - Bearer: []
       consumes: 
@@ -950,18 +942,10 @@ paths:
                 
   /admin/edit:
     get:
-      summary: get Thread summary on profile
-      description: Get
+      summary: Get data of admin
+      description: Get data of admin
       security:
       - Bearer: []
-      consumes: 
-        - application/x-www-form-urlencoded
-      parameters:
-        - in: formData
-          name: id
-          type: integer
-          required: true
-          description: comment id
       produces:
         - application/json
       responses:
@@ -983,8 +967,8 @@ paths:
                 type: string
                 example: 0857XXXX
     put:
-      summary: get Thread summary on profile
-      description: Get
+      summary: Edit profile admin
+      description: Edit profile admin
       security:
       - Bearer: []
       consumes: 
@@ -1033,8 +1017,8 @@ paths:
                 
   /admin/users:
     get:
-      summary: get Nested comment
-      description: Get
+      summary: Get all of users
+      description: Get all of users
       security:
       - Bearer: []
       consumes: 
@@ -1067,8 +1051,8 @@ paths:
                   
   /admin/users/search/{username}:
     get:
-      summary: get Nested comment
-      description: Get
+      summary: Get users by username
+      description: Get users by username
       security:
       - Bearer: []
       consumes: 
@@ -1108,7 +1092,7 @@ paths:
   /admin/users/banned/{id}:
     get:
       summary: Banned or Unbanned User
-      description: Get
+      description: Banned or Unbanned User
       security:
       - Bearer: []
       consumes: 
@@ -1132,8 +1116,8 @@ paths:
                 
   /admin/threads:
     get:
-      summary: get Nested comment
-      description: Get
+      summary: Get all of threads
+      description: Get all of threads
       security:
       - Bearer: []
       consumes: 
@@ -1169,7 +1153,7 @@ paths:
                   
   /admin/threads/search/{title}:
     get:
-      summary: get Nested comment
+      summary: Search all thread by title
       description: Get
       security:
       - Bearer: []
@@ -1213,7 +1197,7 @@ paths:
   /admin/threads/activate/{id}:
     put:
       summary: Activate Threads
-      description: Get
+      description: Activate Threads
       security:
       - Bearer: []
       consumes: 
@@ -1238,7 +1222,7 @@ paths:
   /admin/threads/unactivate/{id}:
     put:
       summary: Unactivated Threads
-      description: Get
+      description: Unactivated Threads
       security:
       - Bearer: []
       consumes: 
@@ -1262,7 +1246,7 @@ paths:
   
   /admin/posts:
     get:
-      summary: get Nested comment
+      summary: Get all of post/comment
       description: Get
       security:
       - Bearer: []
@@ -1299,8 +1283,8 @@ paths:
                     
   /admin/posts/search/{post}:
     get:
-      summary: get Nested comment
-      description: Get
+      summary: Search post by comment
+      description:  Search post by comment
       security:
       - Bearer: []
       consumes: 
@@ -1343,7 +1327,7 @@ paths:
   /admin/posts/activate/{id}:
     put:
       summary: Activate Post/Comment
-      description: Get
+      description: Activate Post/Comment
       security:
       - Bearer: []
       consumes: 
@@ -1369,7 +1353,7 @@ paths:
   /admin/posts/unactivate/{id}:
     put:
       summary: Unactivated Post/Comment
-      description: Get
+      description: Unactivated Post/Comment
       security:
       - Bearer: []
       consumes: 
@@ -1394,8 +1378,8 @@ paths:
   
   /admin/thread-reports:
     get:
-      summary: get Nested comment
-      description: Get
+      summary: Get report data request
+      description: Get report data request
       security:
       - Bearer: []
       consumes: 
@@ -1426,20 +1410,20 @@ paths:
                   type: string
                   example: pending
                     
-  /admin/thread-reports/search/{category}:
+  /admin/thread-reports/search/{case}:
     get:
       summary: Search report by Case/Report Category
-      description: Get
+      description: Search report by Case/Report Category
       security:
       - Bearer: []
       consumes: 
         - application/x-www-form-urlencoded
       parameters:
         - in: path
-          name: category
+          name: case
           type: string
           required: true
-          description: thread-reports
+          description: category of report (case)
       produces:
         - application/json
       responses:
@@ -1468,8 +1452,8 @@ paths:
     
   /admin/thread-reports/thread-report/{id}:
     put:
-      summary: Activate Post/Comment
-      description: Get
+      summary: Solve report
+      description: Solve or softdelete the report request
       security:
       - Bearer: []
       consumes: 
@@ -1494,8 +1478,8 @@ paths:
   
   /report_thread:
     post:
-      summary: Add New Badge
-      description: Add New Badge
+      summary: Create thread report
+      description: Create thread report
       security:
       - Bearer: []
       consumes: 
@@ -1505,17 +1489,17 @@ paths:
           name: thread_id
           type: integer
           required: true
-          description: the title of badge
+          description: thread id
         - in: formData
           name: report_case_id
           type: integer
           required: true
-          description: url as icon
+          description: case(report category)
         - in: formData
           name: message
           type: string
           required: true
-          description: description of badge
+          description: report content
       produces:
         - application/json
       responses:
@@ -1529,8 +1513,8 @@ paths:
   
   /report-thread:
     get:
-      summary: get Thread summary on profile
-      description: Get
+      summary: Get category of report (case)
+      description: Get category of report (case)
       security:
       - Bearer: []
       consumes: 
@@ -1552,8 +1536,8 @@ paths:
     
   /admin/reportcase:
     post:
-      summary: Add New Badge
-      description: Add New Badge
+      summary: Create new report category
+      description: Create new report category
       security:
       - Bearer: []
       consumes: 
@@ -1563,7 +1547,7 @@ paths:
           name: case
           type: string
           required: true
-          description: the title of badge
+          description: report category
       produces:
         - application/json
       responses:
@@ -1577,8 +1561,8 @@ paths:
        
   /categories:
     get:
-      summary: get Thread summary on profile
-      description: Get
+      summary: Get all of thread categories
+      description: Get all of thread categories
       security:
       - Bearer: []
       consumes: 
@@ -1600,8 +1584,8 @@ paths:
   
   /admin/category:
     post:
-      summary: Add New Badge
-      description: Add New Badge
+      summary: Create new thread category
+      description: Create new thread category
       security:
       - Bearer: []
       consumes: 
@@ -1611,7 +1595,7 @@ paths:
           name: category
           type: string
           required: true
-          description: the title of badge
+          description: category name
       produces:
         - application/json
       responses:
@@ -1625,8 +1609,8 @@ paths:
   
   /admin/reputation:
     post:
-      summary: Add New Badge
-      description: Add New Badge
+      summary: Create new reputation
+      description: Create new reputation
       security:
       - Bearer: []
       consumes: 
@@ -1636,12 +1620,12 @@ paths:
           name: reputation
           type: string
           required: true
-          description: the title of badge
+          description: title of reputation
         - in: formData
           name: likepoint
           type: integer
           required: true
-          description: url as icon
+          description: requirement like point for get the reputation
       produces:
         - application/json
       responses:
